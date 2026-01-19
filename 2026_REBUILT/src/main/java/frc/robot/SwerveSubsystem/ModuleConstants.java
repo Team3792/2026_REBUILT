@@ -1,40 +1,44 @@
 package frc.robot.SwerveSubsystem;
 
 public class ModuleConstants {
-    //Front Left Motor
-    public static final int kFrontLeftDriveMotorID = 1;
-    public static final int kFrontLeftTurnMotorID = 2;
-    public static final int kFrontLeftEncoderID = 3;
-    public static final int kFrontLeftAbsoluteEncoderID = 4;
-    public static final boolean kFrontLeftAbsoluteEncoderReversed = false;
-    public static final int kFrontLeftAbsoluteEncoderOffset = 0;
+    
+    //Conversion Factors
+    public static final double kTurnRatio = 15.4299;
+    public static final double kMetersPerRotation = Math.PI/7.36*Units.inchesToMeters(4);
+    public static final double kRadiansPerRotation = Math.PI*2 / kTurnRatio;
+    
 
-    //Front Right Motor
-    public static final int kFrontRightDriveMotorID = 1;
-    public static final int kFrontRightTurnMotorID = 2;
-    public static final int kFrontRightEncoderID = 3;
-    public static final int kFrontRightAbsoluteEncoderID = 4;
-    public static final boolean kFrontRightAbsoluteEncoderReversed = false;
-    public static final int kFrontRightAbsoluteEncoderOffset = 0;
+    //Module Configurations.     Offsets need to be tuned
+    public static final ModuleConfig kFrontLeft = new ModuleConfig(new CANAddress(1), new CANAddress(2), new CANAddress(3), 0.0);
+    public static final ModuleConfig kFrontRight = new ModuleConfig(new CANAddress(4), new CANAddress(5), new CANAddress(6), 0.0);
+    public static final ModuleConfig kBackLeft = new ModuleConfig(new CANAddress(7), new CANAddress(8), new CANAddress(9), 0.0);
+    public static final ModuleConfig kBackRight = new ModuleConfig(new CANAddress(10), new CANAddress(11), new CANAddress(12), 0.0);
 
-    //Back Left Motor
-    public static final int kBackLeftDriveMotorID = 1;
-    public static final int kBackLeftTurnMotorID = 2;
-    public static final int kBackLeftEncoderID = 3;
-    public static final int kBackLeftAbsoluteEncoderID = 4;
-    public static final boolean kBackLeftAbsoluteEncoderReversed = false;
-    public static final int kBackLeftAbsoluteEncoderOffset = 0;
+    public static record ModuleConfig (CANAddress driveAddress, CANAddress turnAddress, CANAddress encoderAddress, double encoderOffset){}
 
-    //Back Right Motor
-    public static final int kBackRightDriveMotorID = 1;
-    public static final int kBackRightTurnMotorID = 2;
-    public static final int kBackRightEncoderID = 3;
-    public static final int kBackRightAbsoluteEncoderID = 4;
-    public static final boolean kBackRightAbsoluteEncoderReversed = false;
-    public static final int kBackRightAbsoluteEncoderOffset = 0;
+    public static MagnetSensorConfig getEncoderConfig(double offset){
+        MagnetSensorConfigs config = new MagnetSensorConfigs();
+        config.MagnetOffset = offset;
+        config.SensorDirection = SensorDirectionValue.Clockwise_Positive; //can be changed if needed
+        config.SensorAbsoluteSensorDiscontinuityPoint = 1.0
+        return config;
+    }
 
-    public static final double kMetersPerRotation = 0.019635;
-    public static final double kTurnEncoderRPM2RadPerSec = 0.10472;
-    public static final double kTurnEncoderRadians2Rot = 9.5493;
-    public static final double kMaxSpeedMetersPerSecond = 5.0;
+    public static TalonFXConfiguration getDriveConfig(){
+        TalonFXConfiguration config = new TalonFXConfiguration();
+
+        Slot0Configuration slot0 = config.Slot0;
+        
+
+
+
+        config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive; //can be changed if needed
+        config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        config.CurrentLimits.StatorCurrentLimit = 60;
+        config.CurrentLimits.StatorCurrentLimitEnable = true;
+        return config;
+    }
+
+
+
 }

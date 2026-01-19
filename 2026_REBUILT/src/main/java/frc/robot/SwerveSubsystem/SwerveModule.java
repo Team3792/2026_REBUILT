@@ -7,12 +7,10 @@ public class SwerveModule extends SubsystemBase{
     VelocityVoltage driveController;
     SwerveModuleState state = new SwerveModuleState(0, new Rotation2d(0));
 
-    private final boolean absoluteEncoderReversed;
     private final double absoluteEncoderOffsetRad;
 
-    public SwerveModule(int driveMotorID, int turnMotorID, int encoderID, double absoluteEncoderOffset, boolean absoluteEncoderReversed) {
+    public SwerveModule(int driveMotorID, int turnMotorID, int encoderID, double absoluteEncoderOffset) {
         this.absoluteEncoderOffsetRad = absoluteEncoderOffset;
-        this.absoluteEncoderReversed = absoluteEncoderReversed;
         
         drive = new TalonFX(driveMotorID);
         turn = new TalonFX(turnMotorID);
