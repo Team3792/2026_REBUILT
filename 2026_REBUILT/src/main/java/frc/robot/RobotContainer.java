@@ -21,13 +21,11 @@ import frc.robot.IntakeSubsystem.IntakeConstants;
 public class RobotContainer {
 
   Feeder feeder = new Feeder();
-  FeederConstants feederConstants = new FeederConstants();
-
   Intake intake = new Intake();
-  IntakeConstants intakeConstants = new IntakeConstants();
+  Climb climb = new Climb()
 
   CommandPS5Controller driver = new CommandPS5Controller(0);
-  CommandPS5Controller operator = new CommandPS5Controller(0);
+  CommandPS5Controller operator = new CommandPS5Controller(1);
 
   public RobotContainer() {
     configureDriverBindings();
@@ -35,12 +33,18 @@ public class RobotContainer {
   }
 
   private void configureDriverBindings() {
-    driver.R1().whileTrue(intake.runIntake(intakeConstants.intakeVoltage));
-    driver.L1().whileTrue(intake.runIntake(-intakeConstants.intakeVoltage));
+    driver.R1().onTrue(intake.runToPosition(IntakeConstants.kIntakePosition));
+    driver.R1().onFalse(intake.runToPosition(IntakeConstants.kStowedPosition));
+
+    driver.R1().whileTrue(intake.runIntake(IntakeConstants.intakeVoltage));
+    driver.L1().whileTrue(intake.runIntake(-IntakeConstants.intakeVoltage));
   }
   private void configureOperatorBindings(){
-    operator.square().whileTrue(feeder.runFeeder(feederConstants.kFeedVoltage));
-    operator.cross().whileTrue(feeder.runFeeder(-feederConstants.kFeedVoltage)); 
+    operator.square().whileTrue(feeder.runFeeder(FeederConstants.kFeedVoltage));
+    operator.cross().whileTrue(feeder.runFeeder(-FeederConstants.kFeedVoltage)); 
+
+    operator.povUp().whileTrue(climb.climbUpCommand(ClimbConstants.kClimbVoltage));
+    operator.povDown().whileTrue(climb.climbDownCommand(-ClimbConstants.kClimbVoltage));
   }
 
   public Command getAutonomousCommand() {
