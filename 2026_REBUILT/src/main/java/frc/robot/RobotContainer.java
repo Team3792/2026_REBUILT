@@ -22,7 +22,7 @@ public class RobotContainer {
 
   Feeder feeder = new Feeder();
   Intake intake = new Intake();
-  Climb climb = new Climb()
+  Climb climb = new Climb();
 
   CommandPS5Controller driver = new CommandPS5Controller(0);
   CommandPS5Controller operator = new CommandPS5Controller(1);

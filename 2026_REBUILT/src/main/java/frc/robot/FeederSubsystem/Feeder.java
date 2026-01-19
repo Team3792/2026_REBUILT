@@ -9,11 +9,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 //includes conveyor system and serializer
 public class Feeder extends SubsystemBase{
-    TalonFX feeder = new TalonFX(feederConstants.kCanID);
+    TalonFX feeder = new TalonFX(FeederConstants.kCanID);
     
 
     public Feeder(){
-        feeder.getConfigurator().apply(FeederConstants.applyConfiguration());
+        feeder.getConfigurator().apply(FeederConstants.getConfig());
     }
 
     public void setVoltage(double voltage){
