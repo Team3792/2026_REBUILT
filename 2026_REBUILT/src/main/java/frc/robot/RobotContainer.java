@@ -12,28 +12,28 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 
-
-
+import frc.robot.FeederSubsystem.Feeder;
+import frc.robot.FeederSubsystem.FeederConstants;
 
 public class RobotContainer {
-  CommandPS5Controller controller = new CommandPS5Controller(0);
-  TalonFX motor = new TalonFX(0);
 
-  public void runVoltage(Double voltage) {
-    motor.setNeutralMode(NeutralModeValue.Coast);
-    motor.setVoltage(voltage);
-  }
+  Feeder feeder = new Feeder();
+  FeederConstants feederConstants = new FeederConstants();
 
-  public Command runMotor(double voltage){
-    return Commands.runOnce(() -> runVoltage(voltage));
-  }
+  CommandPS5Controller driver = new CommandPS5Controller(0);
+  CommandPS5Controller operator = new CommandPS5Controller(0);
 
   public RobotContainer() {
-    configureBindings();
+    configureDriverBindings();
+    configureOperatorBindings();
   }
 
-  private void configureBindings() {
-    controller.circle().onTrue(runMotor(0.5));
+  private void configureDriverBindings() {
+    
+  }
+  private void configureOperatorBindings(){
+    operator.square().whileTrue(feeder.runFeeder(feederConstants.kFeedVoltage));
+    operator.cross().whileTrue(feeder.runFeeder(-feederConstants.kFeedVoltage)); 
   }
 
   public Command getAutonomousCommand() {
