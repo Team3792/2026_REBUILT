@@ -1,54 +1,29 @@
 package frc.robot.SwerveSubsystem;
 
+import com.ctre.phoenix6.hardware.Pigeon2;
+
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 public class Swerve extends SubsystemBase {
       
-  private final SwerveModule frontLeft = new SwerveModule(
-      ModuleConstants.kFrontLeftDriveMotorID,
-      ModuleConstants.kFrontLeftTurnMotorID,
-      ModuleConstants.kFrontLeftEncoderID,
-      ModuleConstants.kFrontLeftAbsoluteEncoderOffset,
-      ModuleConstants.kFrontLeftAbsoluteEncoderReversed
-    );
-
-    private final SwerveModule frontRight = new SwerveModule(
-      ModuleConstants.kFrontRightDriveMotorID,
-      ModuleConstants.kFrontRightTurnMotorID,
-      ModuleConstants.kFrontRightEncoderID,
-      ModuleConstants.kFrontRightAbsoluteEncoderOffset,
-      ModuleConstants.kFrontRightAbsoluteEncoderReversed
-    );
-
-    private final SwerveModule backLeft = new SwerveModule(
-      ModuleConstants.kBackLeftDriveMotorID,
-      ModuleConstants.kBackLeftTurnMotorID,
-      ModuleConstants.kBackLeftEncoderID,
-      ModuleConstants.kBackLeftAbsoluteEncoderOffset,
-      ModuleConstants.kBackLeftAbsoluteEncoderReversed
-    );
-
-    private final SwerveModule backRight = new SwerveModule(
-      ModuleConstants.kBackRightDriveMotorID,
-      ModuleConstants.kBackRightTurnMotorID,
-      ModuleConstants.kBackRightEncoderID,
-      ModuleConstants.kBackRightAbsoluteEncoderOffset,
-      ModuleConstants.kBackRightAbsoluteEncoderReversed
-    );
+  private final SwerveModule frontLeft = new SwerveModule(ModuleConstants.kFrontLeft, "front left");
+    private final SwerveModule frontRight = new SwerveModule(ModuleConstants.kFrontRight, "front right");
+    private final SwerveModule backLeft = new SwerveModule(ModuleConstants.kBackLeft, "back left");
+    private final SwerveModule backRight = new SwerveModule(ModuleConstants.kBackRight, "back right");
 
     SwerveModule[] modules = {frontLeft, frontRight, backLeft, backRight};
 
     Pigeon2 pigeon = new Pigeon2(0);
-
-
-
+    
   public Swerve() {
-    new Thread(() -> {
-      try {
-        Thread.sleep(1000);
-        zeroHeading();
-      } catch (Exception e) {
-        
-      }
-    }).start();
+    zeroHeading();
+
+
   }
 
   public void zeroHeading(){
@@ -57,6 +32,10 @@ public class Swerve extends SubsystemBase {
 
   public double getHeading(){
     return pigeon.getYaw().getValueAsDouble();
+  }
+
+  public void resetHeading(double yawDegrees){
+    pigeon.setYaw(yawDegrees);
   }
 
   public Rotation2d getRotation2dHeading(){
@@ -76,11 +55,29 @@ public class Swerve extends SubsystemBase {
     backRight.stop();
   }
 
+
+
   public void setModuleStates(SwerveModuleState[] desiredStates){
     SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, SwerveConstants.kMaxSpeedMetersPerSecond);
-    frontLeft.desiredState(desiredStates[0]);
-    frontRight.desiredState(desiredStates[1]);
-    backLeft.desiredState(desiredStates[2]);
-    backRight.desiredState(desiredStates[3]);
+    frontLeft.setState(desiredStates[0]);
+    frontRight.setState(desiredStates[1]);
+    backLeft.setState(desiredStates[2]);
+    backRight.setState(desiredStates[3]);
+  }
+
+  public void drive(ChassisSpeeds speeds, Rotation2d rotation){
+    speeds = ChassisSpeeds.discretize(speeds, 0.002);
+    speeds = ChassisSpeeds.fromFieldRelativeSpeeds(speeds, rotation);
+
+    SwerveModuleState[] desiredStates = SwerveConstants.kDriveKinematics.toSwerveModuleStates(speeds);
+    setModuleStates(desiredStates);
+  }
+
+  public void setStates(SwerveModuleState[] targetStates) {
+    SwerveDriveKinematics.desaturateWheelSpeeds(targetStates, SwerveConstants.kMaxSpeedMetersPerSecond);
+
+    for (int i = 0; i < modules.length; i++) {
+      modules[i].setState(targetStates[i]);
+    }
   }
 }

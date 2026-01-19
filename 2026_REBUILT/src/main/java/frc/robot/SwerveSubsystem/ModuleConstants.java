@@ -1,5 +1,15 @@
 package frc.robot.SwerveSubsystem;
 
+import com.ctre.phoenix6.configs.MagnetSensorConfigs;
+import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.ctre.phoenix6.signals.SensorDirectionValue;
+
+import edu.wpi.first.math.util.Units;
+
 public class ModuleConstants {
     
     //Conversion Factors
@@ -9,34 +19,50 @@ public class ModuleConstants {
     
 
     //Module Configurations.     Offsets need to be tuned
-    public static final ModuleConfig kFrontLeft = new ModuleConfig(new CANAddress(1), new CANAddress(2), new CANAddress(3), 0.0);
-    public static final ModuleConfig kFrontRight = new ModuleConfig(new CANAddress(4), new CANAddress(5), new CANAddress(6), 0.0);
-    public static final ModuleConfig kBackLeft = new ModuleConfig(new CANAddress(7), new CANAddress(8), new CANAddress(9), 0.0);
-    public static final ModuleConfig kBackRight = new ModuleConfig(new CANAddress(10), new CANAddress(11), new CANAddress(12), 0.0);
+    public static final ModuleConfig kFrontLeft = new ModuleConfig(0, 0, 0, 0.0);
+    public static final ModuleConfig kFrontRight = new ModuleConfig(0, 0, 0, 0.0);
+    public static final ModuleConfig kBackLeft = new ModuleConfig(0, 0, 0, 0.0);
+    public static final ModuleConfig kBackRight = new ModuleConfig(0, 0, 0, 0.0);
 
-    public static record ModuleConfig (CANAddress driveAddress, CANAddress turnAddress, CANAddress encoderAddress, double encoderOffset){}
 
-    public static MagnetSensorConfig getEncoderConfig(double offset){
+
+
+    public static record ModuleConfig (int driveAddress, int turnAddress, int encoderAddress, double encoderOffset){}
+
+    public static MagnetSensorConfigs getEncoderConfig(double offset){
         MagnetSensorConfigs config = new MagnetSensorConfigs();
         config.MagnetOffset = offset;
         config.SensorDirection = SensorDirectionValue.Clockwise_Positive; //can be changed if needed
-        config.SensorAbsoluteSensorDiscontinuityPoint = 1.0
+        config.AbsoluteSensorDiscontinuityPoint = 1.0;
         return config;
     }
 
     public static TalonFXConfiguration getDriveConfig(){
         TalonFXConfiguration config = new TalonFXConfiguration();
-
-        Slot0Configuration slot0 = config.Slot0;
+        Slot0Configs slot0 = config.Slot0;
+        // Slot0Config.kS = 0.17;
+        // slot0Config.kV = 0.11;
+        // slot0Config.kP = 0.001;
+        // slot0Config.kI = 0;
+        // slot0Config.kD = 0;
         
-
-
-
         config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive; //can be changed if needed
         config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
         config.CurrentLimits.StatorCurrentLimit = 60;
         config.CurrentLimits.StatorCurrentLimitEnable = true;
+
         return config;
+    }
+
+    public static TalonFXConfiguration getTurnConfig(){
+        TalonFXConfiguration config = new TalonFXConfiguration();
+        config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+        config.CurrentLimits.StatorCurrentLimit = 30;
+        config.CurrentLimits.StatorCurrentLimitEnable = true;
+        return config;
+
+
     }
 
 

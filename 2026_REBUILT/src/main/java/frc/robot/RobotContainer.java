@@ -11,18 +11,22 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
-
+import frc.robot.ClimbSubsytem.Climb;
+import frc.robot.ClimbSubsytem.ClimbConstants;
 import frc.robot.FeederSubsystem.Feeder;
 import frc.robot.FeederSubsystem.FeederConstants;
 
 import frc.robot.IntakeSubsystem.Intake;
 import frc.robot.IntakeSubsystem.IntakeConstants;
+import frc.robot.SwerveSubsystem.DriveCommand;
+import frc.robot.SwerveSubsystem.Swerve;
 
 public class RobotContainer {
 
   Feeder feeder = new Feeder();
   Intake intake = new Intake();
   Climb climb = new Climb();
+  Swerve swerve = new Swerve();
 
   CommandPS5Controller driver = new CommandPS5Controller(0);
   CommandPS5Controller operator = new CommandPS5Controller(1);
@@ -38,13 +42,17 @@ public class RobotContainer {
 
     driver.R1().whileTrue(intake.runIntake(IntakeConstants.intakeVoltage));
     driver.L1().whileTrue(intake.runIntake(-IntakeConstants.intakeVoltage));
+
+    swerve.setDefaultCommand(new DriveCommand(swerve, () -> driver.getLeftY(), () -> driver.getLeftX(), () -> driver.getRightX()));
+    driver.options().onTrue(Commands.runOnce(() -> swerve.resetHeading(0)));
   }
+  
   private void configureOperatorBindings(){
     operator.square().whileTrue(feeder.runFeeder(FeederConstants.kFeedVoltage));
     operator.cross().whileTrue(feeder.runFeeder(-FeederConstants.kFeedVoltage)); 
 
-    operator.povUp().whileTrue(climb.climbUpCommand(ClimbConstants.kClimbVoltage));
-    operator.povDown().whileTrue(climb.climbDownCommand(-ClimbConstants.kClimbVoltage));
+    operator.povUp().whileTrue(climb.climbUpCommand());
+    operator.povDown().whileTrue(climb.climbDownCommand());
   }
 
   public Command getAutonomousCommand() {

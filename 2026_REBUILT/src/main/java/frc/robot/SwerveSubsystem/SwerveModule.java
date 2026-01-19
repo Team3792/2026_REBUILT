@@ -1,5 +1,17 @@
 package frc.robot.SwerveSubsystem;
 
+import com.ctre.phoenix6.controls.VelocityVoltage;
+import com.ctre.phoenix6.hardware.CANcoder;
+import com.ctre.phoenix6.hardware.TalonFX;
+
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.SwerveSubsystem.ModuleConstants.ModuleConfig;
+
 public class SwerveModule extends SubsystemBase{
     TalonFX drive, turn;
     CANcoder encoder;
@@ -7,81 +19,80 @@ public class SwerveModule extends SubsystemBase{
     VelocityVoltage driveController;
     SwerveModuleState state = new SwerveModuleState(0, new Rotation2d(0));
 
-    private final double absoluteEncoderOffsetRad;
+    String name;
 
-    public SwerveModule(int driveMotorID, int turnMotorID, int encoderID, double absoluteEncoderOffset) {
-        this.absoluteEncoderOffsetRad = absoluteEncoderOffset;
+    public SwerveModule(ModuleConfig config, String name) {
+        drive = new TalonFX(config.driveAddress());
+        turn = new TalonFX(config.turnAddress());
+        encoder = new CANcoder(config.encoderAddress());
+        this.name = name;
         
-        drive = new TalonFX(driveMotorID);
-        turn = new TalonFX(turnMotorID);
-        encoder = new CANcoder(encoderID);
+        drive.getConfigurator().apply(ModuleConstants.getDriveConfig());
+        turn.getConfigurator().apply(ModuleConstants.getTurnConfig());
+        encoder.getConfigurator().apply(ModuleConstants.getEncoderConfig(0.0)); //Fix offset
 
-        drive.setNeutralMode(NeutralModeValue.Coast);
-        turn.setNeutralMode(NeutralModeValue.Coast);
-      
-
-
+        driveController = new VelocityVoltage(0).withSlot(0);
         turnController = new PIDController(4, 0, 0.05);
         turnController.enableContinuousInput(-Math.PI, Math.PI);   
 
-        resetEncoders();
+        drive.setPosition(0);  
+        resetTurnEncoder();
     }
 
-    public double getAbsoluteEncoderRad() {
-        double angle = (encoder.getAbsolutePosition().getValueAsDouble()) * 2.0 * Math.PI - absoluteEncoderOffsetRad;
-        return angle * (absoluteEncoderReversed ? -1.0 : 1.0);
+
+    public void resetTurnEncoder(){
+        double position = encoder.getPosition().getValueAsDouble() * ModuleConstants.kTurnRatio;
+        turn.setPosition(position);
     }
 
-    public double getDrivePostition(){
+    public void driveVoltage(double voltage){
+        drive.setVoltage(voltage);
+        double turnVoltage = turnController.calculate(getTurnPosition().getRadians(), 0);
+        turn.setVoltage(turnVoltage);
+    }
+
+    public Rotation2d getTurnPosition(){
+        return new Rotation2d(turn.getPosition().getValueAsDouble() * ModuleConstants.kRadiansPerRotation);
+    }
+
+    public SwerveModulePosition getPosition(){
+        return new SwerveModulePosition(getDrivePosition(), getTurnPosition());
+    }
+    
+    public double getDrivePosition(){
         return drive.getPosition().getValueAsDouble() * ModuleConstants.kMetersPerRotation;
-    }
-
-    public double getTurnPosition(){
-        return encoder.getPosition().getValueAsDouble() * ModuleConstants.kTurnEncoderRadians2Rot;
     }
 
     public double getDriveVelocity(){
         return drive.getVelocity().getValueAsDouble() * ModuleConstants.kMetersPerRotation;
     }
 
-    public double getTurnVelocity(){
-        return encoder.getVelocity().getValueAsDouble() * ModuleConstants.kTurnEncoderRPM2RadPerSec;
-    }
-    
-    public void resetEncoders(){
-        drive.setPosition(0);
-        //encoder.setPosition(getAbsoluteEncoderRad());
-    }
-
-    public Rotation2d getStateAngle(){
-        return new Rotation2d(getTurnPosition());
-    }
-
     public SwerveModuleState getState(){
-        return new SwerveModuleState(getDriveVelocity(), getStateAngle());
+        return new SwerveModuleState(getDriveVelocity(), getTurnPosition());
     }
 
-    public void desiredState(SwerveModuleState state){
-        // if (Math.abs(state.speedMetersPerSecond) < 0.001){
-        //     stop();
-        //     return;
-        // }
-        //state = SwerveModuleState.optimize(state, getStateAngle());
-        //drive.set(state.speedMetersPerSecond / ModuleConstants.kMaxSpeedMetersPerSecond);
-        turn.setVoltage(turnController.calculate(getAbsoluteEncoderRad(), state.angle.getRadians()));
-    }
+    public void setState(SwerveModuleState state){
+        System.out.println(state.speedMetersPerSecond);
+        if(Math.abs(state.speedMetersPerSecond) > 0.1){
+            state.optimize(getTurnPosition());
 
-    public void setState(){
-        
-    }
-
-    public void incrementTurn(SwerveModuleState state){
-        double targetAngle = getAbsoluteEncoderRad() + (Math.PI * 0.5);
-        turn.setVoltage(turnController.calculate(getAbsoluteEncoderRad(), targetAngle));
+            drive.setControl(driveController.withVelocity(state.speedMetersPerSecond / ModuleConstants.kMetersPerRotation));
+            
+            double turnVoltage = turnController.calculate(getTurnPosition().getRadians(), state.angle.getRadians());
+            turn.setVoltage(turnVoltage);
+        } else {
+            stop();
+        }
     }
 
     public void stop(){
-        drive.set(0);
-        turn.set(0);
+        turn.setVoltage(0);
+        drive.setVoltage(0);
     }
+
+    // public double getAbsoluteEncoderRad() {
+    //     double angle = (encoder.getAbsolutePosition().getValueAsDouble()) * 2.0 * Math.PI;
+    //     return angle;
+    // }
+
 }
