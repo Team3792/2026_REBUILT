@@ -10,7 +10,7 @@ public class Intake {
     TalonFX intake = new TalonFX(intakeConstants.kCanID);
     
     public Intake(){
-
+        intake.getConfigurator().apply(intakeConstants.applyConfiguration());
     }
 
     public void setVoltage(double voltage){

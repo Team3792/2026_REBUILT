@@ -15,10 +15,16 @@ import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import frc.robot.FeederSubsystem.Feeder;
 import frc.robot.FeederSubsystem.FeederConstants;
 
+import frc.robot.IntakeSubsystem.Intake;
+import frc.robot.IntakeSubsystem.IntakeConstants;
+
 public class RobotContainer {
 
   Feeder feeder = new Feeder();
   FeederConstants feederConstants = new FeederConstants();
+
+  Intake intake = new Intake();
+  IntakeConstants intakeConstants = new IntakeConstants();
 
   CommandPS5Controller driver = new CommandPS5Controller(0);
   CommandPS5Controller operator = new CommandPS5Controller(0);
@@ -29,7 +35,8 @@ public class RobotContainer {
   }
 
   private void configureDriverBindings() {
-    
+    driver.R1().whileTrue(intake.runIntake(intakeConstants.intakeVoltage));
+    driver.L1().whileTrue(intake.runIntake(-intakeConstants.intakeVoltage));
   }
   private void configureOperatorBindings(){
     operator.square().whileTrue(feeder.runFeeder(feederConstants.kFeedVoltage));
