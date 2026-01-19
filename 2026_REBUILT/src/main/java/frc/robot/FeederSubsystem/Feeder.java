@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 //includes conveyor system and serializer
 public class Feeder extends SubsystemBase{
-    TalonFX feeder = new TalonFX(0);
+    TalonFX feeder = new TalonFX(feederConstants.kCanID);
     FeederConstants feederConstants = new FeederConstants();
 
     public Feeder(){
