@@ -1,0 +1,26 @@
+package frc.robot.SwerveSubsystem;
+
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.util.Units;
+
+public class SwerveConstants {
+    
+    public static final double kMaxSpeedMetersPerSecond = 5;
+
+    public static final double kTrackWidth = Units.inchesToMeters(22.5);
+    public static final double kWheelBase = Units.inchesToMeters(22.5);
+
+
+    public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
+        new Translation2d(kWheelBase / 2, kTrackWidth / 2),
+        new Translation2d(kWheelBase / 2, -kTrackWidth / 2),
+        new Translation2d(-kWheelBase / 2, kTrackWidth / 2),
+        new Translation2d(-kWheelBase / 2, -kTrackWidth / 2)
+    );
+
+    public static double kDeadBandValue = 0.08;
+    public static double kMaxLinearVelocity = 4.0;
+    public static double kMaxOmega = 4.0;
+    
+}
