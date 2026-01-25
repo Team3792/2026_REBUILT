@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.915074969400246,
-        "y": -0.2607954023867818
+        "x": 8.15597234786184,
+        "y": 0.6642381784539475
       },
       "isLocked": false,
       "linkedName": "Bottom Shoot Start"
@@ -20,8 +20,8 @@
         "y": 3.3714197330128104
       },
       "prevControl": {
-        "x": 7.123760709914321,
-        "y": 2.3474280427631573
+        "x": 7.653803145559211,
+        "y": 1.0982518503289476
       },
       "nextControl": null,
       "isLocked": false,
@@ -34,7 +34,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 5.0,
-    "maxAcceleration": 2.0,
+    "maxAcceleration": 4.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,

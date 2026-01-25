@@ -19,7 +19,7 @@ public class Climb extends SubsystemBase {
 
         var leftLimitConfig = new HardwareLimitSwitchConfigs();
         leftLimitConfig.ForwardLimitSource = ForwardLimitSourceValue.RemoteTalonFX;
-        leftLimitConfig.ForwardLimitRemoteSensorID = leftClimbMotor.getDeviceID();
+        leftLimitConfig.ForwardLimitRemoteSensorID = leftClimbMotor.getDeviceID();        
         
         var rightLimitConfig = new HardwareLimitSwitchConfigs();
         rightLimitConfig.ForwardLimitSource = ForwardLimitSourceValue.RemoteTalonFX;

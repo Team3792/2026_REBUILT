@@ -20,6 +20,7 @@ import frc.robot.IntakeSubsystem.Intake;
 import frc.robot.IntakeSubsystem.IntakeConstants;
 import frc.robot.SwerveSubsystem.DriveCommand;
 import frc.robot.SwerveSubsystem.Swerve;
+import frc.robot.ShooterSubsystem.Hood.*;
 
 public class RobotContainer {
 
@@ -27,6 +28,7 @@ public class RobotContainer {
   Intake intake = new Intake();
   Climb climb = new Climb();
   Swerve swerve = new Swerve();
+  Hood hood = new Hood();
 
   CommandPS5Controller driver = new CommandPS5Controller(0);
   CommandPS5Controller operator = new CommandPS5Controller(1);
@@ -53,6 +55,8 @@ public class RobotContainer {
 
     operator.povUp().whileTrue(climb.climbUpCommand());
     operator.povDown().whileTrue(climb.climbDownCommand());
+
+    operator.L2().onTrue(hood.setPosition(HoodConstants.kZone1Angle));
   }
 
   public Command getAutonomousCommand() {
