@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.611233313572908,
-        "y": 3.3714197330128104
+        "x": 3.6038674698795177,
+        "y": 7.477228915662651
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.609011149785803,
-        "y": 2.453847202034883
+        "x": 2.6016453060924123,
+        "y": 6.559656384684724
       },
       "isLocked": false,
       "linkedName": "Mid"
@@ -45,10 +45,10 @@
     "rotation": 65.0207468646604
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Langston's Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 93.02485760689466
+    "rotation": 178.49256424122495
   },
   "useDefaultConstraints": true
 }

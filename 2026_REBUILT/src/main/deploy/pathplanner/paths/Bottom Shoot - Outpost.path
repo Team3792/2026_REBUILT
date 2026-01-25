@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 0.5174466416768666,
-        "y": 0.716665009179926
+        "x": 0.412975903614458,
+        "y": 0.7020481927710842
       },
       "prevControl": {
-        "x": 0.1235451820835261,
-        "y": 0.7053706486576187
+        "x": 0.01907444402111752,
+        "y": 0.6907538322487768
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,10 +42,10 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 18.52694089722757
+    "rotation": 1.1348211850035415
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Langston's Paths",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 65.0207468646604
