@@ -3,10 +3,15 @@
   "robotLength": 0.75,
   "holonomicMode": true,
   "pathFolders": [
-    "Langston's Paths",
-    "TowerSneak Paths"
+    "BottomTrench + Neutral Zone paths",
+    "Lower TowerSneak Paths",
+    "Upper TowerSneak Paths"
   ],
-  "autoFolders": [],
+  "autoFolders": [
+    "BottomTrench + Neutral Zone",
+    "Upper TowerSneak Autos",
+    "Lower TowerSneak Autos"
+  ],
   "defaultMaxVel": 5.0,
   "defaultMaxAccel": 4.0,
   "defaultMaxAngVel": 540.0,

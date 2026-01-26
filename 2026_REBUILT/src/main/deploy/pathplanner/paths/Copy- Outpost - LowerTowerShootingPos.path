@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 0.412975903614458,
+        "y": 0.7020481927710842
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 0.7001744957800551,
+        "y": 1.4735078316559846
+      },
+      "isLocked": false,
+      "linkedName": "Outpost"
+    },
+    {
+      "anchor": {
+        "x": 1.079566265060241,
+        "y": 2.4941927710843377
+      },
+      "prevControl": {
+        "x": 0.674928363106107,
+        "y": 1.4188035820056673
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "LowerTowerShootingPos"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 5.0,
+    "maxAcceleration": 4.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 25.346175941946687
+  },
+  "reversed": false,
+  "folder": "Upper TowerSneak Paths",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 1.1348211850035415
+  },
+  "useDefaultConstraints": true
+}
