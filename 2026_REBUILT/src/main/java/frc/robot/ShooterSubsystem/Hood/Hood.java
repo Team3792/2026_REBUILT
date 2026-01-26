@@ -26,10 +26,15 @@ public class Hood extends SubsystemBase {
     new TrapezoidProfile.Constraints(5, 10));
   
   public Hood() {
+
     pidController.enableContinuousInput(0, 360);
     hood.configure(HoodConstants.configHood(), com.revrobotics.ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
 
     pidController.enableContinuousInput(0, 360);
+  }
+
+  public void setVoltage(double voltage){
+    hood.setVoltage(voltage);
   }
 
   //returns rotations

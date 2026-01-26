@@ -36,6 +36,10 @@ public class Shooter extends SubsystemBase {
     
 }
 
+public void setVoltage(double voltage){
+  rightMotor.setVoltage(voltage);
+}
+
 public double getRPM(){
    double rps = rightMotor.getVelocity().getValueAsDouble();
   return rps * 60;
