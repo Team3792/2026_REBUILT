@@ -38,6 +38,7 @@ public class Hood extends SubsystemBase {
 
   //returns hood positions in degrees 
   //where an angle of 0 is a ball exit angle along the horizontal axis
+  //an angle of 90 is ball exit angle along the vertical axis
   public double hoodAngle(){
     return ((getEncoderPositon() - HoodConstants.kEncoderAngleOffset) * 360) % 360;
   }

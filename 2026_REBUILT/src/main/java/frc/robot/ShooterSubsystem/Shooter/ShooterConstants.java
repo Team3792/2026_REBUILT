@@ -39,5 +39,6 @@ public class ShooterConstants {
 
     private static final double flywheelDiameterInches = 4; //diameter in inches
     public static final double flywheelDiameter = flywheelDiameterInches * 0.0254; //convert inches to meters
+    public static final double flywheelRadius = flywheelDiameter / 2;
 
 }

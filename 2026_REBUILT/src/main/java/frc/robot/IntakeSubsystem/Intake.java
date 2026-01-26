@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Intake extends SubsystemBase {
     TalonFX intake = new TalonFX(IntakeConstants.kIntakeCanID);
     TalonFX pivot = new TalonFX(IntakeConstants.kPivotCanID);
-    PIDController pid = new PIDController(0,0,0); //TO-DO; Tune PID
+    PIDController pid = new PIDController(IntakeConstants.kP,IntakeConstants.kI,IntakeConstants.kD);
 
     
     public Intake(){
@@ -22,9 +22,10 @@ public class Intake extends SubsystemBase {
 
     }
 
+    //returns anlge of pivot motor in degrees
     public double getPosition(){
-        double angle = pivot.getPosition().getValueAsDouble();
-        return angle;
+        double angle = pivot.getPosition().getValueAsDouble();//in rotations
+        return angle * 360;                                   //degrees
     }
 
     public void setVoltage(double voltage){
