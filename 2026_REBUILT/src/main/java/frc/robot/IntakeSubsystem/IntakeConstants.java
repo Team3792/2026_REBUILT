@@ -9,6 +9,7 @@ public class IntakeConstants {
     public final static double intakeVoltage = 5;
     public final static int kIntakeCanID = 0; // need to set
     public final static int kPivotCanID = 0; // need to set
+    public final static int kEncoderCanID = 0; // need to set
 
     public final static double kIntakePosition = 0; // need to set
     public final static double kStowedPosition = 0; //need to set
@@ -31,4 +32,6 @@ public class IntakeConstants {
         config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
         return config;
     }
+
+    public static final double kEncoderOffset = 0;
 }

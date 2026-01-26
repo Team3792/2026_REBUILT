@@ -9,6 +9,7 @@ import com.revrobotics.spark.SparkMax;
 // import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
@@ -32,7 +33,7 @@ public class Hood extends SubsystemBase {
   }
 
   //returns rotations
-  public double getEncoderPositon() {
+  public double getEncoderRotation() {
     return encoder.get();
   }
 
@@ -40,7 +41,7 @@ public class Hood extends SubsystemBase {
   //where an angle of 0 is a ball exit angle along the horizontal axis
   //an angle of 90 is ball exit angle along the vertical axis
   public double hoodAngle(){
-    return ((getEncoderPositon() - HoodConstants.kEncoderAngleOffset) * 360) % 360;
+    return MathUtil.inputModulus((getEncoderRotation() -HoodConstants.kEncoderAngleOffset) * 360, 0, 360);
   }
 
   public void setAngle(double angle) {
