@@ -10,6 +10,7 @@ import com.ctre.phoenix6.signals.MotorAlignmentValue;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -28,7 +29,6 @@ public class Shooter extends SubsystemBase {
   public Shooter() {
     rightMotor.getConfigurator().apply(ShooterConstants.applyRightMotorConfig());
     leftMotor.getConfigurator().apply(ShooterConstants.applyLeftMotorConfig());
-
 
     //left motor follows right motor
     //aligned means on same shaft; may need to change to opposed
@@ -61,5 +61,7 @@ public Command setAngularVelocity(double targetRPM){
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("ShooterSubsystems/Shooter", getRPM());
+    SmartDashboard.putNumber("ShooterSubsystems/Shooter", getTangentialVelocity());
   }
 }

@@ -12,6 +12,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -20,21 +21,30 @@ public class Hood extends SubsystemBase {
   /** Creates a new Hood. */
   SparkMax hood = new SparkMax(HoodConstants.kHoodCANID, MotorType.kBrushless);
   DutyCycleEncoder encoder = new DutyCycleEncoder(HoodConstants.kHoodCANID);
-  ProfiledPIDController pidController = new ProfiledPIDController(0, 0, 0, 
+  ProfiledPIDController pidController = new ProfiledPIDController(HoodConstants.kP, HoodConstants.kI, HoodConstants.kD, 
     new TrapezoidProfile.Constraints(5, 10));
   
   public Hood() {
     pidController.enableContinuousInput(0, 360);
     hood.configure(HoodConstants.configHood(), com.revrobotics.ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+
+    pidController.enableContinuousInput(0, 360);
   }
 
+  //returns rotations
   public double getEncoderPositon() {
     return encoder.get();
   }
 
+  //returns hood positions in degrees 
+  //where an angle of 0 is a ball exit angle along the horizontal axis
+  public double hoodAngle(){
+    return ((getEncoderPositon() - HoodConstants.kEncoderAngleOffset) * 360) % 360;
+  }
+
   public void setAngle(double angle) {
     pidController.setGoal(angle);
-    double pidOutput = pidController.calculate(getEncoderPositon());
+    double pidOutput = pidController.calculate(hoodAngle());
     hood.set(pidOutput + HoodConstants.frictionFF);
   }
 
@@ -47,5 +57,6 @@ public class Hood extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("ShooterSubsystem/Hood", hoodAngle());
   }
 }

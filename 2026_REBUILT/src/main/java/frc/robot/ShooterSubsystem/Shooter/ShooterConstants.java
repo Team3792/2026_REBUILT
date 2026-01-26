@@ -15,8 +15,8 @@ import edu.wpi.first.wpilibj.motorcontrol.Talon;
 /** Add your docs here. */
 public class ShooterConstants {
 
-    public static final double kRightMotorCanID = 0;
-    public static final double kLeftMotorCanID = 0;
+    public static final int kRightMotorCanID = 0;
+    public static final int kLeftMotorCanID = 0;
 
     //pid
     public static final double kP = 0;
