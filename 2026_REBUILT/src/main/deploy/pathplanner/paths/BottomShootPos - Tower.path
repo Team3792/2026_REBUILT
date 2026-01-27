@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.6114564144736834,
+        "y": 1.774958881578947
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.742862459233259,
+        "y": 1.5622796597432342
+      },
+      "isLocked": false,
+      "linkedName": "BottomShootPos"
+    },
+    {
+      "anchor": {
+        "x": 1.6016838937910496,
+        "y": 3.3109602635137354
+      },
+      "prevControl": {
+        "x": 1.4462997830238136,
+        "y": 3.1151139510106014
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Tower"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 5.0,
+    "maxAcceleration": 4.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "reversed": false,
+  "folder": "TowerSneak Paths",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 37.021419207415605
+  },
+  "useDefaultConstraints": true
+}
