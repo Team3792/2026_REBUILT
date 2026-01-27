@@ -1,0 +1,75 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.079566265060241,
+        "y": 2.4941927710843377
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 0.6096746987951804,
+        "y": 2.461409638554217
+      },
+      "isLocked": false,
+      "linkedName": "LowerTowerShootingPos"
+    },
+    {
+      "anchor": {
+        "x": 0.48,
+        "y": 3.641602409638554
+      },
+      "prevControl": {
+        "x": 0.5568915662650604,
+        "y": 2.1991445783132533
+      },
+      "nextControl": {
+        "x": 0.4488245643013727,
+        "y": 4.226442250375382
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 0.43483132530120483,
+        "y": 6.919915662650602
+      },
+      "prevControl": {
+        "x": 0.3583373493975904,
+        "y": 5.980132530120482
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "TopDepotIntake"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.848132780082993,
+      "rotationDegrees": 90.0
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 5.0,
+    "maxAcceleration": 4.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 90.0
+  },
+  "reversed": false,
+  "folder": "Lower TowerSneak Paths",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 25.346175941946687
+  },
+  "useDefaultConstraints": true
+}

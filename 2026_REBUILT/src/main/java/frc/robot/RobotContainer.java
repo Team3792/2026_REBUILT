@@ -21,6 +21,7 @@ import frc.robot.IntakeSubsystem.IntakeConstants;
 import frc.robot.SwerveSubsystem.DriveCommand;
 import frc.robot.SwerveSubsystem.Swerve;
 import frc.robot.ShooterSubsystem.Hood.*;
+import frc.robot.ShooterSubsystem.Shooter.*;
 
 public class RobotContainer {
 
@@ -28,6 +29,7 @@ public class RobotContainer {
   Intake intake = new Intake();
   Climb climb = new Climb();
   Swerve swerve = new Swerve();
+  Shooter shooter = new Shooter();
   Hood hood = new Hood();
 
   CommandPS5Controller driver = new CommandPS5Controller(0);
@@ -38,6 +40,7 @@ public class RobotContainer {
     configureOperatorBindings();
   }
 
+  //driver
   private void configureDriverBindings() {
     driver.R1().onTrue(intake.runToPosition(IntakeConstants.kIntakePosition));
     driver.R1().onFalse(intake.runToPosition(IntakeConstants.kStowedPosition));
@@ -48,7 +51,8 @@ public class RobotContainer {
     swerve.setDefaultCommand(new DriveCommand(swerve, () -> driver.getLeftY(), () -> driver.getLeftX(), () -> driver.getRightX()));
     driver.options().onTrue(Commands.runOnce(() -> swerve.resetHeading(0)));
   }
-  
+
+  //operator
   private void configureOperatorBindings(){
     operator.square().whileTrue(feeder.runFeeder(FeederConstants.kFeedVoltage));
     operator.cross().whileTrue(feeder.runFeeder(-FeederConstants.kFeedVoltage)); 
@@ -57,8 +61,10 @@ public class RobotContainer {
     operator.povDown().whileTrue(climb.climbDownCommand());
 
     operator.L2().onTrue(hood.setPosition(HoodConstants.kZone1Angle));
+    operator.R2().onTrue(shooter.setAngularVelocity(100));//for testing
   }
 
+  
   public Command getAutonomousCommand() {
     return Commands.print("No autonomous command configured");
   }

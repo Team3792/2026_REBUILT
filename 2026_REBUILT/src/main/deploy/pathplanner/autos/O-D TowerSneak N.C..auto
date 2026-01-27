@@ -1,0 +1,43 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "LowerTrench - Outpost"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Outpost - TopDepot Sneak"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "TopDepot - UpperTowerShootingPos"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 10.0
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Lower TowerSneak Autos",
+  "choreoAuto": false
+}

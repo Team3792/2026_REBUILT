@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.46989368567016404,
-        "y": 6.589059454757045
+        "x": 0.4566867469873323,
+        "y": 6.460951807229183
       },
       "isLocked": false,
       "linkedName": "DepotTop"
     },
     {
       "anchor": {
-        "x": 0.412975903614458,
-        "y": 4.8982891566265065
+        "x": 0.5878192771078141,
+        "y": 2.319349397590628
       },
       "prevControl": {
-        "x": 0.4129759036144581,
-        "y": 5.903876085087891
+        "x": 0.5331807228909466,
+        "y": 2.7127469879520754
       },
       "nextControl": {
-        "x": 0.4129759036144581,
-        "y": 3.641602409638554
+        "x": 0.7035837068837283,
+        "y": 1.4858455032040412
       },
       "isLocked": false,
       "linkedName": null
@@ -36,8 +36,13 @@
         "y": 0.7020481927710842
       },
       "prevControl": {
+<<<<<<<< HEAD:2026_REBUILT/src/main/deploy/pathplanner/paths/Depot - Outpost.path
         "x": 0.8567729920504379,
         "y": 1.5257390008223681
+========
+        "x": 0.7080240963849229,
+        "y": 0.8987469879520744
+>>>>>>>> 96bd23015a057c06942e1086ea41845ef39308a3:2026_REBUILT/src/main/deploy/pathplanner/paths/DepotTop - Outpost.path
       },
       "nextControl": null,
       "isLocked": false,
@@ -46,6 +51,7 @@
   ],
   "rotationTargets": [
     {
+<<<<<<<< HEAD:2026_REBUILT/src/main/deploy/pathplanner/paths/Depot - Outpost.path
       "waypointRelativePos": 1,
       "rotationDegrees": -90.42737214895385
     }
@@ -63,6 +69,10 @@
         "nominalVoltage": 12.0,
         "unlimited": false
       }
+========
+      "waypointRelativePos": 0.8448132780083026,
+      "rotationDegrees": -90.0
+>>>>>>>> 96bd23015a057c06942e1086ea41845ef39308a3:2026_REBUILT/src/main/deploy/pathplanner/paths/DepotTop - Outpost.path
     }
   ],
   "pointTowardsZones": [],
@@ -80,7 +90,7 @@
     "rotation": 1.1348211850035415
   },
   "reversed": false,
-  "folder": "TowerSneak Paths",
+  "folder": "Upper TowerSneak Paths",
   "idealStartingState": {
     "velocity": 0,
     "rotation": -90.0
