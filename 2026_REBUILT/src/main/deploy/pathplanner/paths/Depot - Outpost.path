@@ -1,0 +1,99 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 0.412975903614458,
+        "y": 6.832493975903614
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 0.4566867469873323,
+        "y": 6.460951807229183
+      },
+      "isLocked": false,
+      "linkedName": "DepotTop"
+    },
+    {
+      "anchor": {
+        "x": 0.5878192771078141,
+        "y": 2.319349397590628
+      },
+      "prevControl": {
+        "x": 0.5331807228909466,
+        "y": 2.7127469879520754
+      },
+      "nextControl": {
+        "x": 0.7035837068837283,
+        "y": 1.4858455032040412
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 0.412975903614458,
+        "y": 0.7020481927710842
+      },
+      "prevControl": {
+<<<<<<<< HEAD:2026_REBUILT/src/main/deploy/pathplanner/paths/Depot - Outpost.path
+        "x": 0.8567729920504379,
+        "y": 1.5257390008223681
+========
+        "x": 0.7080240963849229,
+        "y": 0.8987469879520744
+>>>>>>>> 96bd23015a057c06942e1086ea41845ef39308a3:2026_REBUILT/src/main/deploy/pathplanner/paths/DepotTop - Outpost.path
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Outpost"
+    }
+  ],
+  "rotationTargets": [
+    {
+<<<<<<<< HEAD:2026_REBUILT/src/main/deploy/pathplanner/paths/Depot - Outpost.path
+      "waypointRelativePos": 1,
+      "rotationDegrees": -90.42737214895385
+    }
+  ],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0.015911368843070112,
+      "maxWaypointRelativePos": 0.837199312714786,
+      "constraints": {
+        "maxVelocity": 3.0,
+        "maxAcceleration": 1.5,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+========
+      "waypointRelativePos": 0.8448132780083026,
+      "rotationDegrees": -90.0
+>>>>>>>> 96bd23015a057c06942e1086ea41845ef39308a3:2026_REBUILT/src/main/deploy/pathplanner/paths/DepotTop - Outpost.path
+    }
+  ],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 5.0,
+    "maxAcceleration": 4.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 1.1348211850035415
+  },
+  "reversed": false,
+  "folder": "Upper TowerSneak Paths",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -90.0
+  },
+  "useDefaultConstraints": true
+}

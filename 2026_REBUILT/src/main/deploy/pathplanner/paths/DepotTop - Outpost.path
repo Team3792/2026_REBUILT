@@ -36,8 +36,13 @@
         "y": 0.7020481927710842
       },
       "prevControl": {
+<<<<<<<< HEAD:2026_REBUILT/src/main/deploy/pathplanner/paths/Depot - Outpost.path
+        "x": 0.8567729920504379,
+        "y": 1.5257390008223681
+========
         "x": 0.7080240963849229,
         "y": 0.8987469879520744
+>>>>>>>> 96bd23015a057c06942e1086ea41845ef39308a3:2026_REBUILT/src/main/deploy/pathplanner/paths/DepotTop - Outpost.path
       },
       "nextControl": null,
       "isLocked": false,
@@ -46,11 +51,30 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.8448132780083026,
-      "rotationDegrees": -90.0
+<<<<<<<< HEAD:2026_REBUILT/src/main/deploy/pathplanner/paths/Depot - Outpost.path
+      "waypointRelativePos": 1,
+      "rotationDegrees": -90.42737214895385
     }
   ],
-  "constraintZones": [],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0.015911368843070112,
+      "maxWaypointRelativePos": 0.837199312714786,
+      "constraints": {
+        "maxVelocity": 3.0,
+        "maxAcceleration": 1.5,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+========
+      "waypointRelativePos": 0.8448132780083026,
+      "rotationDegrees": -90.0
+>>>>>>>> 96bd23015a057c06942e1086ea41845ef39308a3:2026_REBUILT/src/main/deploy/pathplanner/paths/DepotTop - Outpost.path
+    }
+  ],
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
