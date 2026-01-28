@@ -40,6 +40,10 @@ public void setVoltage(double voltage){
   rightMotor.setVoltage(voltage);
 }
 
+public Command applyVoltage(double voltage){
+  return Commands.runOnce(() -> setVoltage(voltage));
+}
+
 public double getRPM(){
    double rps = rightMotor.getVelocity().getValueAsDouble();
   return rps * 60;

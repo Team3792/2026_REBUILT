@@ -37,6 +37,10 @@ public class Hood extends SubsystemBase {
     hood.setVoltage(voltage);
   }
 
+  public Command applyVoltage(double voltage){
+    return Commands.runOnce(() -> setVoltage(voltage));
+  }
+
   //returns rotations
   public double getEncoderRotation() {
     return encoder.get();
@@ -46,7 +50,7 @@ public class Hood extends SubsystemBase {
   //where an angle of 0 is a ball exit angle along the horizontal axis
   //an angle of 90 is ball exit angle along the vertical axis
   public double hoodAngle(){
-    return MathUtil.inputModulus((getEncoderRotation() -HoodConstants.kEncoderAngleOffset) * 360, 0, 360);
+    return MathUtil.inputModulus((getEncoderRotation() - HoodConstants.kEncoderAngleOffset) * 360, 0, 360);
   }
 
   public void setAngle(double angle) {
