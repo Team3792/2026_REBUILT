@@ -17,13 +17,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.HardwareMap;
 
 public class Hood extends SubsystemBase {
   /** Creates a new Hood. */
-  SparkMax hood = new SparkMax(HoodConstants.kHoodCANID, MotorType.kBrushless);
-  DutyCycleEncoder encoder = new DutyCycleEncoder(HoodConstants.kHoodCANID);
+  SparkMax hood = new SparkMax(HardwareMap.hoodID, MotorType.kBrushless);
+  DutyCycleEncoder encoder = new DutyCycleEncoder(HardwareMap.hoodEncoderPort);
   ProfiledPIDController pidController = new ProfiledPIDController(HoodConstants.kP, HoodConstants.kI, HoodConstants.kD, 
-    new TrapezoidProfile.Constraints(5, 10));
+    new TrapezoidProfile.Constraints(360, 360));
   
   public Hood() {
 

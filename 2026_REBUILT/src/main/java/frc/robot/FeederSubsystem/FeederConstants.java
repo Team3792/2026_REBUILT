@@ -6,7 +6,6 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 public class FeederConstants {
     public final static double kFeedVoltage = 5;
-    public final static int kCanID = 0; //need to set
 
     public static TalonFXConfiguration getConfig(){
         TalonFXConfiguration config = new TalonFXConfiguration();

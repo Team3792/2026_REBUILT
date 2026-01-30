@@ -18,6 +18,7 @@ import frc.robot.FeederSubsystem.FeederConstants;
 
 import frc.robot.IntakeSubsystem.Intake;
 import frc.robot.IntakeSubsystem.IntakeConstants;
+import frc.robot.LEDSubsystem.LED;
 import frc.robot.SwerveSubsystem.DriveCommand;
 import frc.robot.SwerveSubsystem.Swerve;
 import frc.robot.ShooterSubsystem.Hood.*;
@@ -31,6 +32,7 @@ public class RobotContainer {
   Swerve swerve = new Swerve();
   Shooter shooter = new Shooter();
   Hood hood = new Hood();
+  LED led = new LED();
 
   CommandPS5Controller driver = new CommandPS5Controller(0);
   CommandPS5Controller operator = new CommandPS5Controller(1);

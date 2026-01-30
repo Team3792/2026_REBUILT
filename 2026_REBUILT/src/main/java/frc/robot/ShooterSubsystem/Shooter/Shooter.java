@@ -14,11 +14,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.HardwareMap;
 
 public class Shooter extends SubsystemBase {
 
-  TalonFX rightMotor = new TalonFX(0);
-  TalonFX leftMotor = new TalonFX(0);
+  TalonFX rightMotor = new TalonFX(HardwareMap.shootLeaderID);
+  TalonFX leftMotor = new TalonFX(HardwareMap.shootFollowerID);
 
 
   ProfiledPIDController pidController = new ProfiledPIDController(ShooterConstants.kP, ShooterConstants.kI, ShooterConstants.kD, 

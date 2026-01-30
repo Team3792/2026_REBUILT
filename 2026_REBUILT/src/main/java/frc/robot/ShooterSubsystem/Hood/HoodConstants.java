@@ -13,9 +13,6 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 /** Add your docs here. */
 public class HoodConstants {
 
-    public static final int  kHoodCANID = 0;
-    public static final int kEncoderCANID = 0;
-
     public static final double kP = 0;
     public static final double kI = 0;
     public static final double kD = 0;

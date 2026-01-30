@@ -40,11 +40,11 @@ public class ModuleConstants {
     public static TalonFXConfiguration getDriveConfig(){
         TalonFXConfiguration config = new TalonFXConfiguration();
         Slot0Configs slot0 = config.Slot0;
-        // Slot0Config.kS = 0.17;
-        // slot0Config.kV = 0.11;
-        // slot0Config.kP = 0.001;
-        // slot0Config.kI = 0;
-        // slot0Config.kD = 0;
+        slot0.kS = 0.17;
+        slot0.kV = 0.11;
+        slot0.kP = 0.001;
+        slot0.kI = 0;
+        slot0.kD = 0;
         
         config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive; //can be changed if needed
         config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
