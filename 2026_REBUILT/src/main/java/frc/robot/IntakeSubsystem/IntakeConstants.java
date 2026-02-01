@@ -6,7 +6,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 public class IntakeConstants {
     
-    public final static double intakeVoltage = 5;
+    public final static double kIntakeVoltage = 5;
 
     public final static double kIntakePosition = 0; // need to set
     public final static double kStowedPosition = 0; //need to set

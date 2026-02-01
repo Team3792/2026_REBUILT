@@ -16,7 +16,7 @@ public class HoodConstants {
     public static final double kP = 0;
     public static final double kI = 0;
     public static final double kD = 0;
-    public static final double frictionFF = 0;
+    public static final double kFrictionFF = 0;
 
     //Hood Angle Constants for Zones
     public static final double kZone1Angle = 0;

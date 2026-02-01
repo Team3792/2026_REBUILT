@@ -27,7 +27,6 @@ public class Hood extends SubsystemBase {
     new TrapezoidProfile.Constraints(360, 360));
   
   public Hood() {
-
     pidController.enableContinuousInput(0, 360);
     hood.configure(HoodConstants.configHood(), com.revrobotics.ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
 
@@ -57,7 +56,7 @@ public class Hood extends SubsystemBase {
   public void setAngle(double angle) {
     pidController.setGoal(angle);
     double pidOutput = pidController.calculate(hoodAngle());
-    hood.set(pidOutput + HoodConstants.frictionFF);
+    hood.set(pidOutput + HoodConstants.kFrictionFF);
   }
 
   public Command setPosition(double angle){

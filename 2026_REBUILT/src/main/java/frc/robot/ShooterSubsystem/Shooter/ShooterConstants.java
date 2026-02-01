@@ -14,15 +14,11 @@ import edu.wpi.first.wpilibj.motorcontrol.Talon;
 
 /** Add your docs here. */
 public class ShooterConstants {
-
-    public static final int kRightMotorCanID = 0;
-    public static final int kLeftMotorCanID = 0;
-
     //pid
     public static final double kP = 0;
     public static final double kI = 0;
     public static final double kD = 0;
-    public static final double frictionFF = 0;
+    public static final double kFrictionFF = 0;
 
     public static TalonFXConfiguration applyRightMotorConfig(){
         TalonFXConfiguration config = new TalonFXConfiguration();
@@ -37,8 +33,8 @@ public class ShooterConstants {
         return config;
     }
 
-    private static final double flywheelDiameterInches = 4; //diameter in inches
-    public static final double flywheelDiameter = flywheelDiameterInches * 0.0254; //convert inches to meters
-    public static final double flywheelRadius = flywheelDiameter / 2;
+    private static final double kFlywheelDiameterInches = 4; //diameter in inches
+    public static final double kFlywheelDiameter = kFlywheelDiameterInches * 0.0254; //convert inches to meters
+    public static final double kFlywheelRadius = kFlywheelDiameter / 2;
 
 }

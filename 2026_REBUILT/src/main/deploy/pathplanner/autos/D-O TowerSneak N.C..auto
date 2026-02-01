@@ -13,13 +13,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "DepotTop - Outpost"
+            "pathName": "TopDepot - BottomDepot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "BottomDepot - UpperTowerShootPos"
           }
         },
         {
           "type": "wait",
           "data": {
             "waitTime": 1.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "UpperTowerShootingPos - Outpost"
           }
         },
         {

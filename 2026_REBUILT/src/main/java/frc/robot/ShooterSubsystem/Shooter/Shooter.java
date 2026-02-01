@@ -52,7 +52,7 @@ public double getRPM(){
 
 public double getTangentialVelocity(){
   double radiansPerMinute = getRPM() * 2 * Math.PI;           // radians per minute
-  return radiansPerMinute * ShooterConstants.flywheelRadius;// tangential velocity (meters / minute)
+  return radiansPerMinute * ShooterConstants.kFlywheelRadius;// tangential velocity (meters / minute)
 }
 
 //need to add in piece wise best fit polynomial for RPM target RPM estimation
@@ -60,14 +60,12 @@ public double getTangentialVelocity(){
 public void setRPM(double targetVelocity){
   pidController.setGoal(targetVelocity);
   double pidOutput = pidController.calculate(getRPM());
-  rightMotor.setVoltage(pidOutput + ShooterConstants.frictionFF);
+  rightMotor.setVoltage(pidOutput + ShooterConstants.kFrictionFF);
 }
 
 public Command setAngularVelocity(double targetRPM){
   return Commands.runOnce(() -> setRPM(targetRPM));
 }
-
-
 
   @Override
   public void periodic() {
