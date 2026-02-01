@@ -58,13 +58,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -14.311041262606413
+    "rotation": -14.311041262606414
   },
   "reversed": false,
   "folder": "Lower TowerSneak Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 90.0
+    "rotation": -86.7741771433107
   },
   "useDefaultConstraints": true
 }

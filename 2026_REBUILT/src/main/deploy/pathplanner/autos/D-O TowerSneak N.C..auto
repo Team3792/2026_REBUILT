@@ -13,13 +13,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "TopDepot - BottomDepot"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "BottomDepot - UpperTowerShootPos"
+            "pathName": "DepotTop - Outpost"
           }
         },
         {
