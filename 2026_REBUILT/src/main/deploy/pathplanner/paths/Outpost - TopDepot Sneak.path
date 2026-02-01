@@ -36,7 +36,7 @@
         "y": 6.919915662650602
       },
       "prevControl": {
-        "x": 0.423903614457831,
+        "x": 0.42390361445783087,
         "y": 6.045698795174206
       },
       "nextControl": null,
@@ -63,7 +63,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 90.0
+    "rotation": -86.7741771433107
   },
   "reversed": false,
   "folder": "Lower TowerSneak Paths",
