@@ -18,12 +18,12 @@ public class Vision extends SubsystemBase {
 
   public Vision() {
 
-    PhotonCamera frontCam = new PhotonCamera(VisionConstants.kFrontCamName);
-    PhotonCamera backCam = new PhotonCamera(VisionConstants.kBackCamName);
+    //PhotonCamera frontCam = new PhotonCamera(VisionConstants.kFrontCamName);
+    //PhotonCamera backCam = new PhotonCamera(VisionConstants.kBackCamName);
   }
 
-  PhotonPoseEstimator frontCamPoseEstimation = new PhotonPoseEstimator(VisionConstants.fieldLayout, VisionConstants.kRobotToFrontCam);
-  PhotonPoseEstimator backCamPoseEstimation = new PhotonPoseEstimator(VisionConstants.fieldLayout, VisionConstants.kRobotToBackCam);
+  //PhotonPoseEstimator frontCamPoseEstimation = new PhotonPoseEstimator(VisionConstants.fieldLayout, VisionConstants.kRobotToFrontCam);
+  //PhotonPoseEstimator backCamPoseEstimation = new PhotonPoseEstimator(VisionConstants.fieldLayout, VisionConstants.kRobotToBackCam);
 
   public boolean hasTarget(PhotonCamera camera) {
     

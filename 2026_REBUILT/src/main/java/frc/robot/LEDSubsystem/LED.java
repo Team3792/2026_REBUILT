@@ -4,6 +4,8 @@
 
 package frc.robot.LEDSubsystem;
 
+import static edu.wpi.first.units.Units.MetersPerSecond;
+
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.DistanceUnit;
 import edu.wpi.first.units.Unit;
@@ -30,19 +32,23 @@ public class LED extends SubsystemBase {
     led.setData(ledBuffer);
     led.start();                                                                                                                                                                    
   } 
-private final LEDPattern coolRainbow = LEDPattern.rainbow(255,128);
-// Adust spacing to be how many LEDs per meter
-private static final Distance kLedSpacing = edu.wpi.first.units.Units.Meters.of(1.1/67);
-private final LEDPattern scrollingRainbowLedPattern =
-    coolRainbow.scrollAtAbsoluteSpeed(
-      edu.wpi.first.units.Units.MetersPerSecond.of(1), kLedSpacing);
-  @Override
+  private final LEDPattern coolRainbow = LEDPattern.rainbow(255,128);
+  // Adjust spacing to be how many LEDs per meter
+  private static final Distance kLedSpacing = edu.wpi.first.units.Units.Meters.of(1.1/67);
+  
+  // private final LEDPattern scrollingRainbowLedPattern =
+  //   coolRainbow.scrollAtAbsoluteSpeed(MetersPerSecond.of(1), kLedSpacing);
+
+  public Command runPattern(LEDPattern pattern) {
+    return run(() -> pattern.applyTo(ledBuffer));
+  }
+
+  @Override  
   public void periodic() {
-    scrollingRainbowLedPattern.applyTo(ledBuffer);
-    led.setData(ledBuffer);
+    //scrollingRainbowLedPattern.applyTo(ledBuffer);
+    // This is to apply a rainbow LED
+   // led.setData(ledBuffer);
     // This method will be called once per scheduler run
   }
-public Command runPattern(LEDPattern pattern) {
-  return run(() -> pattern.applyTo(ledBuffer));
-}
+
 }

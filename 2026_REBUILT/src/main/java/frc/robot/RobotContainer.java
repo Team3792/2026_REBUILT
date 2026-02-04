@@ -4,10 +4,13 @@
 
 package frc.robot;
 
+import java.util.regex.Pattern;
+
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.wpilibj.LEDPattern;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
@@ -19,6 +22,7 @@ import frc.robot.FeederSubsystem.FeederConstants;
 import frc.robot.IntakeSubsystem.Intake;
 import frc.robot.IntakeSubsystem.IntakeConstants;
 import frc.robot.LEDSubsystem.LED;
+import frc.robot.LEDSubsystem.LEDConstants;
 import frc.robot.SwerveSubsystem.DriveCommand;
 import frc.robot.SwerveSubsystem.Swerve;
 import frc.robot.ShooterSubsystem.Hood.*;
@@ -44,14 +48,18 @@ public class RobotContainer {
 
   //driver
   private void configureDriverBindings() {
-    driver.R1().onTrue(intake.runToPosition(IntakeConstants.kIntakePosition));
-    driver.R1().onFalse(intake.runToPosition(IntakeConstants.kStowedPosition));
+    // driver.R1().onTrue(intake.runToPosition(IntakeConstants.kIntakePosition));
+    // driver.R1().onFalse(intake.runToPosition(IntakeConstants.kStowedPosition));
 
-    driver.R1().whileTrue(intake.runIntake(IntakeConstants.kIntakeVoltage));
-    driver.L1().whileTrue(intake.runIntake(-IntakeConstants.kIntakeVoltage));
+    // driver.R1().whileTrue(intake.runIntake(IntakeConstants.kIntakeVoltage));
+    // driver.L1().whileTrue(intake.runIntake(-IntakeConstants.kIntakeVoltage));
 
-    swerve.setDefaultCommand(new DriveCommand(swerve, () -> driver.getLeftY(), () -> driver.getLeftX(), () -> driver.getRightX()));
-    driver.options().onTrue(Commands.runOnce(() -> swerve.resetHeading(0)));
+    // swerve.setDefaultCommand(new DriveCommand(swerve, () -> driver.getLeftY(), () -> driver.getLeftX(), () -> driver.getRightX()));
+    // driver.options().onTrue(Commands.runOnce(() -> swerve.resetHeading(0)));
+
+    driver.triangle().onTrue(led.runPattern(LEDConstants.kClimbPattern));
+    driver.square().onTrue(led.runPattern(LEDConstants.kIntakePattern));
+    driver.cross().onTrue(led.runPattern(LEDConstants.kShootingPattern));
   }
 
   //operator

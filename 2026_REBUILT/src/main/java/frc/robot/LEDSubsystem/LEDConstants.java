@@ -5,7 +5,15 @@
 
 package frc.robot.LEDSubsystem;
 
+import java.util.regex.Pattern;
+
+import edu.wpi.first.wpilibj.LEDPattern;
+import edu.wpi.first.wpilibj.util.Color;
+
 /** Add your docs here. */
 public class LEDConstants {
     //ADD LED Patterns here
+    public static final LEDPattern kClimbPattern = LEDPattern.solid(Color.kSkyBlue);
+    public static final LEDPattern kIntakePattern = LEDPattern.solid(Color.kGold);
+    public static final LEDPattern kShootingPattern = LEDPattern.solid(Color.kOrangeRed);
 }
