@@ -2,36 +2,61 @@ package frc.robot.SwerveSubsystem;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
 
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.controller.HolonomicDriveController;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Localization.AntPose;
 
 public class Swerve extends SubsystemBase {
       
-  private final SwerveModule frontLeft = new SwerveModule(ModuleConstants.kFrontLeft, "front left");
-    private final SwerveModule frontRight = new SwerveModule(ModuleConstants.kFrontRight, "front right");
-    private final SwerveModule backLeft = new SwerveModule(ModuleConstants.kBackLeft, "back left");
-    private final SwerveModule backRight = new SwerveModule(ModuleConstants.kBackRight, "back right");
+  static SwerveModule frontLeft = new SwerveModule(ModuleConstants.kFrontLeft, "front left");
+  static SwerveModule frontRight = new SwerveModule(ModuleConstants.kFrontRight, "front right");
+  static SwerveModule backLeft = new SwerveModule(ModuleConstants.kBackLeft, "back left");
+  static SwerveModule backRight = new SwerveModule(ModuleConstants.kBackRight, "back right");
 
-    SwerveModule[] modules = {frontLeft, frontRight, backLeft, backRight};
+  SwerveModule[] modules = {frontLeft, frontRight, backLeft, backRight};
 
-    Pigeon2 pigeon = new Pigeon2(0);
+  public static Pigeon2 pigeon = new Pigeon2(0);
+
+  AntPose poseEstimator = new AntPose(
+    SwerveConstants.kDriveKinematics, 
+    getRotation2dHeading(), 
+    getModulePositions(), 
+    new Pose2d(), 
+    null,
+    null);
+
+  HolonomicDriveController swerveController = new HolonomicDriveController(SwerveConstants.kTranslationController, 
+                                        SwerveConstants.kTranslationController, SwerveConstants.kRotationController);
     
-    
+  
   public Swerve() {
     zeroHeading();
-
-
   }
 
   public void zeroHeading(){
     pigeon.reset();
   }
 
-  public double getHeading(){
+  public static double getHeading(){
     return pigeon.getYaw().getValueAsDouble();
   }
 
@@ -56,7 +81,15 @@ public class Swerve extends SubsystemBase {
     backRight.stop();
   }
 
-
+  public static SwerveModulePosition[] getModulePositions(){
+    SwerveModulePosition frontLeftPos = frontLeft.getPosition();
+    SwerveModulePosition frontRightPos = frontRight.getPosition();
+    SwerveModulePosition backLeftPos = backLeft.getPosition();
+    SwerveModulePosition backRightPos = backRight.getPosition();
+    SwerveModulePosition[] modulePositions = {frontLeftPos, frontRightPos, backLeftPos, backRightPos};
+    
+    return modulePositions;
+  }
 
   public void setModuleStates(SwerveModuleState[] desiredStates){
     SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, SwerveConstants.kMaxSpeedMetersPerSecond);
@@ -74,11 +107,28 @@ public class Swerve extends SubsystemBase {
     setModuleStates(desiredStates);
   }
 
-  public void setStates(SwerveModuleState[] targetStates) {
-    SwerveDriveKinematics.desaturateWheelSpeeds(targetStates, SwerveConstants.kMaxSpeedMetersPerSecond);
+  //Use for testitng
+  public void turnToTag(double tagYaw) {
+    ProfiledPIDController pid = new ProfiledPIDController(0.01, 0, 0, new TrapezoidProfile.Constraints(SwerveConstants.kMaxOmega, SwerveConstants.kMaxOmega));
+    double rotationSpeed = pid.calculate(getHeading(), tagYaw);
+    ChassisSpeeds speeds = new ChassisSpeeds(0, 0, rotationSpeed);
+    drive(speeds, getRotation2dHeading());
+  }
 
-    for (int i = 0; i < modules.length; i++) {
-      modules[i].setState(targetStates[i]);
-    }
+  public void alignToTag(Pose2d tagPose) {
+    // Calculate new target pose with offset
+    Pose2d targetPose = tagPose.transformBy(new Transform2d(0.5, 0, new Rotation2d(0)));
+
+    Pose2d robotPose = poseEstimator.getEstimatedPosition();
+    ChassisSpeeds speeds = swerveController.calculate(robotPose, targetPose, 0, targetPose.getRotation());
+    drive(speeds, getRotation2dHeading());
+  }
+
+  public Command turnToTagCommand(double tagYaw) {
+    return Commands.run(() -> turnToTag(tagYaw));
+  }
+
+  public Command alignToTagCommand(Pose2d tagPose){
+    return Commands.run(() -> alignToTag(tagPose));
   }
 }

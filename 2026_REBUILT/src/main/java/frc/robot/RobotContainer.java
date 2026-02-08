@@ -10,6 +10,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.LEDPattern;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -23,8 +24,11 @@ import frc.robot.IntakeSubsystem.Intake;
 import frc.robot.IntakeSubsystem.IntakeConstants;
 import frc.robot.LEDSubsystem.LED;
 import frc.robot.LEDSubsystem.LEDConstants;
+import frc.robot.Localization.AntPose;
+import frc.robot.Localization.Vision;
 import frc.robot.SwerveSubsystem.DriveCommand;
 import frc.robot.SwerveSubsystem.Swerve;
+import frc.robot.SwerveSubsystem.SwerveConstants;
 import frc.robot.ShooterSubsystem.Hood.*;
 import frc.robot.ShooterSubsystem.Shooter.*;
 
@@ -36,6 +40,7 @@ public class RobotContainer {
   Swerve swerve = new Swerve();
   Shooter shooter = new Shooter();
   Hood hood = new Hood();
+  Vision vision = new Vision();
   LED led = new LED();
 
   CommandPS5Controller driver = new CommandPS5Controller(0);
@@ -57,9 +62,12 @@ public class RobotContainer {
     // swerve.setDefaultCommand(new DriveCommand(swerve, () -> driver.getLeftY(), () -> driver.getLeftX(), () -> driver.getRightX()));
     // driver.options().onTrue(Commands.runOnce(() -> swerve.resetHeading(0)));
 
+    driver.L2().whileTrue(swerve.turnToTagCommand(vision.getTagYaw(Vision.frontCam)));
+    driver.R2().whileTrue(swerve.alignToTagCommand(new Pose2d()));
+
     driver.triangle().onTrue(led.runPattern(LEDConstants.kClimbPattern));
-    driver.square().onTrue(led.runPattern(LEDConstants.kIntakePattern));
-    driver.cross().onTrue(led.runPattern(LEDConstants.kShootingPattern));
+    // driver.square().onTrue(led.runPattern(LEDConstants.kIntakePattern));
+    // driver.cross().onTrue(led.runPattern(LEDConstants.kShootingPattern));
   }
 
   //operator

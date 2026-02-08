@@ -20,8 +20,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
 public class LED extends SubsystemBase {
-  private final int kPort = 1;
-  private final int kLength = 67; 
+  private final int kPort = 0;
+  private final int kLength = 65; 
   private final AddressableLED led;
   private final AddressableLEDBuffer ledBuffer;
 
@@ -32,23 +32,29 @@ public class LED extends SubsystemBase {
     led.setData(ledBuffer);
     led.start();                                                                                                                                                                    
   } 
-  private final LEDPattern coolRainbow = LEDPattern.rainbow(255,128);
-  // Adjust spacing to be how many LEDs per meter
-  private static final Distance kLedSpacing = edu.wpi.first.units.Units.Meters.of(1.1/67);
+  // private final LEDPattern coolRainbow = LEDPattern.rainbow(255,128);
+  // // Adjust spacing to be how many LEDs per meter
+  // private static final Distance kLedSpacing = edu.wpi.first.units.Units.Meters.of(1.1/67);
   
-  // private final LEDPattern scrollingRainbowLedPattern =
-  //   coolRainbow.scrollAtAbsoluteSpeed(MetersPerSecond.of(1), kLedSpacing);
+  // // private final LEDPattern scrollingRainbowLedPattern =
+  // //   coolRainbow.scrollAtAbsoluteSpeed(MetersPerSecond.of(1), kLedSpacing);
+
+  public void setLEDColor(LEDPattern pattern) {
+    pattern.applyTo(ledBuffer);
+    led.setData(ledBuffer);
+  }
 
   public Command runPattern(LEDPattern pattern) {
-    return run(() -> pattern.applyTo(ledBuffer));
+    return run(() -> setLEDColor(pattern));
   }
 
   @Override  
   public void periodic() {
-    //scrollingRainbowLedPattern.applyTo(ledBuffer);
-    // This is to apply a rainbow LED
-   // led.setData(ledBuffer);
-    // This method will be called once per scheduler run
+  //This method will be called once per scheduler run
+
+  setLEDColor(LEDConstants.kClimbPattern);
+    //led.setData(ledBuffer)
+    
   }
 
 }

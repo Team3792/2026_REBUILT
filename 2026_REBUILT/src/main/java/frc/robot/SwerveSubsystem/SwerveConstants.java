@@ -1,7 +1,10 @@
 package frc.robot.SwerveSubsystem;
 
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 
 public class SwerveConstants {
@@ -22,5 +25,9 @@ public class SwerveConstants {
     public static double kDeadBandValue = 0.08;
     public static double kMaxLinearVelocity = 4.0;
     public static double kMaxOmega = 4.0;
+
+
+    public static PIDController kTranslationController = new PIDController(1, 0.1, 0);
+    public static ProfiledPIDController kRotationController = new ProfiledPIDController(0.1, 0, 0, new TrapezoidProfile.Constraints(3.14, 6.28));
     
 }
