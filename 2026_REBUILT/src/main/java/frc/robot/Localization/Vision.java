@@ -4,11 +4,15 @@
 
 package frc.robot.Localization;
 
+import java.lang.StackWalker.Option;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
+import org.photonvision.estimation.VisionEstimation;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -25,66 +29,67 @@ public class Vision extends SubsystemBase {
   public static PhotonCamera frontCam, backCam;
   PhotonPoseEstimator frontCamPoseEstimation;
   PhotonPoseEstimator backCamPoseEstimation;
-  
+
   public Vision() {
 
     frontCam = new PhotonCamera(VisionConstants.kFrontCamName);
     backCam = new PhotonCamera(VisionConstants.kBackCamName);
 
-    //frontCamPoseEstimation = new PhotonPoseEstimator(VisionConstants.kFieldLayout, VisionConstants.kRobotToFrontCam);
-    //backCamPoseEstimation = new PhotonPoseEstimator(VisionConstants.kFieldLayout, VisionConstants.kRobotToBackCam);
+    frontCamPoseEstimation = new PhotonPoseEstimator(VisionConstants.kFieldLayout, VisionConstants.kRobotToFrontCam);
+    backCamPoseEstimation = new PhotonPoseEstimator(VisionConstants.kFieldLayout, VisionConstants.kRobotToBackCam);
   }
-
 
   public boolean hasTarget(PhotonCamera cam){
     var result = cam.getLatestResult();
     boolean hasTarget = result.hasTargets();
     return hasTarget;
   }
-   
-  public int getTagID(PhotonCamera cam) {
-    var result = cam.getLatestResult();
-    if (result.hasTargets()) {
-      PhotonTrackedTarget target = result.getBestTarget();
-      int tagID = target.getFiducialId();
-      return tagID;
-    } else {
-      return -1; // Return -1 if no targets are detected
-    }
-  }
 
-  public double getTagYaw(PhotonCamera cam) {
-    double tagYaw = 0;
-    var result = cam.getLatestResult();
-    if (result.hasTargets()){
-      var target = result.getBestTarget();
-      tagYaw = target.getYaw();
-    } 
-    return tagYaw;
-  }
-
-  //Return Pose2d of tag
-  //Still need implementation
-  public Pose2d getTagPose(PhotonCamera cam) {
-    return new Pose2d();
-  }
-
-  public Optional<EstimatedRobotPose> getRobotPose(){
-    var result = frontCam.getLatestResult();
+  public Optional<EstimatedRobotPose> getFrontCamPoseLatest(){
+    var result = frontCam.getLatestResult();  
     return frontCamPoseEstimation.estimateCoprocMultiTagPose(result);
   }
-   
+
+  public Optional<EstimatedRobotPose> getBackCamPoseLatest(){
+    var result = backCam.getLatestResult();
+    return backCamPoseEstimation.estimateCoprocMultiTagPose(result);
+  }
+
+  public List<EstimatedRobotPose> getFrontCamResults(){
+    Optional<EstimatedRobotPose> visionEstimate = Optional.empty();
+    List<EstimatedRobotPose> visionEstimates = new ArrayList<EstimatedRobotPose>();
+    for (var result : frontCam.getAllUnreadResults()) {
+      visionEstimate = frontCamPoseEstimation.estimateCoprocMultiTagPose(result);
+      if (visionEstimate.isEmpty()) {
+        continue;
+      }
+      visionEstimates.add(visionEstimate.get());
+    }
+    return visionEstimates;
+  }
+
+  public List<EstimatedRobotPose> getBackCamResults(){
+    Optional<EstimatedRobotPose> visionEstimate = Optional.empty();
+    List<EstimatedRobotPose> visionEstimates = new ArrayList<EstimatedRobotPose>();
+    for (var result : frontCam.getAllUnreadResults()) {
+      visionEstimate = frontCamPoseEstimation.estimateCoprocMultiTagPose(result);
+      if (visionEstimate.isEmpty()) {
+        continue;
+      }
+      visionEstimates.add(visionEstimate.get());
+    }
+    return visionEstimates;
+  }
+  
 
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putBoolean("VisionSubsystem/frontCam", hasTarget(frontCam));
-    SmartDashboard.putBoolean("VisionSubsystem/backCam", hasTarget(backCam));
-    SmartDashboard.putNumber("VisionSubsystem/frontCamTagID", getTagID(frontCam));
-    SmartDashboard.putNumber("VisionSubsystem/backCamTagID", getTagID(backCam));
-    SmartDashboard.putNumber("VisionSubsystem/frontCamTagYaw", getTagYaw(frontCam));
-    SmartDashboard.putNumber("VisionSubsystem/backCamTagYaw", getTagYaw(backCam));
-    
+    SmartDashboard.putBoolean("VisionSubsystem/backCam", hasTarget(backCam));   
+
+    getFrontCamPose();
+    getBackCamPose();
   }
 }

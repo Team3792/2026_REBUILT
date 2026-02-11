@@ -36,13 +36,7 @@ public class Swerve extends SubsystemBase {
 
   public static Pigeon2 pigeon = new Pigeon2(0);
 
-  // AntPose poseEstimator = new AntPose(
-  //   SwerveConstants.kDriveKinematics, 
-  //   getRotation2dHeading(), 
-  //   getModulePositions(), 
-  //   new Pose2d(), 
-  //   null,
-  //   null);
+  AntPose antPose = new AntPose(SwerveConstants.kDriveKinematics, getRotation2dHeading(), getModulePositions(), new Pose2d());
 
   // HolonomicDriveController swerveController = new HolonomicDriveController(SwerveConstants.kTranslationController, 
   //                                       SwerveConstants.kTranslationController, SwerveConstants.kRotationController);
