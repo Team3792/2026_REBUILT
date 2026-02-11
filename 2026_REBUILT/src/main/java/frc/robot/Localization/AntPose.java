@@ -29,9 +29,4 @@ public class AntPose extends SwerveDrivePoseEstimator {
         // Can check abiguity of tag, distance to tag, etc.
         return true; // Placeholder
     }
-
-
-
-
-
 }

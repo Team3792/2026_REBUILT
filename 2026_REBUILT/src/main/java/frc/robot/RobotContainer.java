@@ -62,8 +62,8 @@ public class RobotContainer {
     // swerve.setDefaultCommand(new DriveCommand(swerve, () -> driver.getLeftY(), () -> driver.getLeftX(), () -> driver.getRightX()));
     // driver.options().onTrue(Commands.runOnce(() -> swerve.resetHeading(0)));
 
-    driver.L2().whileTrue(swerve.turnToTagCommand(vision.getTagYaw(Vision.frontCam)));
-    driver.R2().whileTrue(swerve.alignToTagCommand(new Pose2d()));
+    // driver.L2().whileTrue(swerve.turnToTagCommand(vision.getTagYaw(Vision.frontCam)));
+    // driver.R2().whileTrue(swerve.alignToTagCommand(new Pose2d()));
 
     driver.triangle().onTrue(led.runPattern(LEDConstants.kClimbPattern));
     // driver.square().onTrue(led.runPattern(LEDConstants.kIntakePattern));

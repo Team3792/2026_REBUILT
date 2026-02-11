@@ -36,16 +36,16 @@ public class Swerve extends SubsystemBase {
 
   public static Pigeon2 pigeon = new Pigeon2(0);
 
-  AntPose poseEstimator = new AntPose(
-    SwerveConstants.kDriveKinematics, 
-    getRotation2dHeading(), 
-    getModulePositions(), 
-    new Pose2d(), 
-    null,
-    null);
+  // AntPose poseEstimator = new AntPose(
+  //   SwerveConstants.kDriveKinematics, 
+  //   getRotation2dHeading(), 
+  //   getModulePositions(), 
+  //   new Pose2d(), 
+  //   null,
+  //   null);
 
-  HolonomicDriveController swerveController = new HolonomicDriveController(SwerveConstants.kTranslationController, 
-                                        SwerveConstants.kTranslationController, SwerveConstants.kRotationController);
+  // HolonomicDriveController swerveController = new HolonomicDriveController(SwerveConstants.kTranslationController, 
+  //                                       SwerveConstants.kTranslationController, SwerveConstants.kRotationController);
     
   
   public Swerve() {
@@ -108,27 +108,27 @@ public class Swerve extends SubsystemBase {
   }
 
   //Use for testitng
-  public void turnToTag(double tagYaw) {
-    ProfiledPIDController pid = new ProfiledPIDController(0.01, 0, 0, new TrapezoidProfile.Constraints(SwerveConstants.kMaxOmega, SwerveConstants.kMaxOmega));
-    double rotationSpeed = pid.calculate(getHeading(), tagYaw);
-    ChassisSpeeds speeds = new ChassisSpeeds(0, 0, rotationSpeed);
-    drive(speeds, getRotation2dHeading());
-  }
+  // public void turnToTag(double tagYaw) {
+  //   ProfiledPIDController pid = new ProfiledPIDController(0.01, 0, 0, new TrapezoidProfile.Constraints(SwerveConstants.kMaxOmega, SwerveConstants.kMaxOmega));
+  //   double rotationSpeed = pid.calculate(getHeading(), tagYaw);
+  //   ChassisSpeeds speeds = new ChassisSpeeds(0, 0, rotationSpeed);
+  //   drive(speeds, getRotation2dHeading());
+  // }
 
-  public void alignToTag(Pose2d tagPose) {
-    // Calculate new target pose with offset
-    Pose2d targetPose = tagPose.transformBy(new Transform2d(0.5, 0, new Rotation2d(0)));
+  // public void alignToTag(Pose2d tagPose) {
+  //   // Calculate new target pose with offset
+  //   Pose2d targetPose = tagPose.transformBy(new Transform2d(0.5, 0, new Rotation2d(0)));
 
-    Pose2d robotPose = poseEstimator.getEstimatedPosition();
-    ChassisSpeeds speeds = swerveController.calculate(robotPose, targetPose, 0, targetPose.getRotation());
-    drive(speeds, getRotation2dHeading());
-  }
+  //   Pose2d robotPose = poseEstimator.getEstimatedPosition();
+  //   ChassisSpeeds speeds = swerveController.calculate(robotPose, targetPose, 0, targetPose.getRotation());
+  //   drive(speeds, getRotation2dHeading());
+  // }
 
-  public Command turnToTagCommand(double tagYaw) {
-    return Commands.run(() -> turnToTag(tagYaw));
-  }
+  // public Command turnToTagCommand(double tagYaw) {
+  //   return Commands.run(() -> turnToTag(tagYaw));
+  // }
 
-  public Command alignToTagCommand(Pose2d tagPose){
-    return Commands.run(() -> alignToTag(tagPose));
-  }
+  // public Command alignToTagCommand(Pose2d tagPose){
+  //   return Commands.run(() -> alignToTag(tagPose));
+  // }
 }
