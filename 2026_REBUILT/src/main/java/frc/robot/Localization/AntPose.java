@@ -16,15 +16,21 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 
+
 /** Add your docs here. */
 public class AntPose extends SwerveDrivePoseEstimator {
 
+    
+
     public AntPose (SwerveDriveKinematics kin, Rotation2d gyroAngle, SwerveModulePosition[] modulePositions,
-        Pose2d initialPoseMeters, Matrix<N3, N1> stateStdDevs,Matrix<N3, N1> visionStdDevs) {
+        Pose2d initialPoseMeters, Matrix<N3, N1> stateStdDevs,Matrix<N3, N1> visionStdDevs){
+
         super(kin, gyroAngle, modulePositions, initialPoseMeters, stateStdDevs, visionStdDevs);
     }
 
-    public boolean isDataValid() {
+    //validity based on distance tag is from camera, and ambiguity of detected tag.
+    //further distance means less ambiguity needed for pose to be tossed out
+    public boolean camDataValid() {
         // check if the data is valid
         // Can check abiguity of tag, distance to tag, etc.
         return true; // Placeholder

@@ -69,10 +69,10 @@ public class Vision extends SubsystemBase {
     return new Pose2d();
   }
 
-  // public Optional<EstimatedRobotPose> getRobotPose(){
-  //   var result = frontCam.getLatestResult();
-  //   return frontCamPoseEstimation.estimateCoprocMultiTagPose(result);
-  // }
+  public Optional<EstimatedRobotPose> getRobotPose(){
+    var result = frontCam.getLatestResult();
+    return frontCamPoseEstimation.estimateCoprocMultiTagPose(result);
+  }
    
 
 
