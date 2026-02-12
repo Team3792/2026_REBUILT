@@ -9,9 +9,12 @@ import java.util.regex.Pattern;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.pathplanner.lib.auto.AutoBuilder;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.LEDPattern;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
@@ -24,11 +27,12 @@ import frc.robot.IntakeSubsystem.Intake;
 import frc.robot.IntakeSubsystem.IntakeConstants;
 import frc.robot.LEDSubsystem.LED;
 import frc.robot.LEDSubsystem.LEDConstants;
-import frc.robot.Localization.AntPose;
+import frc.robot.Localization.AntPoseEstimator;
 import frc.robot.Localization.Vision;
 import frc.robot.SwerveSubsystem.DriveCommand;
 import frc.robot.SwerveSubsystem.Swerve;
 import frc.robot.SwerveSubsystem.SwerveConstants;
+import frc.robot.SwerveSubsystem.TurnToHubCommand;
 import frc.robot.ShooterSubsystem.Hood.*;
 import frc.robot.ShooterSubsystem.Shooter.*;
 
@@ -46,9 +50,20 @@ public class RobotContainer {
   CommandPS5Controller driver = new CommandPS5Controller(0);
   CommandPS5Controller operator = new CommandPS5Controller(1);
 
+  private SendableChooser<Command> autoChooser;
+
   public RobotContainer() {
     configureDriverBindings();
     configureOperatorBindings();
+
+    //Register Named Commands
+
+
+    boolean isCompetition = false;
+    autoChooser = AutoBuilder.buildAutoChooserWithOptionsModifier((stream) -> isCompetition 
+                  ? stream.filter(auto -> auto.getName().startsWith("comp")) : stream);
+
+    SmartDashboard.putData("Auto Chooser", autoChooser);
   }
 
   //driver
@@ -59,13 +74,15 @@ public class RobotContainer {
     // driver.R1().whileTrue(intake.runIntake(IntakeConstants.kIntakeVoltage));
     // driver.L1().whileTrue(intake.runIntake(-IntakeConstants.kIntakeVoltage));
 
-    // swerve.setDefaultCommand(new DriveCommand(swerve, () -> driver.getLeftY(), () -> driver.getLeftX(), () -> driver.getRightX()));
-    // driver.options().onTrue(Commands.runOnce(() -> swerve.resetHeading(0)));
+    swerve.setDefaultCommand(new DriveCommand(swerve, () -> driver.getLeftY(), () -> driver.getLeftX(), () -> driver.getRightX()));
+    driver.options().onTrue(Commands.runOnce(() -> swerve.resetHeading(0)));
+
+    driver.R2().whileTrue(new TurnToHubCommand(swerve, new Pose2d(), () -> driver.getLeftY(), () -> driver.getLeftX()));
 
     // driver.L2().whileTrue(swerve.turnToTagCommand(vision.getTagYaw(Vision.frontCam)));
     // driver.R2().whileTrue(swerve.alignToTagCommand(new Pose2d()));
 
-    driver.triangle().onTrue(led.runPattern(LEDConstants.kClimbPattern));
+    //driver.triangle().onTrue(led.runPattern(LEDConstants.kClimbPattern));
     // driver.square().onTrue(led.runPattern(LEDConstants.kIntakePattern));
     // driver.cross().onTrue(led.runPattern(LEDConstants.kShootingPattern));
   }
@@ -84,6 +101,7 @@ public class RobotContainer {
 
   
   public Command getAutonomousCommand() {
-    return Commands.print("No autonomous command configured");
+    return autoChooser.getSelected();
+    //return Commands.print("No autonomous command configured");
   }
 }

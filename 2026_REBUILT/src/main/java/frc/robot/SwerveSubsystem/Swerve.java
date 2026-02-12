@@ -1,6 +1,11 @@
 package frc.robot.SwerveSubsystem;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.ModuleConfig;
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.controller.HolonomicDriveController;
@@ -15,15 +20,17 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Localization.AntPose;
+import frc.robot.Localization.AntPoseEstimator;
 
 public class Swerve extends SubsystemBase {
       
@@ -36,12 +43,14 @@ public class Swerve extends SubsystemBase {
 
   public static Pigeon2 pigeon = new Pigeon2(0);
 
-  AntPose antPose = new AntPose(SwerveConstants.kDriveKinematics, getRotation2dHeading(), getModulePositions(), new Pose2d());
+  AntPoseEstimator antPose = new AntPoseEstimator(SwerveConstants.kDriveKinematics, getRotation2dHeading(), getModulePositions(), new Pose2d());
+  Pose2d robotPose = new Pose2d();
+
+  double currentTimestamp = 0.0;
 
   // HolonomicDriveController swerveController = new HolonomicDriveController(SwerveConstants.kTranslationController, 
   //                                       SwerveConstants.kTranslationController, SwerveConstants.kRotationController);
     
-  
   public Swerve() {
     zeroHeading();
   }
@@ -62,10 +71,47 @@ public class Swerve extends SubsystemBase {
     return Rotation2d.fromDegrees(getHeading());
   }
 
+
+  private void configureAutoBuilder() {
+    RobotConfig config;
+    try {
+      config = RobotConfig.fromGUISettings();
+    } catch (Exception e) {
+      config = new RobotConfig(0, 0, new ModuleConfig(0, 0, 0, new DCMotor(0, 0, 0, 0, 0, 4), 0, 4));
+
+      e.printStackTrace();
+    }
+
+    AutoBuilder.configure(
+      this::getPose,
+      this::resetPose,
+      this::getRobotRelativeSpeeds,
+      (speeds, feedforward) -> driveAuto(speeds),
+      new PPHolonomicDriveController(new PIDConstants(5.0, 0.0, 0.0), new PIDConstants(5.0, 0.0, 0.0)),
+      config,
+      () -> {
+      var alliance = DriverStation.getAlliance();
+      if (alliance.isPresent()){
+        return alliance.get() == DriverStation.Alliance.Red;
+      }
+      return false;
+    },
+    this);
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Robot Heading", getHeading());
+
+
+    //currentTimestamp = Timer.getFPGATimestamp();
+    //antPose.updateWithTime(currentTimestamp, getRotation2dHeading(), getModulePositions());
+
+    //Update Localization
+    antPose.updateAllVisionMeasurements();
+    antPose.update(getRotation2dHeading(), getModulePositions());
+    robotPose = antPose.getEstimatedPosition();
   }
 
   public void stopModules(){
@@ -101,6 +147,31 @@ public class Swerve extends SubsystemBase {
     setModuleStates(desiredStates);
   }
 
+  public void drive(ChassisSpeeds speeds) {
+    speeds = ChassisSpeeds.discretize(speeds, 0.002);
+    speeds = ChassisSpeeds.fromFieldRelativeSpeeds(speeds, getRotation2dHeading());
+    
+    SwerveModuleState[] desiredStates = SwerveConstants.kDriveKinematics.toSwerveModuleStates(speeds);
+    setModuleStates(desiredStates);
+  }
+
+  public void driveAuto(ChassisSpeeds speeds){
+    speeds = ChassisSpeeds.discretize(speeds, 0.002);
+    SwerveModuleState[] desiredStates = SwerveConstants.kDriveKinematics.toSwerveModuleStates(speeds);
+    setModuleStates(desiredStates);
+  }
+
+  public void resetPose(Pose2d pose){
+    antPose.resetPose(pose);
+  }
+
+  public Pose2d getPose(){
+    return antPose.getEstimatedPosition();
+  } 
+
+  private ChassisSpeeds getRobotRelativeSpeeds(){
+    return SwerveConstants.kDriveKinematics.toChassisSpeeds(frontLeft.getState(), frontRight.getState(), backLeft.getState(), backRight.getState());
+  }
   //Use for testitng
   // public void turnToTag(double tagYaw) {
   //   ProfiledPIDController pid = new ProfiledPIDController(0.01, 0, 0, new TrapezoidProfile.Constraints(SwerveConstants.kMaxOmega, SwerveConstants.kMaxOmega));

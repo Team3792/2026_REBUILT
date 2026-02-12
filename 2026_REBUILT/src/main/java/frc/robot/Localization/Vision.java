@@ -28,16 +28,16 @@ public class Vision extends SubsystemBase {
   
   //PhotonCamera frontCam, backCam;
   public static PhotonCamera frontCam, backCam;
-  PhotonPoseEstimator frontCamPoseEstimation;
-  PhotonPoseEstimator backCamPoseEstimation;
+  //PhotonPoseEstimator frontCamPoseEstimation;
+  //PhotonPoseEstimator backCamPoseEstimation;
 
   public Vision() {
 
     frontCam = new PhotonCamera(VisionConstants.kFrontCamName);
     backCam = new PhotonCamera(VisionConstants.kBackCamName);
 
-    frontCamPoseEstimation = new PhotonPoseEstimator(VisionConstants.kFieldLayout, VisionConstants.kRobotToFrontCam);
-    backCamPoseEstimation = new PhotonPoseEstimator(VisionConstants.kFieldLayout, VisionConstants.kRobotToBackCam);
+    //frontCamPoseEstimation = new PhotonPoseEstimator(VisionConstants.kFieldLayout, VisionConstants.kRobotToFrontCam);
+    //backCamPoseEstimation = new PhotonPoseEstimator(VisionConstants.kFieldLayout, VisionConstants.kRobotToBackCam);
   }
 
   public boolean hasTarget(PhotonCamera cam){
@@ -46,73 +46,15 @@ public class Vision extends SubsystemBase {
     return hasTarget;
   }
 
-  public Optional<EstimatedRobotPose> getFrontCamPoseLatest(){
-    var result = frontCam.getLatestResult();  
-    return frontCamPoseEstimation.estimateCoprocMultiTagPose(result);
-  }
-
-  public Optional<EstimatedRobotPose> getBackCamPoseLatest(){
-    var result = backCam.getLatestResult();
-    return backCamPoseEstimation.estimateCoprocMultiTagPose(result);
-  }
-
-  public List<PhotonTrackedTarget> getFrontCamResults(){
-    List<PhotonTrackedTarget> results = new ArrayList<PhotonTrackedTarget>();
-    for (var result : frontCam.getAllUnreadResults()) {
-      List<PhotonTrackedTarget> targets = result.getTargets();
-      for (var target: targets){
-        results.add(target);
-      }
-    }
-    return results;
-  }
-
   public List<PhotonPipelineResult> getFrontCamPipelineResults(){
     List<PhotonPipelineResult> pipelineResults = frontCam.getAllUnreadResults();
     return pipelineResults;
   }
 
-  public List<EstimatedRobotPose> getFrontCamPoses(List<PhotonPipelineResult> results){
-
-    Optional<EstimatedRobotPose> visionEstimate = Optional.empty();
-    List<EstimatedRobotPose> visionEstimates = new ArrayList<EstimatedRobotPose>();
-    for (var result : frontCam.getAllUnreadResults()) {
-      visionEstimate = frontCamPoseEstimation.estimateCoprocMultiTagPose(result);
-      if (visionEstimate.isEmpty()) {
-        continue;
-      }
-      visionEstimates.add(visionEstimate.get());
-    }
-    return visionEstimates;
+  public List<PhotonPipelineResult> getBackCamPipelineResults(){
+    List<PhotonPipelineResult> pipelineResults = backCam.getAllUnreadResults();
+    return pipelineResults;
   }
-
-  public List<EstimatedRobotPose> getBackCamResults(){
-    Optional<EstimatedRobotPose> visionEstimate = Optional.empty();
-    List<EstimatedRobotPose> visionEstimates = new ArrayList<EstimatedRobotPose>();
-    for (var result : frontCam.getAllUnreadResults()) {
-      visionEstimate = frontCamPoseEstimation.estimateCoprocMultiTagPose(result);
-      if (visionEstimate.isEmpty()) {
-        continue;
-      }
-      visionEstimates.add(visionEstimate.get());
-    }
-    return visionEstimates;
-  }
-
-    public List<EstimatedRobotPose> getBackCamPoses(){
-    Optional<EstimatedRobotPose> visionEstimate = Optional.empty();
-    List<EstimatedRobotPose> visionEstimates = new ArrayList<EstimatedRobotPose>();
-    for (var result : frontCam.getAllUnreadResults()) {
-      visionEstimate = frontCamPoseEstimation.estimateCoprocMultiTagPose(result);
-      if (visionEstimate.isEmpty()) {
-        continue;
-      }
-      visionEstimates.add(visionEstimate.get());
-    }
-    return visionEstimates;
-  }
-  
-
 
   @Override
   public void periodic() {

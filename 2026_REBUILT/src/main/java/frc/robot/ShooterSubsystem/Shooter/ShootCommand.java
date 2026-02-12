@@ -16,9 +16,9 @@ public class ShootCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    for(int i = 0 ; i < ShooterConstants.distanceVSRPM[].length() ; i++){
+    // for(int i = 0 ; i < ShooterConstants.distanceVSRPM[].length() ; i++){
 
-    }
+    // }
   }
 
   // Called every time the scheduler runs while the command is scheduled.

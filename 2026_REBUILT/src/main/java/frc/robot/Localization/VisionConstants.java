@@ -4,11 +4,16 @@
 
 package frc.robot.Localization;
 
+import java.util.Optional;
+
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 
 /** Add your docs here. */
 public class VisionConstants {
@@ -20,4 +25,13 @@ public class VisionConstants {
     public static final Transform3d kRobotToBackCam = new Transform3d(new Translation3d(0,0,0), new Rotation3d(0,0,0));
 
     public static final AprilTagFieldLayout kFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltAndymark);
+
+    // private Optional<Alliance> alliance = DriverStation.getAlliance();
+
+    // if (alliance.isPresent() && alliance.get() == Alliance.Red) {
+    //     Pose2d hub = kFieldLayout.getTagPose(10).get().plus(new Transform3d(new Translation3d(0,0,0), new Rotation3d(0,0,0))).toPose2d();
+    // } else {
+    //     Pose2d hub = kFieldLayout.getTagPose(25).get().plus(new Transform3d(new Translation3d(0,0,0), new Rotation3d(0,0,0))).toPose2d();
+    // }
 }
+

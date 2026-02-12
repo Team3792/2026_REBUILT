@@ -40,7 +40,6 @@ public class DriveCommand extends Command {
 
     ChassisSpeeds chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, tSpeed);
 
-
     swerve.drive(chassisSpeeds, swerve.getRotation2dHeading());
 
   }
