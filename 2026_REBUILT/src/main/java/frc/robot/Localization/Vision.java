@@ -13,6 +13,7 @@ import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.estimation.VisionEstimation;
+import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -55,7 +56,24 @@ public class Vision extends SubsystemBase {
     return backCamPoseEstimation.estimateCoprocMultiTagPose(result);
   }
 
-  public List<EstimatedRobotPose> getFrontCamResults(){
+  public List<PhotonTrackedTarget> getFrontCamResults(){
+    List<PhotonTrackedTarget> results = new ArrayList<PhotonTrackedTarget>();
+    for (var result : frontCam.getAllUnreadResults()) {
+      List<PhotonTrackedTarget> targets = result.getTargets();
+      for (var target: targets){
+        results.add(target);
+      }
+    }
+    return results;
+  }
+
+  public List<PhotonPipelineResult> getFrontCamPipelineResults(){
+    List<PhotonPipelineResult> pipelineResults = frontCam.getAllUnreadResults();
+    return pipelineResults;
+  }
+
+  public List<EstimatedRobotPose> getFrontCamPoses(List<PhotonPipelineResult> results){
+
     Optional<EstimatedRobotPose> visionEstimate = Optional.empty();
     List<EstimatedRobotPose> visionEstimates = new ArrayList<EstimatedRobotPose>();
     for (var result : frontCam.getAllUnreadResults()) {
@@ -80,6 +98,19 @@ public class Vision extends SubsystemBase {
     }
     return visionEstimates;
   }
+
+    public List<EstimatedRobotPose> getBackCamPoses(){
+    Optional<EstimatedRobotPose> visionEstimate = Optional.empty();
+    List<EstimatedRobotPose> visionEstimates = new ArrayList<EstimatedRobotPose>();
+    for (var result : frontCam.getAllUnreadResults()) {
+      visionEstimate = frontCamPoseEstimation.estimateCoprocMultiTagPose(result);
+      if (visionEstimate.isEmpty()) {
+        continue;
+      }
+      visionEstimates.add(visionEstimate.get());
+    }
+    return visionEstimates;
+  }
   
 
 
@@ -88,8 +119,5 @@ public class Vision extends SubsystemBase {
     // This method will be called once per scheduler run
     SmartDashboard.putBoolean("VisionSubsystem/frontCam", hasTarget(frontCam));
     SmartDashboard.putBoolean("VisionSubsystem/backCam", hasTarget(backCam));   
-
-    getFrontCamPose();
-    getBackCamPose();
   }
 }
