@@ -7,8 +7,12 @@ package frc.robot.Localization;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.OptionalInt;
 
 import org.photonvision.EstimatedRobotPose;
+import org.photonvision.PhotonPoseEstimator;
+import org.photonvision.targeting.PhotonPipelineResult;
+import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.estimator.PoseEstimator;
@@ -27,6 +31,9 @@ import edu.wpi.first.math.numbers.N3;
 public class AntPose extends SwerveDrivePoseEstimator {
 
     Vision vision = new Vision();
+    PhotonPoseEstimator frontCamPoseEstimator = new PhotonPoseEstimator(VisionConstants.kFieldLayout, VisionConstants.kRobotToFrontCam);
+    PhotonPoseEstimator backCamPoseEstimator = new PhotonPoseEstimator(VisionConstants.kFieldLayout, VisionConstants.kRobotToBackCam);
+    List<PhotonPipelineResult> frontCamPipelineResults = vision.getFrontCamPipelineResults();
     
 
     public AntPose (SwerveDriveKinematics kin, Rotation2d gyroAngle, SwerveModulePosition[] modulePositions,
@@ -35,13 +42,14 @@ public class AntPose extends SwerveDrivePoseEstimator {
         super(kin, gyroAngle, modulePositions, initialPoseMeters);
     }
 
+
+
     //validity based on distance tag is from camera, and ambiguity of detected tag.
     //further distance means less ambiguity needed for pose to be tossed out
     //TODO: find a way to hold timestamps and store them and access them
-    public List<EstimatedRobotPose> getFrontCamAcceptedPoses() {
+    public List<EstimatedRobotPose> getFrontCamAcceptedPoses(List<EstimatedRobotPose> poses) {
         // check if the data is valid
         // Can check abiguity of tag, distance to tag, etc.
-        List<EstimatedRobotPose> poses = vision.getFrontCamResults();
         List<EstimatedRobotPose> acceptedFrontPoses = new ArrayList<EstimatedRobotPose>();
         for (int i = 0; i < poses.size(); i++){
             var pose = poses.get(i);
@@ -60,11 +68,21 @@ public class AntPose extends SwerveDrivePoseEstimator {
         return acceptedFrontPoses;
     }
 
-    public List<EstimatedRobotPose> getBackCamAcceptedPoses() {
-        List<EstimatedRobotPose> backPoses = vision.getBackCamResults();
+    public List<PhotonTrackedTarget> getFrontCamTargets(List<PhotonPipelineResult> results){
+        List<PhotonTrackedTarget> targets = new ArrayList<PhotonTrackedTarget>();
+        for (var result : results) {
+            List<PhotonTrackedTarget> resultTargets = result.getTargets();
+            for (var target: resultTargets){
+                targets.add(target);
+            }
+        }
+    return targets;
+  }
+
+    public List<EstimatedRobotPose> getBackCamAcceptedPoses(List<EstimatedRobotPose> poses) {
         List<EstimatedRobotPose> acceptedBackPoses = new ArrayList<EstimatedRobotPose>();
-        for (int i = 0; i < backPoses.size(); i++){
-            var pose = backPoses.get(i);
+        for (int i = 0; i < poses.size(); i++){
+            var pose = poses.get(i);
             double distance = pose.estimatedPose.toPose2d().getTranslation().getDistance(null); //TODO: add robot pose here (but it lives in swerve so awk))
             if (distance > 6.0) { //TODO: find good distance threshold
                 continue;
@@ -74,21 +92,52 @@ public class AntPose extends SwerveDrivePoseEstimator {
         return acceptedBackPoses;
     }
 
-    // IDK if we will ever use this
-    public List<EstimatedRobotPose> getAcceptedPoses() {
-        List<EstimatedRobotPose> frontPoses = getFrontCamAcceptedPoses();
-        List<EstimatedRobotPose> backPoses = getBackCamAcceptedPoses();
-        List<EstimatedRobotPose> allPoses = new ArrayList<>();
-        allPoses.addAll(frontPoses);
-        allPoses.addAll(backPoses);
-        return allPoses;
+
+
+
+    public Matrix<N3, N1> getVisionStd(Optional<EstimatedRobotPose> robotPose, List<PhotonTrackedTarget> targets){
     }
 
-    public Matrix<N3, N1> getVisionStd(Optional<EstimatedRobotPose> robotPose){ 
 
+    public List<EstimatedRobotPose> getFrontCamPoses(List<PhotonPipelineResult> results){
+        Optional<EstimatedRobotPose> visionEstimate = Optional.empty();
+        List<EstimatedRobotPose> visionEstimates = new ArrayList<EstimatedRobotPose>();
+
+        for (var result : results){
+            visionEstimate = frontCamPoseEstimator.estimateCoprocMultiTagPose(result);
+            if (visionEstimate.isEmpty()){
+                continue;
+            }
+            visionEstimates.add(visionEstimate.get());
+        }
+        return visionEstimates;
     }
 
+    // TODO: add way to make pose2d 
+    // 
+    public List<VisionData> something(List<PhotonPipelineResult> pipelineResults) {
+        Optional<EstimatedRobotPose> visionEstFront = Optional.empty();
+        List<VisionData> visionDatas = new ArrayList<VisionData>();
+
+        for (var result : pipelineResults){
+            visionEstFront = frontCamPoseEstimator.estimateCoprocMultiTagPose(result);
+            List<PhotonTrackedTarget> targets = result.getTargets();
+            if (visionEstFront.isEmpty()){
+                continue;
+            }
+            Matrix<N3,N1> std = getVisionStd(visionEstFront, targets);
+            VisionData visionData = new Vision(visionEstFront, result.getTimestampSeconds(), std)
+            visionDatas.add(visionData);
+        }
+        return visionDatas;
+    }
 
 
     public void getVisionData(){}
+
+    public record VisionData(Optional<EstimatedRobotPose> estRobotPose, double timestamp, Matrix<N3,N1> estSTD){}
+    @FunctionalInterface
+    public static interface VisionEstimateConsumer {
+        public void accept(Optional<EstimatedRobotPose> estRobotPose, double timestamp, Matrix<N3, N1> estimationSTD);
+    }
 }
