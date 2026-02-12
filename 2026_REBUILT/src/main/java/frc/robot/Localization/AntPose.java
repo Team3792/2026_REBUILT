@@ -114,10 +114,8 @@ public class AntPose extends SwerveDrivePoseEstimator {
     }
 
     // TODO: add way to make pose2d 
-    // 
-    public List<VisionData> something(List<PhotonPipelineResult> pipelineResults) {
+    public void something(List<PhotonPipelineResult> pipelineResults) {
         Optional<EstimatedRobotPose> visionEstFront = Optional.empty();
-        List<VisionData> visionDatas = new ArrayList<VisionData>();
 
         for (var result : pipelineResults){
             visionEstFront = frontCamPoseEstimator.estimateCoprocMultiTagPose(result);
@@ -126,18 +124,18 @@ public class AntPose extends SwerveDrivePoseEstimator {
                 continue;
             }
             Matrix<N3,N1> std = getVisionStd(visionEstFront, targets);
-            VisionData visionData = new Vision(visionEstFront, result.getTimestampSeconds(), std)
-            visionDatas.add(visionData);
+            addVisMeasurement(visionEstFront, result.getTimestampSeconds(), std);
         }
-        return visionDatas;
+    }
+
+    public void addVisMeasurement(Optional<EstimatedRobotPose> visionPose, double timestamp, Matrix<N3,N1> visionSTD){
+        if (visionPose.isEmpty()){
+            return;
+        }
+        this.addVisionMeasurement(visionPose.get().estimatedPose.toPose2d(), timestamp, visionSTD);
     }
 
 
     public void getVisionData(){}
 
-    public record VisionData(Optional<EstimatedRobotPose> estRobotPose, double timestamp, Matrix<N3,N1> estSTD){}
-    @FunctionalInterface
-    public static interface VisionEstimateConsumer {
-        public void accept(Optional<EstimatedRobotPose> estRobotPose, double timestamp, Matrix<N3, N1> estimationSTD);
-    }
 }
