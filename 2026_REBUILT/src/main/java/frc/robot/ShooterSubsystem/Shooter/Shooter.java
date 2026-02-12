@@ -27,6 +27,8 @@ public class Shooter extends SubsystemBase {
 
 
   /** Creates a new Shooter. */
+
+  
   public Shooter() {
     rightMotor.getConfigurator().apply(ShooterConstants.applyRightMotorConfig());
     leftMotor.getConfigurator().apply(ShooterConstants.applyLeftMotorConfig());

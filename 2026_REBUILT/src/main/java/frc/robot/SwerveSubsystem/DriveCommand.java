@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class DriveCommand extends Command {
   /** Creates a new DriveCommand. */
   Swerve swerve;
-  private Supplier<Double> xSupplier, ySupplier, tSupplier;
+  private Supplier<Double> xSupplier, ySupplier, tSupplier; 
 
 
 
