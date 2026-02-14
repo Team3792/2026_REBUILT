@@ -36,6 +36,7 @@ public class Vision extends SubsystemBase {
     frontCam = new PhotonCamera(VisionConstants.kFrontCamName);
     backCam = new PhotonCamera(VisionConstants.kBackCamName);
 
+    //moved to AntPose
     //frontCamPoseEstimation = new PhotonPoseEstimator(VisionConstants.kFieldLayout, VisionConstants.kRobotToFrontCam);
     //backCamPoseEstimation = new PhotonPoseEstimator(VisionConstants.kFieldLayout, VisionConstants.kRobotToBackCam);
   }

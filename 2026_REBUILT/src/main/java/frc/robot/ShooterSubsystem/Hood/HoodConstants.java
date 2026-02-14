@@ -32,4 +32,5 @@ public class HoodConstants {
     
 
     public static final double kEncoderAngleOffset = 0; //need to make accurate
+    public static final double hoodAngleBestFit = 0;//need to set to best fit curve of hood angle vs distance
 }
