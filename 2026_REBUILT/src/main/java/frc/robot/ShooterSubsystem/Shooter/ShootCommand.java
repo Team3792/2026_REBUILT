@@ -11,7 +11,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.SwerveSubsystem.Swerve;
 import frc.robot.ShooterSubsystem.Shooter.ShooterConstants;
 import frc.robot.ShooterSubsystem.Shooter.Shooter;
-import frc.robot.ShooterSubsystem.Hood.*;;
+import frc.robot.ShooterSubsystem.Hood.*;
+import frc.robot.LEDSubsystem.*;
+
 
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
@@ -21,6 +23,7 @@ public class ShootCommand extends Command {
   Shooter shooter = new Shooter();
   Hood hood = new Hood();
   Swerve swerve;
+  LED led = new LED();
 
   double targetRPM;
   double distanceRange;
@@ -42,7 +45,7 @@ public class ShootCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    
+    led.setLEDColor(LEDConstants.kShootingPattern);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -68,14 +71,13 @@ public class ShootCommand extends Command {
       }
     }
     
-    
-
+  
 
     double hoodPower = hoodPID.calculate(hood.hoodAngle(), HoodConstants.hoodAngleBestFit) + HoodConstants.kFrictionFF;
     //double hoodPower = hoodPID.calculate(hood.hoodAngle(), targetHoodAngle) + HoodConstants.kFrictionFF;
     hood.setVoltage(hoodPower);
 
-    double shooterPower = shooterPID.calculate(shooter.getRPM(), targetRPM) * ShooterConstants.kFrictionFF;
+    double shooterPower = shooterPID.calculate(shooter.getRPM(), targetRPM) + ShooterConstants.kFrictionFF;
     shooter.setVoltage(shooterPower);
     
   }
@@ -85,6 +87,7 @@ public class ShootCommand extends Command {
   public void end(boolean interrupted) {
     //sets rpm of shooter to some constants rpm when not shooting; talkes less time to spin up
     //shooter.setVoltage(shooterPID.calculate(shooter.getRPM(), shooterConstants.coastRPM));
+    led.setLEDColor(LEDConstants.kIdlePattern);
   }
 
   // Returns true when the command should end.

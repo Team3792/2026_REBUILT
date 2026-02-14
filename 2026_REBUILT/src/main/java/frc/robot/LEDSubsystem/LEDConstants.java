@@ -16,4 +16,5 @@ public class LEDConstants {
     public static final LEDPattern kClimbPattern = LEDPattern.solid(Color.kSkyBlue);
     public static final LEDPattern kIntakePattern = LEDPattern.solid(Color.kGold);
     public static final LEDPattern kShootingPattern = LEDPattern.solid(Color.kOrangeRed);
+    public static final LEDPattern kIdlePattern = LEDPattern.solid(Color.kSeaGreen);
 }
