@@ -173,12 +173,12 @@ public class Swerve extends SubsystemBase {
     return SwerveConstants.kDriveKinematics.toChassisSpeeds(frontLeft.getState(), frontRight.getState(), backLeft.getState(), backRight.getState());
   }
   //Use for testitng
-  // public void turnToTag(double tagYaw) {
-  //   ProfiledPIDController pid = new ProfiledPIDController(0.01, 0, 0, new TrapezoidProfile.Constraints(SwerveConstants.kMaxOmega, SwerveConstants.kMaxOmega));
-  //   double rotationSpeed = pid.calculate(getHeading(), tagYaw);
-  //   ChassisSpeeds speeds = new ChassisSpeeds(0, 0, rotationSpeed);
-  //   drive(speeds, getRotation2dHeading());
-  // }
+  public void turnToTag(double tagYaw) {
+    ProfiledPIDController pid = new ProfiledPIDController(0.01, 0, 0, new TrapezoidProfile.Constraints(SwerveConstants.kMaxOmega, SwerveConstants.kMaxOmega));
+    double rotationSpeed = pid.calculate(getHeading(), tagYaw);
+    ChassisSpeeds speeds = new ChassisSpeeds(0, 0, rotationSpeed);
+    drive(speeds, getRotation2dHeading());
+  }
 
   // public void alignToTag(Pose2d tagPose) {
   //   // Calculate new target pose with offset
@@ -189,9 +189,9 @@ public class Swerve extends SubsystemBase {
   //   drive(speeds, getRotation2dHeading());
   // }
 
-  // public Command turnToTagCommand(double tagYaw) {
-  //   return Commands.run(() -> turnToTag(tagYaw));
-  // }
+  public Command turnToTagCommand(double tagYaw) {
+    return Commands.run(() -> turnToTag(tagYaw));
+  }
 
   // public Command alignToTagCommand(Pose2d tagPose){
   //   return Commands.run(() -> alignToTag(tagPose));
