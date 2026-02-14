@@ -26,7 +26,7 @@ public class ShootCommand extends Command {
   LED led = new LED();
 
   double targetRPM;
-  double distanceRange;
+  double rangePercentage;
   double targetHoodAngle;
 
   PIDController shooterPID = new PIDController(ShooterConstants.kP,ShooterConstants.kI,ShooterConstants.kD);
@@ -56,24 +56,30 @@ public class ShootCommand extends Command {
     var robotToHubPose = hubPose.getTranslation().minus(currentPos.getTranslation());
     double robotToHubDistance = Math.sqrt(Math.pow(robotToHubPose.getX(), 2) + Math.pow(robotToHubPose.getY(), 2));
 
-    for(int i = 0; i < ShooterConstants.distanceVSRPM[0].length; i++){
+    for(int i = 1; i < ShooterConstants.distanceVSRPM[0].length; i++){
+
       if(robotToHubDistance > ShooterConstants.distanceVSRPM[0][i]){
-        int index = i-1 ;
-        targetRPM = ShooterConstants.distanceVSRPM[1][index];
-        //return what percentage of what the distance is of the upper distance value in the rpm range of the 2d array
-        distanceRange = (robotToHubDistance - ShooterConstants.distanceVSRPM[1][index -=1]) / 24;
-        //multiply upper hood value for given distance range; multiply by percentage calculated above
-        targetHoodAngle = ShooterConstants.distanceVsHoodAngle[0][i] * distanceRange;
+        //return target flywheel RPM
+        targetRPM = ShooterConstants.distanceVSRPM[1][i-1];
+
+        //returns what percentage of the distance range the robot is in
+        double lowerDistance = ShooterConstants.distanceVsHoodAngle[0][i-1];
+        double upperDistance = ShooterConstants.distanceVsHoodAngle[0][i];
+        rangePercentage = (robotToHubDistance - lowerDistance) / (upperDistance - lowerDistance);
+
+        //interpolate hood angle based on rangePercentage
+        double lowerHoodAngle = ShooterConstants.distanceVsHoodAngle[1][i-1];
+        double upperHoodAngle = ShooterConstants.distanceVsHoodAngle[1][i];
+        targetHoodAngle = ((upperHoodAngle-lowerHoodAngle) * rangePercentage) + lowerHoodAngle;
         break;
       }
-      else{
-        continue;
-      }
+      
     }
     
   
-
+    //based off best fit curve
     double hoodPower = hoodPID.calculate(hood.hoodAngle(), HoodConstants.hoodAngleBestFit) + HoodConstants.kFrictionFF;
+    //based off array value interpolation
     //double hoodPower = hoodPID.calculate(hood.hoodAngle(), targetHoodAngle) + HoodConstants.kFrictionFF;
     hood.setVoltage(hoodPower);
 
