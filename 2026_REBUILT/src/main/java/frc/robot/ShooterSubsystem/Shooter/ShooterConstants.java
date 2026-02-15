@@ -43,13 +43,18 @@ public class ShooterConstants {
 
     //distance vs rpm 2D array
         //TODO: set good rpm values for given distance range
-    public static double[][] distanceVSRPM = {{24,48,72,96,120,144,168,192,216,240,264},
-                                              {0,0,0,0,0,0,0,0,0,0,0}};
-        //TODO: set good hood angle values for given distance range
-    public static double[][] distanceVsHoodAngle = {{24,48,72,96,120,144,168,192,216,240,264},
+    public static final double[][] distanceVSRPM = {{24,48,72,96,120,144,168,192,216,240,264},
                                                     {0,0,0,0,0,0,0,0,0,0,0}};
-    
-    
+        //TODO: set good hood angle values for given distance range
+    public static final double[][] distanceVsHoodAngle = {{24,48,72,96,120,144,168,192,216,240,264},
+                                                          {0,0,0,0,0,0,0,0,0,0,0}};
+
+    //TODO: make accurate
+    public static final double ktimeVsDistance = 0;
+                                                               //meters
+    public static final double fuelFlightTimeVsDistance(double robotToHubDistance){
+        return robotToHubDistance * ktimeVsDistance;
+    }
 
 
 

@@ -169,8 +169,18 @@ public class Swerve extends SubsystemBase {
     return antPose.getEstimatedPosition();
   } 
 
-  private ChassisSpeeds getRobotRelativeSpeeds(){
+  public ChassisSpeeds getRobotRelativeSpeeds(){
     return SwerveConstants.kDriveKinematics.toChassisSpeeds(frontLeft.getState(), frontRight.getState(), backLeft.getState(), backRight.getState());
+  }
+  //returns array of field relative robot velocity [x,y]
+  public double[] getFieldRelativeSpeeds(){
+    double robotRelativeVelocityX = getRobotRelativeSpeeds().vxMetersPerSecond;
+    double robotRelativeVelocityY = getRobotRelativeSpeeds().vyMetersPerSecond;
+    double heading = getHeading();
+    double fieldRelativeVelocityX = robotRelativeVelocityX * Math.cos(heading) + robotRelativeVelocityY * Math.sin(heading);
+    double fieldRelativeVelocityY = robotRelativeVelocityX * Math.sin(heading) + robotRelativeVelocityY * Math.cos(heading);
+    double[] fieldRelativeVelocities = {fieldRelativeVelocityX, fieldRelativeVelocityY};
+    return fieldRelativeVelocities;
   }
   //Use for testitng
   public void turnToTag(double tagYaw) {

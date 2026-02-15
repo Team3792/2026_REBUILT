@@ -7,6 +7,7 @@ package frc.robot.ShooterSubsystem.Shooter;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.SwerveSubsystem.Swerve;
 import frc.robot.ShooterSubsystem.Shooter.ShooterConstants;
@@ -53,8 +54,9 @@ public class ShootCommand extends Command {
   public void execute() {
 
     Pose2d currentPos = swerve.getPose();
-    var robotToHubPose = hubPose.getTranslation().minus(currentPos.getTranslation());
-    double robotToHubDistance = Math.sqrt(Math.pow(robotToHubPose.getX(), 2) + Math.pow(robotToHubPose.getY(), 2));
+    Translation2d robotToHubPose = hubPose.getTranslation().minus(currentPos.getTranslation());
+    //double robotToHubDistance = Math.hypot((robotToHubPose.getX(),robotToHubPose.getY());
+    double robotToHubDistance = robotToHubPose.getDistance(currentPos.getTranslation());
 
     for(int i = 1; i < ShooterConstants.distanceVSRPM[0].length; i++){
 
