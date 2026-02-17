@@ -10,6 +10,9 @@ import com.ctre.phoenix6.signals.MotorAlignmentValue;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.units.measure.Time;
+import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -17,10 +20,15 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.HardwareMap;
 
 public class Shooter extends SubsystemBase {
+  
+  Timer timer = new Timer();
+  boolean ballShot;
+  public static double ballsShot = 0;
 
   TalonFX rightMotor = new TalonFX(HardwareMap.shootLeaderID);
   TalonFX leftMotor = new TalonFX(HardwareMap.shootFollowerID);
 
+  AnalogInput lightSensor = new AnalogInput(0);
 
   ProfiledPIDController pidController = new ProfiledPIDController(ShooterConstants.kP, ShooterConstants.kI, ShooterConstants.kD, 
     new TrapezoidProfile.Constraints(20, 10));
@@ -36,8 +44,9 @@ public class Shooter extends SubsystemBase {
     //left motor follows right motor
     //aligned means on same shaft; may need to change to opposed
     leftMotor.setControl(new Follower(rightMotor.getDeviceID(), MotorAlignmentValue.Aligned));
-    
+         
 }
+
 
 public void setVoltage(double voltage){
   rightMotor.setVoltage(voltage);
@@ -68,6 +77,41 @@ public void setRPM(double targetVelocity){
 public Command setAngularVelocity(double targetRPM){
   return Commands.runOnce(() -> setRPM(targetRPM));
 }
+
+public boolean ballInShooter(){
+  return lightSensor.getVoltage() > ShooterConstants.kLightSensorThreshold;
+}
+
+//time it take for ball to pass through the light sensor detection range
+public double ballShootTime(){
+  return ShooterConstants.lightSensorDetectionRange / getTangentialVelocity();
+}
+
+//if ball detected is in shooter, and ball is gone after the time it takes to shoot 1 ball; returns true
+public boolean ballShot(){
+  if(ballInShooter()){
+    timer.start();
+    if(timer.hasElapsed(ballShootTime())){
+      ballShot = !ballInShooter();
+    }
+  }
+  timer.reset();
+  return ballShot;
+}
+
+public double ballsShot(){
+  this.timer = timer;
+  timer.reset();
+  timer.start();
+  if(ballShot()){
+    timer.hasElapsed(ShooterConstants.kballSeperationTime);
+    if(!ballShot){
+      ballsShot += 1;
+    }
+  }
+  return ballsShot;
+}
+
 
   @Override
   public void periodic() {

@@ -56,6 +56,9 @@ public class ShootCommand extends Command {
     Pose2d currentPos = swerve.getPose();
     Translation2d robotToHubPose = hubPose.getTranslation().minus(currentPos.getTranslation());
     //double robotToHubDistance = Math.hypot((robotToHubPose.getX(),robotToHubPose.getY());
+    //velocity of robot relative to field; in x direction
+    double fieldRelativeVelocityX = swerve.getFieldRelativeSpeeds()[0];
+
     double robotToHubDistance = robotToHubPose.getDistance(currentPos.getTranslation());
 
     for(int i = 1; i < ShooterConstants.distanceVSRPM[0].length; i++){

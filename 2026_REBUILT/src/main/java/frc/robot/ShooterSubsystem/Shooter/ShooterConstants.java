@@ -14,6 +14,12 @@ import edu.wpi.first.wpilibj.motorcontrol.Talon;
 
 /** Add your docs here. */
 public class ShooterConstants {
+
+    //TODO make accurate
+    public static final double kLightSensorThreshold = 0.5;
+    public static final double lightSensorDetectionRange = 0.01;//meters
+    public static final double kballSeperationTime = 0.1;
+
     //pid
     public static final double kP = 0;
     public static final double kI = 0;
@@ -48,6 +54,9 @@ public class ShooterConstants {
         //TODO: set good hood angle values for given distance range
     public static final double[][] distanceVsHoodAngle = {{24,48,72,96,120,144,168,192,216,240,264},
                                                           {0,0,0,0,0,0,0,0,0,0,0}};
+    //                                               r:1 2 3 4 5 6 7 8 9 10 11
+    public static final double[][] hoodAngleRanges = {{0,0,0,0,0,0,0,0,0,0,0}, 
+                                                      {0,0,0,0,0,0,0,0,0,0,0}};
 
     //TODO: make accurate
     public static final double ktimeVsDistance = 0;
