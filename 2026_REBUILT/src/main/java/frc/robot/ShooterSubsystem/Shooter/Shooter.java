@@ -8,6 +8,7 @@ import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.units.measure.Time;
@@ -22,6 +23,7 @@ import frc.robot.HardwareMap;
 public class Shooter extends SubsystemBase {
   
   Timer timer = new Timer();
+  Timer time = new Timer();
   boolean ballShot;
   public static double ballsShot = 0;
 
@@ -30,8 +32,7 @@ public class Shooter extends SubsystemBase {
 
   AnalogInput lightSensor = new AnalogInput(0);
 
-  ProfiledPIDController pidController = new ProfiledPIDController(ShooterConstants.kP, ShooterConstants.kI, ShooterConstants.kD, 
-    new TrapezoidProfile.Constraints(20, 10));
+  PIDController pidController = new PIDController(ShooterConstants.kP, ShooterConstants.kI, ShooterConstants.kD);
 
 
   /** Creates a new Shooter. */
@@ -69,8 +70,7 @@ public double getTangentialVelocity(){
 //need to add in piece wise best fit polynomial for RPM target RPM estimation
 
 public void setRPM(double targetVelocity){
-  pidController.setGoal(targetVelocity);
-  double pidOutput = pidController.calculate(getRPM());
+  double pidOutput = pidController.calculate(targetVelocity,getRPM());
   rightMotor.setVoltage(pidOutput + ShooterConstants.kFrictionFF);
 }
 
@@ -100,11 +100,10 @@ public boolean ballShot(){
 }
 
 public double ballsShot(){
-  this.timer = timer;
-  timer.reset();
-  timer.start();
+  time.reset();
+  time.start();
   if(ballShot()){
-    timer.hasElapsed(ShooterConstants.kballSeperationTime);
+    time.hasElapsed(ShooterConstants.kballSeperationTime);
     if(!ballShot){
       ballsShot += 1;
     }
