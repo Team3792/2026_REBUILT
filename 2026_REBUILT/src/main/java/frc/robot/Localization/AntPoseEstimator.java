@@ -50,7 +50,23 @@ public class AntPoseEstimator extends SwerveDrivePoseEstimator {
         }
         return true;
     }
-
+    /** 
+     * 6328's STD scaling
+     * don't use ambiguity
+     * reference 6328 2025 github for full implementation in their vision subsystem
+     */
+    // double xyStdDev =
+    //         xyStdDevCoefficient
+    //             * Math.pow(avgDistance, 1.2)
+    //             / Math.pow(tagPoses.size(), 2.0)
+    //             * cameras[instanceIndex].stdDevFactor();
+    //     double thetaStdDev =
+    //         useVisionRotation
+    //             ? thetaStdDevCoefficient
+    //                 * Math.pow(avgDistance, 1.2)
+    //                 / Math.pow(tagPoses.size(), 2.0)
+    //                 * cameras[instanceIndex].stdDevFactor()
+    //             : Double.POSITIVE_INFINITY;
     //TODO: implement logging
     // Team 971 seems like they have a good kalman filter but it's in C
     private Matrix<N3, N1> getVisionStd(Optional<EstimatedRobotPose> robotPose, List<PhotonTrackedTarget> targets){
@@ -70,7 +86,6 @@ public class AntPoseEstimator extends SwerveDrivePoseEstimator {
         //ambiguity above 0.2 in considered ambiguous
         double avgAbg = 0.0;
         
-
         for (var target : targets){
             var targetPose = frontCamPoseEstimator.getFieldTags().getTagPose(target.getFiducialId());
             if (targetPose.isEmpty()){

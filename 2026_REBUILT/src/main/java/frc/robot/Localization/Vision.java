@@ -13,6 +13,7 @@ import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.estimation.VisionEstimation;
+import org.photonvision.simulation.PhotonCameraSim;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
@@ -27,7 +28,7 @@ public class Vision extends SubsystemBase {
   /** Creates a new Vision. */
   
   //PhotonCamera frontCam, backCam;
-  public static PhotonCamera frontCam, backCam;
+  public static PhotonCamera frontCam, backCam, fuelCam;
   //PhotonPoseEstimator frontCamPoseEstimation;
   //PhotonPoseEstimator backCamPoseEstimation;
 
@@ -35,6 +36,11 @@ public class Vision extends SubsystemBase {
 
     frontCam = new PhotonCamera(VisionConstants.kFrontCamName);
     backCam = new PhotonCamera(VisionConstants.kBackCamName);
+
+    //Can do HSV yellow detection to do fuel detection. 
+    //Need to do tuning and setup in photonvision dashboard
+    //create a new pipeline
+    fuelCam = new PhotonCamera("fuelCam");
 
     //moved to AntPose
     //frontCamPoseEstimation = new PhotonPoseEstimator(VisionConstants.kFieldLayout, VisionConstants.kRobotToFrontCam);
