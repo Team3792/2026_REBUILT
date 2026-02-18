@@ -19,6 +19,7 @@ public class ShooterConstants {
     public static final double kLightSensorThreshold = 0.5;
     public static final double lightSensorDetectionRange = 0.01;//meters
     public static final double kballSeperationTime = 0.1;
+    public static final double kFlywheelBallLoadCurrent = 0;//amps
 
     //pid
     public static final double kP = 0;

@@ -4,12 +4,17 @@
 
 package frc.robot.ShooterSubsystem.Shooter;
 
+import com.ctre.phoenix6.controls.ControlRequest;
 import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.controls.TorqueCurrentFOC;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj.AnalogInput;
@@ -19,6 +24,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.HardwareMap;
+import frc.robot.SwerveSubsystem.Swerve;
 
 public class Shooter extends SubsystemBase {
   
@@ -42,6 +48,8 @@ public class Shooter extends SubsystemBase {
     rightMotor.getConfigurator().apply(ShooterConstants.applyRightMotorConfig());
     leftMotor.getConfigurator().apply(ShooterConstants.applyLeftMotorConfig());
 
+    
+
     //left motor follows right motor
     //aligned means on same shaft; may need to change to opposed
     leftMotor.setControl(new Follower(rightMotor.getDeviceID(), MotorAlignmentValue.Aligned));
@@ -50,7 +58,10 @@ public class Shooter extends SubsystemBase {
 
 
 public void setVoltage(double voltage){
-  rightMotor.setVoltage(voltage);
+  VoltageOut output = new VoltageOut(12).withEnableFOC(true);
+  rightMotor.setControl(output);
+ 
+ 
 }
 
 public Command applyVoltage(double voltage){
@@ -70,12 +81,48 @@ public double getTangentialVelocity(){
 //need to add in piece wise best fit polynomial for RPM target RPM estimation
 
 public void setRPM(double targetVelocity){
-  double pidOutput = pidController.calculate(targetVelocity,getRPM());
-  rightMotor.setVoltage(pidOutput + ShooterConstants.kFrictionFF);
+  double pidOutput = pidController.calculate(targetVelocity,getRPM()) + ShooterConstants.kFrictionFF;
+  VoltageOut motorVoltage = new VoltageOut(pidOutput).withEnableFOC(true);
+  rightMotor.setControl(motorVoltage);
 }
 
-public Command setAngularVelocity(double targetRPM){
+public Command setFlywheelRPM(double targetRPM){
   return Commands.runOnce(() -> setRPM(targetRPM));
+}
+
+public void setTorque(double torque){
+  double pidOutput = pidController.calculate(torque, rightMotor.getStatorCurrent().getValueAsDouble()) + ShooterConstants.kFrictionFF;
+  TorqueCurrentFOC motorTorque = new TorqueCurrentFOC(pidOutput);
+  rightMotor.setControl(motorTorque);
+}
+
+public Command setFlywheelTorque(double torque){
+  return Commands.runOnce(() -> setTorque(torque));
+}
+
+public double targetFlywheelVelocity(Swerve swerve, Pose2d hubPose){
+
+  Pose2d currentPos = swerve.getPose();
+  Translation2d robotToHubPose = hubPose.getTranslation().minus(currentPos.getTranslation());
+
+    //double robotToHubDistance = Math.hypot((robotToHubPose.getX(),robotToHubPose.getY());
+    //velocity of robot relative to field; in x direction
+  double fieldRelativeVelocityX = swerve.getFieldRelativeSpeeds()[0];
+  double robotToHubDistance = robotToHubPose.getDistance(currentPos.getTranslation());
+
+  double targetRPM = 0;
+
+  for(int i = 1; i < ShooterConstants.distanceVSRPM[0].length; i++){
+      if(robotToHubDistance > ShooterConstants.distanceVSRPM[0][i]){
+        //return target flywheel RPM
+        targetRPM = ShooterConstants.distanceVSRPM[1][i-1];
+        break;
+      }
+    
+    }
+
+    return targetRPM;
+
 }
 
 public boolean ballInShooter(){
@@ -97,6 +144,15 @@ public boolean ballShot(){
   }
   timer.reset();
   return ballShot;
+}
+
+public double flywheelStatorCurrent(){
+  return rightMotor.getStatorCurrent().getValueAsDouble();
+}
+//return true if flywheel current < current of flywheel under load of a ball && if there has been a decrease if flywheel RPMs
+public boolean ballShotCurrentDetection(Swerve swerve, Pose2d hubPose){
+  return (flywheelStatorCurrent() < ShooterConstants.kFlywheelBallLoadCurrent) 
+      && (getRPM() < targetFlywheelVelocity(swerve, hubPose) );
 }
 
 public double ballsShot(){
