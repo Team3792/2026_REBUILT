@@ -27,7 +27,8 @@ public class HardwareMap {
     //feeder
 
     //public static final CAN conveyorID = new CAN(21);
-    public static final int feederID = 22;
+    public static final int conveyorID = 22;
+    public static final int kickerID = 23;
     //shooter
     
     public static final int shootLeaderID = 30;

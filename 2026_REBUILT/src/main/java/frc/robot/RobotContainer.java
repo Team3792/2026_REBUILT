@@ -96,7 +96,7 @@ public class RobotContainer {
     operator.povDown().whileTrue(climb.climbDownCommand());
 
     operator.L2().onTrue(hood.setPosition(HoodConstants.kZone1Angle));
-    operator.R2().onTrue(shooter.setAngularVelocity(100));//for testing
+    operator.R2().onTrue(shooter.setFlywheelRPM(100));//for testing
   }
 
   

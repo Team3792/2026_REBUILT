@@ -10,19 +10,42 @@ import frc.robot.HardwareMap;
 
 //includes conveyor system and serializer
 public class Feeder extends SubsystemBase{
-    TalonFX feeder = new TalonFX(HardwareMap.feederID);
+    TalonFX kicker = new TalonFX(HardwareMap.kickerID);
+    TalonFX Conveyor = new TalonFX(HardwareMap.conveyorID);
+
+    double a;
     
 
     public Feeder(){
-        feeder.getConfigurator().apply(FeederConstants.getConfig());
+        kicker.getConfigurator().apply(FeederConstants.getKickerConfig());
+        Conveyor.getConfigurator().apply(FeederConstants.getConveyorConfig());
     }
 
-    public void setVoltage(double voltage){
-        feeder.setVoltage(voltage);
+    public void setKickerVoltage(double voltage){
+        kicker.setVoltage(voltage);
     }
 
-    public Command runFeeder(double voltage){
-        return Commands.runOnce(()-> setVoltage(voltage));
+    public void setConveyorVoltage(double voltage){
+        Conveyor.setVoltage(voltage);
+    }
+
+    public void setSubsystemVoltage(){
+        setKickerVoltage(FeederConstants.kKickerVoltage);
+        setConveyorVoltage(FeederConstants.kConveyorVoltage);
+    }
+
+    public Command runKicker(double voltage){
+        return Commands.runOnce(()-> setKickerVoltage(voltage));
+    }
+
+    public Command runConveyor(double voltage){
+        return Commands.runOnce(() -> setConveyorVoltage(voltage));
+    }
+
+    //run both conveyor, and kicker
+    public Command runFeederSubsystem(){
+        return Commands.parallel( runKicker(FeederConstants.kKickerVoltage),
+                                  runConveyor(FeederConstants.kConveyorVoltage));
     }
 
 

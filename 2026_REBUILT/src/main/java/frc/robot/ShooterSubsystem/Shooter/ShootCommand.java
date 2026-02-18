@@ -14,6 +14,8 @@ import frc.robot.ShooterSubsystem.Shooter.ShooterConstants;
 import frc.robot.ShooterSubsystem.Shooter.Shooter;
 import frc.robot.ShooterSubsystem.Hood.*;
 import frc.robot.LEDSubsystem.*;
+import frc.robot.FeederSubsystem.*;
+
 
 
 
@@ -25,6 +27,8 @@ public class ShootCommand extends Command {
   Hood hood = new Hood();
   Swerve swerve;
   LED led = new LED();
+  Feeder feeder = new Feeder();
+
 
   double targetRPM;
   double rangePercentage;
@@ -90,6 +94,8 @@ public class ShootCommand extends Command {
 
     double shooterPower = shooterPID.calculate(shooter.getRPM(), targetRPM) + ShooterConstants.kFrictionFF;
     shooter.setVoltage(shooterPower);
+
+    feeder.setSubsystemVoltage();
     
   }
 
