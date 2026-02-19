@@ -16,15 +16,13 @@ import frc.robot.HardwareMap;
 public class Intake extends SubsystemBase {
     TalonFX intake = new TalonFX(HardwareMap.intakeDriveID);
     TalonFX pivot = new TalonFX(HardwareMap.intakePivotID);
-    ProfiledPIDController pid = new ProfiledPIDController(0, 0, 0, new TrapezoidProfile.Constraints(0, 0));
+    PIDController pid = new PIDController(IntakeConstants.kP, IntakeConstants.kI, IntakeConstants.kD);
 
     public Intake(){
         intake.getConfigurator().apply(IntakeConstants.applyIntakeConfig());
         pivot.getConfigurator().apply(IntakeConstants.applyPivotConfig());
 
         pivot.setPosition(0);
-        pid.setGoal(0);
-        pid.reset(intakeAngle());
 
     }
 
@@ -34,11 +32,11 @@ public class Intake extends SubsystemBase {
         return MathUtil.inputModulus((pivot.getPosition().getValueAsDouble() - IntakeConstants.kEncoderOffset) * 360,0,360);
     }
 
-    //returns anlge of pivot motor in degrees
-    // public double getPosition(){
-    //     double angle = pivot.getPosition().getValueAsDouble();//in rotations
-    //     return angle * 360;                                   //degrees
-    // }
+    //returns angle of pivot motor in degrees
+    public double getPosition(){
+        double angle = pivot.getPosition().getValueAsDouble();//in rotations
+        return angle * 360;                                   //degrees
+    }
 
     public void setVoltage(double voltage){
         intake.setVoltage(voltage);
@@ -49,7 +47,9 @@ public class Intake extends SubsystemBase {
     }
 
     public void setPosition(double position){
-        pid.setGoal(position);
+        double pidOutput = pid.calculate(getPosition(), position) 
+                         + IntakeConstants.kFrictionFF 
+                         + IntakeConstants.GravityFF(getPosition());
     }
 
     public Command runToPosition(double position){

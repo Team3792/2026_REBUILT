@@ -59,10 +59,15 @@ public class ShooterConstants {
     public static final double[][] hoodAngleRanges = {{0,0,0,0,0,0,0,0,0,0,0}, 
                                                       {0,0,0,0,0,0,0,0,0,0,0}};
 
+    //TODO: instead of 2, use best fit curve to return correct amount of iterations needed
+    public static double targetHubPoseIterations(double robotVelocity){
+        return robotVelocity * 2;
+    }
+
     //TODO: make accurate
-    public static final double ktimeVsDistance = 0;
+    public static final double ktimeVsDistance = 0; //how long it takes fuel to travel one meter
                                                                //meters
-    public static final double fuelFlightTimeVsDistance(double robotToHubDistance){
+    public static  double fuelFlightTimeVsDistance(double robotToHubDistance){
         return robotToHubDistance * ktimeVsDistance;
     }
 
