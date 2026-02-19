@@ -14,6 +14,13 @@ public class IntakeConstants {
     public final static double kP = 0;
     public final static double kI = 0;
     public final static double kD = 0;
+    public final static double kFrictionFF = 0;
+    public final static double kGravityFF = 0;
+    
+    //where an angle of 0 degrees is intake vertical stow position
+    public static double GravityFF(double intakeAngle){
+        return 9.81 * Math.sin(intakeAngle) * kGravityFF;
+    }
 
     public static TalonFXConfiguration applyIntakeConfig(){
         

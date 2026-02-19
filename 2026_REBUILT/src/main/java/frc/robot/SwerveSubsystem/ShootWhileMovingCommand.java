@@ -16,14 +16,21 @@ import frc.robot.ShooterSubsystem.Shooter.ShooterConstants;
 import frc.robot.SwerveSubsystem.Swerve;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class TurnToTargetHubCommand extends Command {
+public class ShootWhileMovingCommand extends Command {
   /** Creates a new TurnToTargetHubCommand. */
   Swerve swerve;
   Pose2d hubPose;
   ProfiledPIDController anglePID = new ProfiledPIDController(0, 0, 0, new TrapezoidProfile.Constraints(360, 720));
   private Supplier<Double> xSupplier, ySupplier;
 
-  public TurnToTargetHubCommand(Swerve swerve, Pose2d hubPose, Supplier<Double> x, Supplier<Double> y ) {
+  double targetHubPositionX;
+  double targetHubPositionY;
+
+  double newRobotToHubDistance;
+
+  double ballFlightTime;
+
+  public ShootWhileMovingCommand(Swerve swerve, Pose2d hubPose, Supplier<Double> x, Supplier<Double> y ) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.swerve = swerve;
     this.hubPose = hubPose;
@@ -42,21 +49,47 @@ public class TurnToTargetHubCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    Pose2d currentPose = swerve.getPose();
-    Translation2d robotToHub = hubPose.getTranslation().minus(currentPose.getTranslation());
-    double robotToHubDistance = robotToHub.getDistance(currentPose.getTranslation());
-    double robotToHubDistanceX = robotToHub.getX();
-    double robotToHubDistanceY = robotToHub.getY();
-    //target hub is where robot should aim; not at the hub istelfs, unless robot V_y = 0
-    //velocity_y of target hub = opposite of robot velocity_y: m/s
-    double targetHubVelocityY = -swerve.getFieldRelativeSpeeds()[1];
-    double targetHubPositionY =  targetHubVelocityY * ShooterConstants.fuelFlightTimeVsDistance(robotToHubDistance);
-    double robotToTargetHubY = hubPose.getTranslation().getY() - targetHubPositionY;
-
-    double targetYaw = Math.atan2(robotToHubDistanceX, robotToTargetHubY);
 
     double xSpeed = xSupplier.get();
     double ySpeed = ySupplier.get();
+
+    Pose2d currentPose = swerve.getPose();
+    Translation2d robotToHub = hubPose.getTranslation().minus(currentPose.getTranslation());
+
+    double robotToHubDistance = robotToHub.getDistance(currentPose.getTranslation());
+
+    double robotToHubDistanceX = robotToHub.getX();
+    double robotToHubDistanceY = robotToHub.getY();
+
+    //target hub is where robot should aim; not at the hub istelfs, unless robot V_y = 0
+    //velocity_y of target hub = opposite of robot velocity_y: m/s
+    double targetHubVelocityX = -swerve.getFieldRelativeSpeeds()[0];
+    double targetHubVelocityY = -swerve.getFieldRelativeSpeeds()[1];
+    double targetHubVelocityTotal = Math.hypot(targetHubVelocityX, targetHubVelocityY);
+    
+
+    //update target hub position by calculating distance to hub using time it takes ball to travel
+    //using distance, recalculate time of flight
+    //repeat until percent error is low enough to shoot ball while moving
+    for(int i = 0; i < ShooterConstants.targetHubPoseIterations(targetHubVelocityTotal); i++){
+      if(i == 0){
+        //calculate based on actual hub pose once
+        targetHubPositionY =  targetHubVelocityY * ShooterConstants.fuelFlightTimeVsDistance(robotToHubDistance);
+        targetHubPositionX = targetHubVelocityX * ShooterConstants.fuelFlightTimeVsDistance(robotToHubDistance);
+        newRobotToHubDistance = Math.hypot(targetHubPositionX, targetHubPositionY);
+        ballFlightTime = ShooterConstants.fuelFlightTimeVsDistance(newRobotToHubDistance);
+      }else{
+        targetHubPositionY =  targetHubVelocityY * ballFlightTime;
+        targetHubPositionX = targetHubVelocityX * ballFlightTime;
+        newRobotToHubDistance = Math.hypot(targetHubPositionX, targetHubPositionY);
+        ballFlightTime = ShooterConstants.fuelFlightTimeVsDistance(newRobotToHubDistance);
+      }
+    
+    }
+    
+    // Translation2d targetHubPose = new Translation2d(targetHubPositionX, targetHubPositionY);
+    double targetYaw = Math.atan2(targetHubPositionX, targetHubPositionY);
+
     double tOut = anglePID.calculate(swerve.getRotation2dHeading().getDegrees(), targetYaw);
 
     ChassisSpeeds chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, tOut);

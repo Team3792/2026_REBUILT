@@ -89,8 +89,8 @@ public class RobotContainer {
 
   //operator
   private void configureOperatorBindings(){
-    operator.square().whileTrue(feeder.runFeeder(FeederConstants.kFeedVoltage));
-    operator.cross().whileTrue(feeder.runFeeder(-FeederConstants.kFeedVoltage)); 
+    // operator.square().whileTrue(feeder.runFeeder(FeederConstants.kFeedVoltage));
+    // operator.cross().whileTrue(feeder.runFeeder(-FeederConstants.kFeedVoltage)); 
 
     operator.povUp().whileTrue(climb.climbUpCommand());
     operator.povDown().whileTrue(climb.climbDownCommand());
