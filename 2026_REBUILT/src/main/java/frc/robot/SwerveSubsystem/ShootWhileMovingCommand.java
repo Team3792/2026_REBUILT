@@ -16,7 +16,7 @@ import frc.robot.ShooterSubsystem.Shooter.ShooterConstants;
 import frc.robot.SwerveSubsystem.Swerve;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class TurnToTargetHubCommand extends Command {
+public class ShootWhileMovingCommand extends Command {
   /** Creates a new TurnToTargetHubCommand. */
   Swerve swerve;
   Pose2d hubPose;
@@ -28,7 +28,9 @@ public class TurnToTargetHubCommand extends Command {
 
   double newRobotToHubDistance;
 
-  public TurnToTargetHubCommand(Swerve swerve, Pose2d hubPose, Supplier<Double> x, Supplier<Double> y ) {
+  double ballFlightTime;
+
+  public ShootWhileMovingCommand(Swerve swerve, Pose2d hubPose, Supplier<Double> x, Supplier<Double> y ) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.swerve = swerve;
     this.hubPose = hubPose;
@@ -68,18 +70,19 @@ public class TurnToTargetHubCommand extends Command {
 
     //update target hub position by calculating distance to hub using time it takes ball to travel
     //using distance, recalculate time of flight
-    //repeat until percent error is low enough
+    //repeat until percent error is low enough to shoot ball while moving
     for(int i = 0; i < ShooterConstants.targetHubPoseIterations(targetHubVelocityTotal); i++){
       if(i == 0){
         //calculate based on actual hub pose once
         targetHubPositionY =  targetHubVelocityY * ShooterConstants.fuelFlightTimeVsDistance(robotToHubDistance);
         targetHubPositionX = targetHubVelocityX * ShooterConstants.fuelFlightTimeVsDistance(robotToHubDistance);
         newRobotToHubDistance = Math.hypot(targetHubPositionX, targetHubPositionY);
+        ballFlightTime = ShooterConstants.fuelFlightTimeVsDistance(newRobotToHubDistance);
       }else{
-        //all following iterations done based on target hub pose
-        targetHubPositionY =  targetHubVelocityY * ShooterConstants.fuelFlightTimeVsDistance(newRobotToHubDistance);
-        targetHubPositionX = targetHubVelocityX * ShooterConstants.fuelFlightTimeVsDistance(newRobotToHubDistance);
+        targetHubPositionY =  targetHubVelocityY * ballFlightTime;
+        targetHubPositionX = targetHubVelocityX * ballFlightTime;
         newRobotToHubDistance = Math.hypot(targetHubPositionX, targetHubPositionY);
+        ballFlightTime = ShooterConstants.fuelFlightTimeVsDistance(newRobotToHubDistance);
       }
     
     }
