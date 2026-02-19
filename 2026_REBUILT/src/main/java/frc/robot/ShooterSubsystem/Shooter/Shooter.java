@@ -25,6 +25,9 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.HardwareMap;
 import frc.robot.SwerveSubsystem.Swerve;
+import edu.wpi.first.util.datalog.DataLog;
+import edu.wpi.first.util.datalog.DoubleLogEntry;
+import edu.wpi.first.wpilibj.DataLogManager;
 
 public class Shooter extends SubsystemBase {
   
@@ -40,6 +43,7 @@ public class Shooter extends SubsystemBase {
 
   PIDController pidController = new PIDController(ShooterConstants.kP, ShooterConstants.kI, ShooterConstants.kD);
 
+  DoubleLogEntry rpmLog;
 
   /** Creates a new Shooter. */
 
@@ -54,6 +58,9 @@ public class Shooter extends SubsystemBase {
     //aligned means on same shaft; may need to change to opposed
     leftMotor.setControl(new Follower(rightMotor.getDeviceID(), MotorAlignmentValue.Aligned));
          
+  DataLogManager.start();
+  DataLog log = DataLogManager.getLog();
+  rpmLog = new DoubleLogEntry(log, "/my/double");
 }
 
 
@@ -173,5 +180,9 @@ public double ballsShot(){
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("ShooterSubsystems/Shooter", getRPM());
     SmartDashboard.putNumber("ShooterSubsystems/Shooter", getTangentialVelocity());
+
+    rpmLog.append(getRPM());
+
+    
   }
 }
