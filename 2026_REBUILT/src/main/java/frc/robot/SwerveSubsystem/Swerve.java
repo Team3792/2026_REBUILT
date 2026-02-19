@@ -26,6 +26,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -45,6 +46,8 @@ public class Swerve extends SubsystemBase {
 
   AntPoseEstimator antPose = new AntPoseEstimator(SwerveConstants.kDriveKinematics, getRotation2dHeading(), getModulePositions(), new Pose2d());
   Pose2d robotPose = new Pose2d();
+
+  Field2d field = new Field2d();
 
   double currentTimestamp = 0.0;
 
@@ -112,6 +115,8 @@ public class Swerve extends SubsystemBase {
     antPose.updateAllVisionMeasurements();
     antPose.update(getRotation2dHeading(), getModulePositions());
     robotPose = antPose.getEstimatedPosition();
+    field.setRobotPose(robotPose);
+    SmartDashboard.putData("Robot Pose Estimate", field);
   }
 
   public void stopModules(){

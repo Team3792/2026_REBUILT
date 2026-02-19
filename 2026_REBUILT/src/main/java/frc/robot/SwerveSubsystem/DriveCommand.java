@@ -38,6 +38,12 @@ public class DriveCommand extends Command {
     double ySpeed = ySupplier.get();
     double tSpeed = tSupplier.get();
 
+    //apply deadband
+    xSpeed = Math.abs(xSpeed) < 0.05 ? 0.0 : xSpeed;
+    ySpeed = Math.abs(ySpeed) < 0.05 ? 0.0 : ySpeed;
+    tSpeed = Math.abs(tSpeed) < 0.05 ? 0.0 : tSpeed;
+
+
     ChassisSpeeds chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, tSpeed);
 
     swerve.drive(chassisSpeeds, swerve.getRotation2dHeading());

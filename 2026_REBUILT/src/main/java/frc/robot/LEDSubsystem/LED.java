@@ -18,7 +18,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-
+/**
+ * 6328's 2025 code uses addressable LED's so you can look at their code
+ * They also have a post in chief delphi 2025 that explains there LED process clearly:
+ * https://www.chiefdelphi.com/t/frc-6328-mechanical-advantage-2025-build-thread/477314/420
+ */
 public class LED extends SubsystemBase {
   private final int kPort = 0;
   private final int kLength = 65; 
