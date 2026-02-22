@@ -16,11 +16,11 @@ import frc.robot.ShooterSubsystem.Shooter.ShooterConstants;
 import frc.robot.SwerveSubsystem.Swerve;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class ShootWhileMovingCommand extends Command {
+public class AimWhileMoving extends Command {
   /** Creates a new TurnToTargetHubCommand. */
   Swerve swerve;
   Pose2d hubPose;
-  ProfiledPIDController anglePID = new ProfiledPIDController(0, 0, 0, new TrapezoidProfile.Constraints(360, 720));
+  ProfiledPIDController tController = new ProfiledPIDController(0, 0, 0, new TrapezoidProfile.Constraints(360, 720));
   private Supplier<Double> xSupplier, ySupplier;
 
   double targetHubPositionX;
@@ -30,14 +30,14 @@ public class ShootWhileMovingCommand extends Command {
 
   double ballFlightTime;
 
-  public ShootWhileMovingCommand(Swerve swerve, Pose2d hubPose, Supplier<Double> x, Supplier<Double> y ) {
+  public AimWhileMoving(Swerve swerve, Pose2d hubPose, Supplier<Double> x, Supplier<Double> y ) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.swerve = swerve;
     this.hubPose = hubPose;
     this.xSupplier = x;
     this.ySupplier = y;
 
-    anglePID.enableContinuousInput(-180, 180);
+    tController.enableContinuousInput(-180, 180);
 
     addRequirements(swerve);
   }
@@ -84,13 +84,12 @@ public class ShootWhileMovingCommand extends Command {
         newRobotToHubDistance = Math.hypot(targetHubPositionX, targetHubPositionY);
         ballFlightTime = ShooterConstants.fuelFlightTimeVsDistance(newRobotToHubDistance);
       }
-    
     }
     
     // Translation2d targetHubPose = new Translation2d(targetHubPositionX, targetHubPositionY);
     double targetYaw = Math.atan2(targetHubPositionX, targetHubPositionY);
 
-    double tOut = anglePID.calculate(swerve.getRotation2dHeading().getDegrees(), targetYaw);
+    double tOut = tController.calculate(swerve.getRotation2dHeading().getDegrees(), targetYaw);
 
     ChassisSpeeds chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, tOut);
     swerve.drive(chassisSpeeds, swerve.getRotation2dHeading());

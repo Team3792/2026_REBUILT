@@ -36,7 +36,6 @@ public class AntPoseEstimator extends SwerveDrivePoseEstimator {
     Vision vision = new Vision();
     PhotonPoseEstimator frontCamPoseEstimator = new PhotonPoseEstimator(VisionConstants.kFieldLayout, VisionConstants.kRobotToFrontCam);
     PhotonPoseEstimator backCamPoseEstimator = new PhotonPoseEstimator(VisionConstants.kFieldLayout, VisionConstants.kRobotToBackCam);
-    //List<PhotonPipelineResult> frontCamPipelineResults = vision.getFrontCamPipelineResults();
 
     public AntPoseEstimator (SwerveDriveKinematics kin, Rotation2d gyroAngle, SwerveModulePosition[] modulePositions,
         Pose2d initialPoseMeters){
@@ -80,7 +79,7 @@ public class AntPoseEstimator extends SwerveDrivePoseEstimator {
 
         // can change this to be max or to be weighted with combo of avg & max
         double avgDis = 0.0;
-        double avgYaw = 0.0;
+        double avgYaw = 0.0; 
 
         //can change this to be max or to be weighted with combo of avg & max
         //ambiguity above 0.2 in considered ambiguous

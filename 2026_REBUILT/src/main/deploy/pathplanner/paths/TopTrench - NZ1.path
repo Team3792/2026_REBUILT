@@ -57,7 +57,7 @@
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "NZ1"
+      "linkedName": null
     }
   ],
   "rotationTargets": [
@@ -86,7 +86,7 @@
     "rotation": 178.45587139007773
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Random Paths",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 0.0

@@ -96,11 +96,11 @@ public class ShootCommand extends Command {
     //double hoodPower = hoodPID.calculate(hood.hoodAngle(), targetHoodAngle) + HoodConstants.kFrictionFF;
     hood.setVoltage(hoodPower);
 
+    //TODO: add velocity feedforward (could do in slot0 configs)
     double shooterPower = shooterPID.calculate(shooter.getRPM(), targetRPM) + ShooterConstants.kFrictionFF;
     shooter.setVoltage(shooterPower);
 
     feeder.setSubsystemVoltage();
-    
   }
 
   // Called once the command ends or is interrupted.
