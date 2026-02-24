@@ -1,4 +1,4 @@
-package frc.robot.ClimbSubsytem;
+package frc.robot.Subsystems.ClimbSubsytem;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.InvertedValue;

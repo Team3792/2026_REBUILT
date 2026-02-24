@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.ShooterSubsystem.Shooter;
+package frc.robot.Subsystems.ShooterSubsystem.Shooter;
 
 import com.ctre.phoenix6.controls.ControlRequest;
 import com.ctre.phoenix6.controls.Follower;
@@ -24,7 +24,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.HardwareMap;
-import frc.robot.SwerveSubsystem.Swerve;
+import frc.robot.Subsystems.SwerveSubsystem.Swerve;
 import edu.wpi.first.util.datalog.DataLog;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.wpilibj.DataLogManager;
@@ -132,47 +132,15 @@ public double targetFlywheelVelocity(Swerve swerve, Pose2d hubPose){
 
 }
 
-public boolean ballInShooter(){
-  return lightSensor.getVoltage() > ShooterConstants.kLightSensorThreshold;
-}
-
-//time it take for ball to pass through the light sensor detection range
-public double ballShootTime(){
-  return ShooterConstants.lightSensorDetectionRange / getTangentialVelocity();
-}
-
-//if ball detected is in shooter, and ball is gone after the time it takes to shoot 1 ball; returns true
-public boolean ballShot(){
-  if(ballInShooter()){
-    timer.start();
-    if(timer.hasElapsed(ballShootTime())){
-      ballShot = !ballInShooter();
-    }
-  }
-  timer.reset();
-  return ballShot;
+public double lightSensorReading(){
+  return lightSensor.getVoltage();
 }
 
 public double flywheelStatorCurrent(){
   return rightMotor.getStatorCurrent().getValueAsDouble();
 }
-//return true if flywheel current < current of flywheel under load of a ball && if there has been a decrease if flywheel RPMs
-public boolean ballShotCurrentDetection(Swerve swerve, Pose2d hubPose){
-  return (flywheelStatorCurrent() < ShooterConstants.kFlywheelBallLoadCurrent) 
-      && (getRPM() < targetFlywheelVelocity(swerve, hubPose) );
-}
 
-public double ballsShot(){
-  time.reset();
-  time.start();
-  if(ballShot()){
-    time.hasElapsed(ShooterConstants.kballSeperationTime);
-    if(!ballShot){
-      ballsShot += 1;
-    }
-  }
-  return ballsShot;
-}
+
 
 
   @Override

@@ -1,4 +1,4 @@
-package frc.robot.SwerveSubsystem;
+package frc.robot.Subsystems.SwerveSubsystem;
 
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -10,7 +10,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.SwerveSubsystem.ModuleConstants.ModuleConfig;
+import frc.robot.Subsystems.SwerveSubsystem.ModuleConstants.ModuleConfig;
 
 public class SwerveModule extends SubsystemBase{
     TalonFX drive, turn;

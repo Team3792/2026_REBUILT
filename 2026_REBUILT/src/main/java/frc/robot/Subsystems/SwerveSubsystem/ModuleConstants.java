@@ -1,4 +1,4 @@
-package frc.robot.SwerveSubsystem;
+package frc.robot.Subsystems.SwerveSubsystem;
 
 import com.ctre.phoenix6.configs.MagnetSensorConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;

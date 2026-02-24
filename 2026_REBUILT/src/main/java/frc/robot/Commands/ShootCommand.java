@@ -2,19 +2,19 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.ShooterSubsystem.Shooter;
+package frc.robot.Commands;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.SwerveSubsystem.Swerve;
-import frc.robot.ShooterSubsystem.Shooter.ShooterConstants;
-import frc.robot.ShooterSubsystem.Shooter.Shooter;
-import frc.robot.ShooterSubsystem.Hood.*;
-import frc.robot.LEDSubsystem.*;
-import frc.robot.FeederSubsystem.*;
+import frc.robot.Subsystems.FeederSubsystem.*;
+import frc.robot.Subsystems.LEDSubsystem.*;
+import frc.robot.Subsystems.ShooterSubsystem.Hood.*;
+import frc.robot.Subsystems.ShooterSubsystem.Shooter.Shooter;
+import frc.robot.Subsystems.ShooterSubsystem.Shooter.ShooterConstants;
+import frc.robot.Subsystems.SwerveSubsystem.Swerve;
 
 
 

@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.SwerveSubsystem;
+package frc.robot.Commands;
 
 import java.util.function.Supplier;
 
@@ -12,8 +12,8 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.ShooterSubsystem.Shooter.ShooterConstants;
-import frc.robot.SwerveSubsystem.Swerve;
+import frc.robot.Subsystems.ShooterSubsystem.Shooter.ShooterConstants;
+import frc.robot.Subsystems.SwerveSubsystem.Swerve;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ShootWhileMovingCommand extends Command {
@@ -67,7 +67,7 @@ public class ShootWhileMovingCommand extends Command {
     double targetHubVelocityY = -swerve.getFieldRelativeSpeeds()[1];
     double targetHubVelocityTotal = Math.hypot(targetHubVelocityX, targetHubVelocityY);
     
-
+    
     //update target hub position by calculating distance to hub using time it takes ball to travel
     //using distance, recalculate time of flight
     //repeat until percent error is low enough to shoot ball while moving

@@ -1,4 +1,4 @@
-package frc.robot.IntakeSubsystem;
+package frc.robot.Subsystems.IntakeSubsystem;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 

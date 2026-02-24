@@ -1,4 +1,4 @@
-package frc.robot.ClimbSubsytem;
+package frc.robot.Subsystems.ClimbSubsytem;
 
 import com.ctre.phoenix6.configs.HardwareLimitSwitchConfigs;
 import com.ctre.phoenix6.hardware.TalonFX;
