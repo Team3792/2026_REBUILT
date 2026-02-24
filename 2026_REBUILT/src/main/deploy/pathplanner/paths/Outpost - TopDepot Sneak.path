@@ -12,7 +12,7 @@
         "y": 0.7676144578378421
       },
       "isLocked": false,
-      "linkedName": "Outpost"
+      "linkedName": null
     },
     {
       "anchor": {
@@ -41,7 +41,7 @@
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "TopDepotIntake"
+      "linkedName": null
     }
   ],
   "rotationTargets": [
@@ -63,7 +63,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -86.7741771433107
+    "rotation": 90.0
   },
   "reversed": false,
   "folder": "Lower TowerSneak Paths",

@@ -12,7 +12,7 @@
         "y": 6.919915662650602
       },
       "isLocked": false,
-      "linkedName": "TopDepotIntake"
+      "linkedName": null
     },
     {
       "anchor": {
@@ -41,7 +41,7 @@
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "UpperTowerShootingPos"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -64,7 +64,7 @@
   "folder": "Lower TowerSneak Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -86.7741771433107
+    "rotation": 90.0
   },
   "useDefaultConstraints": true
 }

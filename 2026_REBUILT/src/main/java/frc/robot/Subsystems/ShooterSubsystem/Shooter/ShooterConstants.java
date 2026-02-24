@@ -70,8 +70,4 @@ public class ShooterConstants {
     public static  double fuelFlightTimeVsDistance(double robotToHubDistance){
         return robotToHubDistance * ktimeVsDistance;
     }
-
-
-
-
 }

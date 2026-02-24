@@ -26,7 +26,6 @@ public class ModuleConstants {
 
 
 
-
     public static record ModuleConfig (int driveAddress, int turnAddress, int encoderAddress, double encoderOffset){}
 
     public static MagnetSensorConfigs getEncoderConfig(double offset){

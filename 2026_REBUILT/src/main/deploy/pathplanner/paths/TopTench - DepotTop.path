@@ -12,7 +12,7 @@
         "y": 7.637822416614474
       },
       "isLocked": false,
-      "linkedName": "TopTrench"
+      "linkedName": null
     },
     {
       "anchor": {
@@ -25,7 +25,7 @@
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "DepotTop"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],

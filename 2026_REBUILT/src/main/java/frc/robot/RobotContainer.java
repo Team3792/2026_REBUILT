@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import frc.robot.Commands.TurnToHubCommand;
 import frc.robot.Localization.AntPoseEstimator;
@@ -67,35 +68,35 @@ public class RobotContainer {
 
   //driver
   private void configureDriverBindings() {
-    // driver.R1().onTrue(intake.runToPosition(IntakeConstants.kIntakePosition));
-    // driver.R1().onFalse(intake.runToPosition(IntakeConstants.kStowedPosition));
-
-    // driver.R1().whileTrue(intake.runIntake(IntakeConstants.kIntakeVoltage));
-    // driver.L1().whileTrue(intake.runIntake(-IntakeConstants.kIntakeVoltage));
-
+    //Swerve
     swerve.setDefaultCommand(new DriveCommand(swerve, () -> driver.getLeftY(), () -> driver.getLeftX(), () -> driver.getRightX()));
     driver.options().onTrue(Commands.runOnce(() -> swerve.resetHeading(0)));
 
     driver.R2().whileTrue(new TurnToHubCommand(swerve, new Pose2d(), () -> driver.getLeftY(), () -> driver.getLeftX()));
 
-    // driver.L2().whileTrue(swerve.turnToTagCommand(vision.getTagYaw(Vision.frontCam)));
-    // driver.R2().whileTrue(swerve.alignToTagCommand(new Pose2d()));
-
-    //driver.triangle().onTrue(led.runPattern(LEDConstants.kClimbPattern));
-    // driver.square().onTrue(led.runPattern(LEDConstants.kIntakePattern));
-    // driver.cross().onTrue(led.runPattern(LEDConstants.kShootingPattern));
+    //Intake
+    driver.R1().onTrue(intake.runToPosition(IntakeConstants.kIntakePosition));
+    driver.R1().onFalse(intake.runToPosition(IntakeConstants.kStowedPosition));
+    driver.R1().whileTrue(intake.runIntake(IntakeConstants.kIntakeVoltage));
+    driver.L1().whileTrue(intake.runIntake(-IntakeConstants.kIntakeVoltage));
   }
 
   //operator
   private void configureOperatorBindings(){
-    // operator.square().whileTrue(feeder.runFeeder(FeederConstants.kFeedVoltage));
-    // operator.cross().whileTrue(feeder.runFeeder(-FeederConstants.kFeedVoltage)); 
-
-    operator.povUp().whileTrue(climb.climbUpCommand());
-    operator.povDown().whileTrue(climb.climbDownCommand());
-
+    //Shoot
     operator.L2().onTrue(hood.setPosition(HoodConstants.kZone1Angle));
     operator.R2().onTrue(shooter.setFlywheelRPM(100));//for testing
+
+    //Feeder
+    operator.triangle().whileTrue(feeder.runFeederSubsystem());
+
+    //Manual Feeder
+    operator.povRight().onTrue(feeder.runConveyor(FeederConstants.kConveyorVoltage));
+    operator.povLeft().onTrue(feeder.runConveyor(-FeederConstants.kConveyorVoltage));
+
+    //Climb
+    operator.povUp().whileTrue(climb.climbUpCommand());
+    operator.povDown().whileTrue(climb.climbDownCommand());
   }
 
   

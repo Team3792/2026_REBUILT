@@ -25,7 +25,7 @@
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Outpost"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -48,7 +48,7 @@
   "folder": "Lower TowerSneak Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -0.8083524224313481
+    "rotation": -0.8083524224313482
   },
   "useDefaultConstraints": true
 }
