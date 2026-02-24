@@ -16,7 +16,7 @@ import frc.robot.Subsystems.ShooterSubsystem.Shooter.ShooterConstants;
 import frc.robot.Subsystems.SwerveSubsystem.Swerve;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class AimWhileMoving extends Command {
+public class AimWhileMovingCommand extends Command {
   /** Creates a new TurnToTargetHubCommand. */
   Swerve swerve;
   Pose2d hubPose;
@@ -30,7 +30,7 @@ public class AimWhileMoving extends Command {
 
   double ballFlightTime;
 
-  public AimWhileMoving(Swerve swerve, Pose2d hubPose, Supplier<Double> x, Supplier<Double> y ) {
+  public AimWhileMovingCommand(Swerve swerve, Pose2d hubPose, Supplier<Double> x, Supplier<Double> y ) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.swerve = swerve;
     this.hubPose = hubPose;
