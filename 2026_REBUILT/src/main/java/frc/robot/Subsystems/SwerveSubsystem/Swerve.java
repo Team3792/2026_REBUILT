@@ -44,10 +44,10 @@ public class Swerve extends SubsystemBase {
 
   public static Pigeon2 pigeon = new Pigeon2(0);
 
-  AntPoseEstimator antPose = new AntPoseEstimator(SwerveConstants.kDriveKinematics, getRotation2dHeading(), getModulePositions(), new Pose2d());
-  Pose2d robotPose = new Pose2d();
+  //AntPoseEstimator antPose = new AntPoseEstimator(SwerveConstants.kDriveKinematics, getRotation2dHeading(), getModulePositions(), new Pose2d());
+  //Pose2d robotPose = new Pose2d();
 
-  Field2d field = new Field2d();
+  //Field2d field = new Field2d();
 
   double currentTimestamp = 0.0;
 
@@ -75,32 +75,32 @@ public class Swerve extends SubsystemBase {
   }
 
 
-  private void configureAutoBuilder() {
-    RobotConfig config;
-    try {
-      config = RobotConfig.fromGUISettings();
-    } catch (Exception e) {
-      config = new RobotConfig(0, 0, new ModuleConfig(0, 0, 0, new DCMotor(0, 0, 0, 0, 0, 4), 0, 4));
+  // private void configureAutoBuilder() {
+  //   RobotConfig config;
+  //   try {
+  //     config = RobotConfig.fromGUISettings();
+  //   } catch (Exception e) {
+  //     config = new RobotConfig(0, 0, new ModuleConfig(0, 0, 0, new DCMotor(0, 0, 0, 0, 0, 4), 0, 4));
 
-      e.printStackTrace();
-    }
+  //     e.printStackTrace();
+  //   }
 
-    AutoBuilder.configure(
-      this::getPose,
-      this::resetPose,
-      this::getRobotRelativeSpeeds,
-      (speeds, feedforward) -> driveAuto(speeds),
-      new PPHolonomicDriveController(new PIDConstants(5.0, 0.0, 0.0), new PIDConstants(5.0, 0.0, 0.0)),
-      config,
-      () -> {
-      var alliance = DriverStation.getAlliance();
-      if (alliance.isPresent()){
-        return alliance.get() == DriverStation.Alliance.Red;
-      }
-      return false;
-    },
-    this);
-  }
+  //   AutoBuilder.configure(
+  //     this::getPose,
+  //     this::resetPose,
+  //     this::getRobotRelativeSpeeds,
+  //     (speeds, feedforward) -> driveAuto(speeds),
+  //     new PPHolonomicDriveController(new PIDConstants(5.0, 0.0, 0.0), new PIDConstants(5.0, 0.0, 0.0)),
+  //     config,
+  //     () -> {
+  //     var alliance = DriverStation.getAlliance();
+  //     if (alliance.isPresent()){
+  //       return alliance.get() == DriverStation.Alliance.Red;
+  //     }
+  //     return false;
+  //   },
+  //   this);
+  // }
 
   @Override
   public void periodic() {
@@ -112,11 +112,11 @@ public class Swerve extends SubsystemBase {
     //antPose.updateWithTime(currentTimestamp, getRotation2dHeading(), getModulePositions());
 
     //Update Localization
-    antPose.updateAllVisionMeasurements();
-    antPose.update(getRotation2dHeading(), getModulePositions());
-    robotPose = antPose.getEstimatedPosition();
-    field.setRobotPose(robotPose);
-    SmartDashboard.putData("Robot Pose Estimate", field);
+    // antPose.updateAllVisionMeasurements();
+    // antPose.update(getRotation2dHeading(), getModulePositions());
+    // robotPose = antPose.getEstimatedPosition();
+    // field.setRobotPose(robotPose);
+    // SmartDashboard.putData("Robot Pose Estimate", field);
   }
 
   public void stopModules(){
@@ -166,12 +166,13 @@ public class Swerve extends SubsystemBase {
     setModuleStates(desiredStates);
   }
 
-  public void resetPose(Pose2d pose){
-    antPose.resetPose(pose);
-  }
+  // public void resetPose(Pose2d pose){
+  //   antPose.resetPose(pose);
+  // }
 
   public Pose2d getPose(){
-    return antPose.getEstimatedPosition();
+    //return antPose.getEstimatedPosition();
+    return new Pose2d();
   } 
 
   public ChassisSpeeds getRobotRelativeSpeeds(){
@@ -188,12 +189,12 @@ public class Swerve extends SubsystemBase {
     return fieldRelativeVelocities;
   }
   //Use for testitng
-  public void turnToTag(double tagYaw) {
-    ProfiledPIDController pid = new ProfiledPIDController(0.01, 0, 0, new TrapezoidProfile.Constraints(SwerveConstants.kMaxOmega, SwerveConstants.kMaxOmega));
-    double rotationSpeed = pid.calculate(getHeading(), tagYaw);
-    ChassisSpeeds speeds = new ChassisSpeeds(0, 0, rotationSpeed);
-    drive(speeds, getRotation2dHeading());
-  }
+  // public void turnToTag(double tagYaw) {
+  //   ProfiledPIDController pid = new ProfiledPIDController(0.01, 0, 0, new TrapezoidProfile.Constraints(SwerveConstants.kMaxOmega, SwerveConstants.kMaxOmega));
+  //   double rotationSpeed = pid.calculate(getHeading(), tagYaw);
+  //   ChassisSpeeds speeds = new ChassisSpeeds(0, 0, rotationSpeed);
+  //   drive(speeds, getRotation2dHeading());
+  // }
 
   // public void alignToTag(Pose2d tagPose) {
   //   // Calculate new target pose with offset
@@ -204,9 +205,9 @@ public class Swerve extends SubsystemBase {
   //   drive(speeds, getRotation2dHeading());
   // }
 
-  public Command turnToTagCommand(double tagYaw) {
-    return Commands.run(() -> turnToTag(tagYaw));
-  }
+  // public Command turnToTagCommand(double tagYaw) {
+  //   return Commands.run(() -> turnToTag(tagYaw));
+  // }
 
   // public Command alignToTagCommand(Pose2d tagPose){
   //   return Commands.run(() -> alignToTag(tagPose));

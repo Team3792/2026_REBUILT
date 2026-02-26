@@ -56,7 +56,7 @@ public class LED extends SubsystemBase {
   public void periodic() {
   //This method will be called once per scheduler run
 
-  setLEDColor(LEDConstants.kClimbPattern);
+  //setLEDColor(LEDConstants.kClimbPattern);
     //led.setData(ledBuffer)
     
   }

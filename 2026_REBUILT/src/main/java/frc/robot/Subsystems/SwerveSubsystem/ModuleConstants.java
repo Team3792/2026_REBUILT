@@ -31,7 +31,7 @@ public class ModuleConstants {
     public static MagnetSensorConfigs getEncoderConfig(double offset){
         MagnetSensorConfigs config = new MagnetSensorConfigs();
         config.MagnetOffset = offset;
-        config.SensorDirection = SensorDirectionValue.Clockwise_Positive; //can be changed if needed
+        config.SensorDirection = SensorDirectionValue.CounterClockwise_Positive; //can be changed if needed
         config.AbsoluteSensorDiscontinuityPoint = 1.0;
         return config;
     }
@@ -60,10 +60,5 @@ public class ModuleConstants {
         config.CurrentLimits.StatorCurrentLimit = 30;
         config.CurrentLimits.StatorCurrentLimitEnable = true;
         return config;
-
-
     }
-
-
-
 }

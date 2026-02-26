@@ -44,8 +44,8 @@ public class RobotContainer {
   Swerve swerve = new Swerve();
   Shooter shooter = new Shooter();
   Hood hood = new Hood();
-  Vision vision = new Vision();
-  LED led = new LED();
+  //Vision vision = new Vision();
+  //LED led = new LED();
 
   CommandPS5Controller driver = new CommandPS5Controller(0);
   CommandPS5Controller operator = new CommandPS5Controller(1);
@@ -84,7 +84,7 @@ public class RobotContainer {
   //operator
   private void configureOperatorBindings(){
     //Shoot
-    operator.L2().onTrue(hood.setPosition(HoodConstants.kZone1Angle));
+    //operator.L2().onTrue(hood.setPosition(HoodConstants.kZone1Angle));
     operator.R2().onTrue(shooter.setFlywheelRPM(100));//for testing
 
     //Feeder

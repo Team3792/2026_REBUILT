@@ -22,7 +22,7 @@ import frc.robot.HardwareMap;
 public class Hood extends SubsystemBase {
   /** Creates a new Hood. */
   SparkMax hood = new SparkMax(HardwareMap.hoodID, MotorType.kBrushless);
-  DutyCycleEncoder encoder = new DutyCycleEncoder(HardwareMap.hoodEncoderPort);
+  //DutyCycleEncoder encoder = new DutyCycleEncoder(HardwareMap.hoodEncoderPort);
   ProfiledPIDController pidController = new ProfiledPIDController(HoodConstants.kP, HoodConstants.kI, HoodConstants.kD, 
     new TrapezoidProfile.Constraints(360, 360));
   
@@ -42,32 +42,32 @@ public class Hood extends SubsystemBase {
   }
 
   //returns rotations
-  public double getEncoderRotation() {
-    return encoder.get();
-  }
+  // public double getEncoderRotation() {
+  //   return encoder.get();
+  // }
 
-  //returns hood positions in degrees 
-  //where an angle of 0 is a ball exit angle along the horizontal axis
-  //an angle of 90 is ball exit angle along the vertical axis
-  public double hoodAngle(){
-    return MathUtil.inputModulus((getEncoderRotation() - HoodConstants.kEncoderAngleOffset) * 360, 0, 360);
-  }
+  // //returns hood positions in degrees 
+  // //where an angle of 0 is a ball exit angle along the horizontal axis
+  // //an angle of 90 is ball exit angle along the vertical axis
+  // public double hoodAngle(){
+  //   return MathUtil.inputModulus((getEncoderRotation() - HoodConstants.kEncoderAngleOffset) * 360, 0, 360);
+  // }
 
-  public void setAngle(double angle) {
-    pidController.setGoal(angle);
-    double pidOutput = pidController.calculate(hoodAngle());
-    hood.set(pidOutput + HoodConstants.kFrictionFF);
-  }
+  // public void setAngle(double angle) {
+  //   pidController.setGoal(angle);
+  //   double pidOutput = pidController.calculate(hoodAngle());
+  //   hood.set(pidOutput + HoodConstants.kFrictionFF);
+  // }
 
-  public Command setPosition(double angle){
-    return Commands.runOnce(() -> setAngle(angle));
-  }
+  // public Command setPosition(double angle){
+  //   return Commands.runOnce(() -> setAngle(angle));
+  // }
 
 
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("ShooterSubsystem/Hood", hoodAngle());
+    //SmartDashboard.putNumber("ShooterSubsystem/Hood", hoodAngle());
   }
 }

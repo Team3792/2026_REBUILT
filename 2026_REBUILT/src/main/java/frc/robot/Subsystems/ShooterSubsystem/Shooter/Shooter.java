@@ -65,10 +65,8 @@ public class Shooter extends SubsystemBase {
 
 
 public void setVoltage(double voltage){
-  VoltageOut output = new VoltageOut(12).withEnableFOC(true);
+  VoltageOut output = new VoltageOut(voltage).withEnableFOC(true);
   rightMotor.setControl(output);
- 
- 
 }
 
 public Command applyVoltage(double voltage){
@@ -107,30 +105,30 @@ public Command setFlywheelTorque(double torque){
   return Commands.runOnce(() -> setTorque(torque));
 }
 
-public double targetFlywheelVelocity(Swerve swerve, Pose2d hubPose){
+// public double targetFlywheelVelocity(Swerve swerve, Pose2d hubPose){
 
-  Pose2d currentPos = swerve.getPose();
-  Translation2d robotToHubPose = hubPose.getTranslation().minus(currentPos.getTranslation());
+//   Pose2d currentPos = swerve.getPose();
+//   Translation2d robotToHubPose = hubPose.getTranslation().minus(currentPos.getTranslation());
 
-    //double robotToHubDistance = Math.hypot((robotToHubPose.getX(),robotToHubPose.getY());
-    //velocity of robot relative to field; in x direction
-  double fieldRelativeVelocityX = swerve.getFieldRelativeSpeeds()[0];
-  double robotToHubDistance = robotToHubPose.getDistance(currentPos.getTranslation());
+//     //double robotToHubDistance = Math.hypot((robotToHubPose.getX(),robotToHubPose.getY());
+//     //velocity of robot relative to field; in x direction
+//   double fieldRelativeVelocityX = swerve.getFieldRelativeSpeeds()[0];
+//   double robotToHubDistance = robotToHubPose.getDistance(currentPos.getTranslation());
 
-  double targetRPM = 0;
+//   double targetRPM = 0;
 
-  for(int i = 1; i < ShooterConstants.distanceVSRPM[0].length; i++){
-      if(robotToHubDistance > ShooterConstants.distanceVSRPM[0][i]){
-        //return target flywheel RPM
-        targetRPM = ShooterConstants.distanceVSRPM[1][i-1];
-        break;
-      }
+//   for(int i = 1; i < ShooterConstants.distanceVSRPM[0].length; i++){
+//       if(robotToHubDistance > ShooterConstants.distanceVSRPM[0][i]){
+//         //return target flywheel RPM
+//         targetRPM = ShooterConstants.distanceVSRPM[1][i-1];
+//         break;
+//       }
     
-    }
+//     }
 
-    return targetRPM;
+//     return targetRPM;
 
-}
+// }
 
 public double lightSensorReading(){
   return lightSensor.getVoltage();
@@ -150,7 +148,5 @@ public double flywheelStatorCurrent(){
     SmartDashboard.putNumber("ShooterSubsystems/Shooter", getTangentialVelocity());
 
     rpmLog.append(getRPM());
-
-    
   }
 }

@@ -72,7 +72,7 @@ public class SwerveModule extends SubsystemBase{
     }
 
     public void setState(SwerveModuleState state){
-        System.out.println(state.speedMetersPerSecond);
+        //System.out.println(state.speedMetersPerSecond);
         if(Math.abs(state.speedMetersPerSecond) > 0.1){
             state.optimize(getTurnPosition());
 

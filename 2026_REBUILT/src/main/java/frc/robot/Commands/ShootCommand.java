@@ -91,10 +91,10 @@ public class ShootCommand extends Command {
     
   
     //based off best fit curve
-    double hoodPower = hoodPID.calculate(hood.hoodAngle(), HoodConstants.hoodAngleBestFit) + HoodConstants.kFrictionFF;
+    //double hoodPower = hoodPID.calculate(hood.hoodAngle(), HoodConstants.hoodAngleBestFit) + HoodConstants.kFrictionFF;
     //based off array value interpolation
     //double hoodPower = hoodPID.calculate(hood.hoodAngle(), targetHoodAngle) + HoodConstants.kFrictionFF;
-    hood.setVoltage(hoodPower);
+    //hood.setVoltage(hoodPower);
 
     //TODO: add velocity feedforward (could do in slot0 configs)
     double shooterPower = shooterPID.calculate(shooter.getRPM(), targetRPM) + ShooterConstants.kFrictionFF;

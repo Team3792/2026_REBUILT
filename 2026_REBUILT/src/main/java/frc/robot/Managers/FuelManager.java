@@ -14,7 +14,7 @@ import frc.robot.Subsystems.ShooterSubsystem.Shooter.Shooter;
 /** Add your docs here. */
 public class FuelManager extends SubsystemBase {
 
-Shooter shooter = new Shooter();
+    Shooter shooter = new Shooter();
 
     Timer timer = new Timer();
     Timer time = new Timer();
@@ -37,9 +37,9 @@ Shooter shooter = new Shooter();
         return shooter.getTangentialVelocity();
     }
 
-    public double targetFlywheelVelocity(Swerve swerve, Pose2d hubPose){
-        return shooter.targetFlywheelVelocity(swerve, hubPose);
-    }
+    // public double targetFlywheelVelocity(Swerve swerve, Pose2d hubPose){
+    //     return shooter.targetFlywheelVelocity(swerve, hubPose);
+    // }
     //time it take for ball to pass through the light sensor detection range
     public double ballShootTime(){
         return ShooterConstants.lightSensorDetectionRange / getTangentialVelocity();
@@ -47,34 +47,32 @@ Shooter shooter = new Shooter();
 
     
     //if ball detected is in shooter, and ball is gone after the time it takes to shoot 1 ball; returns true
-public boolean ballShot(){
-    if(ballInShooter()){
-        timer.start();
-        if(timer.hasElapsed(ballShootTime())){
-        ballShot = !ballInShooter();
+    public boolean ballShot(){
+        if(ballInShooter()){
+            timer.start();
+            if(timer.hasElapsed(ballShootTime())){
+            ballShot = !ballInShooter();
+            }
+        }
+        timer.reset();
+        return ballShot;
+    }
+
+    //return true if flywheel current < current of flywheel under load of a ball && if there has been a decrease if flywheel RPMs
+    // public boolean ballShotCurrentDetection(Swerve swerve, Pose2d hubPose){
+    // return (flywheelStatorCurrent() < ShooterConstants.kFlywheelBallLoadCurrent) 
+    //         && (RPM() < targetFlywheelVelocity(swerve, hubPose) );
+    // }
+
+    public double ballsShot(){
+    time.reset();
+    time.start();
+    if(ballShot()){
+        time.hasElapsed(ShooterConstants.kballSeperationTime);
+        if(!ballShot){
+        ballsShot += 1;
         }
     }
-    timer.reset();
-    return ballShot;
-}
-
-
-//return true if flywheel current < current of flywheel under load of a ball && if there has been a decrease if flywheel RPMs
-public boolean ballShotCurrentDetection(Swerve swerve, Pose2d hubPose){
-  return (flywheelStatorCurrent() < ShooterConstants.kFlywheelBallLoadCurrent) 
-         && (RPM() < targetFlywheelVelocity(swerve, hubPose) );
-}
-
-public double ballsShot(){
-  time.reset();
-  time.start();
-  if(ballShot()){
-    time.hasElapsed(ShooterConstants.kballSeperationTime);
-    if(!ballShot){
-      ballsShot += 1;
+    return ballsShot;
     }
-  }
-  return ballsShot;
-}
-
 }
