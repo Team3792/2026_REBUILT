@@ -5,4 +5,6 @@
 package frc.robot.Managers;
 
 /** Add your docs here. */
-public class ZoneManager {}
+public class RobotManager {
+    public static final double trenchHoodSlowAngle = 22;
+}
