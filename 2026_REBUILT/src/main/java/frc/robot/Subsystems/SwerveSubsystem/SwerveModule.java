@@ -9,10 +9,11 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Subsystems.SwerveSubsystem.ModuleConstants.ModuleConfig;
 
-public class SwerveModule extends SubsystemBase{
+public class SwerveModule{
     TalonFX drive, turn;
     CANcoder encoder;
     PIDController turnController;
@@ -29,20 +30,39 @@ public class SwerveModule extends SubsystemBase{
         
         drive.getConfigurator().apply(ModuleConstants.getDriveConfig());
         turn.getConfigurator().apply(ModuleConstants.getTurnConfig());
-        encoder.getConfigurator().apply(ModuleConstants.getEncoderConfig(0.0)); //Fix offset
+        encoder.getConfigurator().apply(ModuleConstants.getEncoderConfig(config.encoderOffset())); //Fix offset
 
         driveController = new VelocityVoltage(0).withSlot(0);
-        turnController = new PIDController(4, 0, 0.05);
+        turnController = new PIDController(6, 0, 0.05);
         turnController.enableContinuousInput(-Math.PI, Math.PI);   
 
-        drive.setPosition(0);  
+        drive.setPosition(0); 
         resetTurnEncoder();
+    }
+
+    public void resetEncoders(){
+        resetTurnEncoder();
+        resetDriveEncoder();
+        resetCancoder();
     }
 
 
     public void resetTurnEncoder(){
         double position = encoder.getPosition().getValueAsDouble() * ModuleConstants.kTurnRatio;
         turn.setPosition(position);
+        //turn.setPosition(0);
+    }
+
+    public void zeroTurnEncoder(){
+        turn.setPosition(0);
+    }
+
+    public void resetDriveEncoder(){
+        drive.setPosition(0);
+    }
+
+    public void resetCancoder(){
+        //encoder.setPosition(0);
     }
 
     public void driveVoltage(double voltage){
@@ -52,7 +72,11 @@ public class SwerveModule extends SubsystemBase{
     }
 
     public Rotation2d getTurnPosition(){
-        return new Rotation2d(turn.getPosition().getValueAsDouble() * ModuleConstants.kRadiansPerRotation);
+        return new Rotation2d(turn.getPosition().getValueAsDouble() * ModuleConstants.kRadiansPerMotorRotation);
+    }
+
+    public double getTurnPositionDegrees(){
+        return encoder.getPosition().getValueAsDouble() * 360.0;
     }
 
     public SwerveModulePosition getPosition(){
@@ -60,11 +84,11 @@ public class SwerveModule extends SubsystemBase{
     }
     
     public double getDrivePosition(){
-        return drive.getPosition().getValueAsDouble() * ModuleConstants.kMetersPerRotation;
+        return drive.getPosition().getValueAsDouble() * ModuleConstants.kMetersPerMotorRotation;
     }
 
     public double getDriveVelocity(){
-        return drive.getVelocity().getValueAsDouble() * ModuleConstants.kMetersPerRotation;
+        return drive.getVelocity().getValueAsDouble() * ModuleConstants.kMetersPerMotorRotation;
     }
 
     public SwerveModuleState getState(){
@@ -73,10 +97,10 @@ public class SwerveModule extends SubsystemBase{
 
     public void setState(SwerveModuleState state){
         //System.out.println(state.speedMetersPerSecond);
-        if(Math.abs(state.speedMetersPerSecond) > 0.1){
-            state.optimize(getTurnPosition());
+        if(Math.abs(state.speedMetersPerSecond) >= 0){
+            //state.optimize(getTurnPosition());
 
-            drive.setControl(driveController.withVelocity(state.speedMetersPerSecond / ModuleConstants.kMetersPerRotation));
+            drive.setControl(driveController.withVelocity(state.speedMetersPerSecond / ModuleConstants.kMetersPerMotorRotation));
             
             double turnVoltage = turnController.calculate(getTurnPosition().getRadians(), state.angle.getRadians());
             turn.setVoltage(turnVoltage);
@@ -95,4 +119,10 @@ public class SwerveModule extends SubsystemBase{
     //     return angle;
     // }
 
+
+    public void printEncoders() {
+        SmartDashboard.putNumber(name + "Cancoder Position", encoder.getAbsolutePosition().getValueAsDouble());
+        SmartDashboard.putNumber(name + "Turn Encoder Position", turn.getPosition().getValueAsDouble());// * ModuleConstants.kRadiansPerRotation);
+        SmartDashboard.putNumber(name + "Drive Encoder Position", getDrivePosition());
+    }
 }

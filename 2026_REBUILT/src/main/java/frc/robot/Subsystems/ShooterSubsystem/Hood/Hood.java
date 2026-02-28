@@ -21,20 +21,20 @@ import frc.robot.HardwareMap;
 
 public class Hood extends SubsystemBase {
   /** Creates a new Hood. */
-  SparkMax hood = new SparkMax(HardwareMap.hoodID, MotorType.kBrushless);
+  //SparkMax hood = new SparkMax(HardwareMap.hoodID, MotorType.kBrushless);
   //DutyCycleEncoder encoder = new DutyCycleEncoder(HardwareMap.hoodEncoderPort);
   ProfiledPIDController pidController = new ProfiledPIDController(HoodConstants.kP, HoodConstants.kI, HoodConstants.kD, 
     new TrapezoidProfile.Constraints(360, 360));
   
   public Hood() {
     pidController.enableContinuousInput(0, 360);
-    hood.configure(HoodConstants.configHood(), com.revrobotics.ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+    //hood.configure(HoodConstants.configHood(), com.revrobotics.ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
 
     pidController.enableContinuousInput(0, 360);
   }
 
   public void setVoltage(double voltage){
-    hood.setVoltage(voltage);
+    //hood.setVoltage(voltage);
   }
 
   public Command applyVoltage(double voltage){

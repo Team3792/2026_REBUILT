@@ -6,6 +6,7 @@ package frc.robot.Subsystems.SwerveSubsystem;
 
 import java.util.function.Supplier;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 
@@ -46,8 +47,7 @@ public class DriveCommand extends Command {
 
     ChassisSpeeds chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, tSpeed);
 
-    swerve.drive(chassisSpeeds, swerve.getRotation2dHeading());
-
+    swerve.drive(chassisSpeeds, new Rotation2d());//swerve.getRotation2dHeading());
   }
 
   // Called once the command ends or is interrupted.

@@ -70,6 +70,20 @@ public class Swerve extends SubsystemBase {
     pigeon.setYaw(yawDegrees);
   }
 
+  public void resetTurnEncoders(){
+    for (SwerveModule mod : modules){
+      mod.resetEncoders();
+    }
+  }
+
+  public void zeroEncodersAll(){
+    for (SwerveModule module : modules) {
+      module.resetDriveEncoder();
+      module.resetTurnEncoder();
+    }
+  
+  }
+
   public Rotation2d getRotation2dHeading(){
     return Rotation2d.fromDegrees(getHeading());
   }
@@ -107,6 +121,8 @@ public class Swerve extends SubsystemBase {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Robot Heading", getHeading());
 
+    //modules[0].getTurnPosition();
+
 
     //currentTimestamp = Timer.getFPGATimestamp();
     //antPose.updateWithTime(currentTimestamp, getRotation2dHeading(), getModulePositions());
@@ -117,6 +133,10 @@ public class Swerve extends SubsystemBase {
     // robotPose = antPose.getEstimatedPosition();
     // field.setRobotPose(robotPose);
     // SmartDashboard.putData("Robot Pose Estimate", field);
+    frontLeft.printEncoders();
+    frontRight.printEncoders();
+    backLeft.printEncoders();
+    backRight.printEncoders();
   }
 
   public void stopModules(){
@@ -124,6 +144,19 @@ public class Swerve extends SubsystemBase {
     frontRight.stop();
     backLeft.stop();
     backRight.stop();
+  }
+
+  public void setVoltage(double voltage){
+    for (SwerveModule mod : modules){
+      mod.driveVoltage(voltage);
+    }
+  }
+
+  public void setTurnAngleAll(double angleRadians){
+    frontLeft.setState(new SwerveModuleState(0, new Rotation2d(angleRadians)));
+    frontRight.setState(new SwerveModuleState(0, new Rotation2d(angleRadians)));
+    backLeft.setState(new SwerveModuleState(0, new Rotation2d(angleRadians)));
+    backRight.setState(new SwerveModuleState(0, new Rotation2d(angleRadians)));
   }
 
   public static SwerveModulePosition[] getModulePositions(){

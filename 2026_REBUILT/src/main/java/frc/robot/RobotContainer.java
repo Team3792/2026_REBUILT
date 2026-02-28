@@ -12,6 +12,8 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.pathplanner.lib.auto.AutoBuilder;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.LEDPattern;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -43,7 +45,7 @@ public class RobotContainer {
   Climb climb = new Climb();
   Swerve swerve = new Swerve();
   Shooter shooter = new Shooter();
-  Hood hood = new Hood();
+  //Hood hood = new Hood();
   //Vision vision = new Vision();
   //LED led = new LED();
 
@@ -59,19 +61,30 @@ public class RobotContainer {
     //Register Named Commands
 
 
-    boolean isCompetition = false;
-    autoChooser = AutoBuilder.buildAutoChooserWithOptionsModifier((stream) -> isCompetition 
-                  ? stream.filter(auto -> auto.getName().startsWith("comp")) : stream);
+  //   boolean isCompetition = false;
+  //   autoChooser = AutoBuilder.buildAutoChooserWithOptionsModifier((stream) -> isCompetition 
+  //                 ? stream.filter(auto -> auto.getName().startsWith("comp")) : stream);
 
-    SmartDashboard.putData("Auto Chooser", autoChooser);
-  }
+  //   SmartDashboard.putData("Auto Chooser", autoChooser);
+    }
 
   //driver
   private void configureDriverBindings() {
     //Swerve
-    swerve.setDefaultCommand(new DriveCommand(swerve, () -> driver.getLeftY(), () -> driver.getLeftX(), () -> driver.getRightX()));
+    swerve.setDefaultCommand(new DriveCommand(swerve, () -> -driver.getLeftY(), () -> -driver.getLeftX(), () -> -driver.getRightX()));
+      
+   // Commands.run(() -> swerve.drive(new ChassisSpeeds(0, 0, 1), new Rotation2d()), swerve));
+      
+    
     driver.options().onTrue(Commands.runOnce(() -> swerve.resetHeading(0)));
+    // driver.cross().onTrue(Commands.runOnce(() -> swerve.zeroEncodersAll()));
+    driver.triangle().whileTrue(Commands.run(() -> swerve.setVoltage(1.0)));
+    // driver.triangle().onFalse(Commands.runOnce(() -> swerve.setVoltage(0)));
 
+    // //driver.povUp().whileTrue(Commands.(() -> swerve.setTurnAngleAll(Math.PI/2), () -> swerve.setTurnAngleAll(0)));
+    driver.povRight().whileTrue(Commands.run(() -> swerve.setTurnAngleAll(Math.PI/2)));
+    // driver.povRight().whileFalse(Commands.run(() -> swerve.setTurnAngleAll(0)));
+  
     driver.R2().whileTrue(new TurnToHubCommand(swerve, new Pose2d(), () -> driver.getLeftY(), () -> driver.getLeftX()));
 
     //Intake
@@ -101,7 +114,7 @@ public class RobotContainer {
 
   
   public Command getAutonomousCommand() {
-    return autoChooser.getSelected();
-    //return Commands.print("No autonomous command configured");
+    //return autoChooser.getSelected();
+    return Commands.print("No autonomous command configured");
   }
 }
