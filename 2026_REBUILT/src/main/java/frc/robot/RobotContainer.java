@@ -93,7 +93,14 @@ public class RobotContainer {
     driver.R1().whileTrue(intake.runIntake(IntakeConstants.kIntakeVoltage));
     driver.L1().whileTrue(intake.runIntake(-IntakeConstants.kIntakeVoltage));
 
+
     
+    driver.povRight().whileTrue(intake.movePivot(2));
+    driver.povLeft().whileTrue(intake.movePivot(-2));
+
+
+    operator.povUp().whileTrue(climb.climbUpCommand());
+    operator.povDown().whileTrue(climb.climbDownCommand());
   }
 
   //operator

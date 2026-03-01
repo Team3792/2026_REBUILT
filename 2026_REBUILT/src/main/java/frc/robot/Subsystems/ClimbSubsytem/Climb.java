@@ -22,11 +22,11 @@ public class Climb extends SubsystemBase {
     }
 
     public Command climbUpCommand(){
-        return Commands.runOnce(() -> setVoltage(ClimbConstants.kClimbVoltage));
+        return Commands.startEnd(() -> setVoltage(ClimbConstants.kClimbVoltage), () -> setVoltage(0));
     }
 
     public Command climbDownCommand(){
-        return Commands.runOnce(() -> setVoltage(-ClimbConstants.kClimbVoltage));
+        return Commands.startEnd(() -> setVoltage(-ClimbConstants.kClimbVoltage), () -> setVoltage(0));
     }
 }
 
