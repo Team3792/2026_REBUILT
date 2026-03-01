@@ -28,22 +28,15 @@ public class FieldManager {
     Translation2d bottomBlueTrench = new Translation2d(0,0);
     Translation2d topBlueTrench = new Translation2d(0,0);
 
-    private double trenchWidth = 1.278636; 
+    public static double trenchWidth = 1.278636; 
     private double trenchDepth = 1.194;
-
-    private double trenchZoneDepth = 1;
-    private double trenchZoneWidth = trenchDepth;
-
-
-
-
 
     //bump 
 
     //climb
     Translation2d blueTowerPos = new Translation2d(0,0);
     Translation2d redTowerPos = new Translation2d(0,0);
-
+    
     
     // public void setFieldElementPoses(AllianceColor color){
     //     switch (color) {
@@ -51,14 +44,9 @@ public class FieldManager {
 
     // }
 
-    // public boolean trenchZoneSize(){
-    //     Swerve.getPose.
-    // }
+    public double[] distanceToTrench(Pose2d )
 
-    // //use robot pose to determine if robot is within a trench zone
-    // public boolean inTrenchZone(Pose2d robotPose){
-    //     return false;
-    // }
+    
     
     
 }
