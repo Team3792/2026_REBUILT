@@ -32,5 +32,17 @@ public class HoodConstants {
     
 
     public static final double kEncoderAngleOffset = 0; //need to make accurate
-    public static final double hoodAngleBestFit = 0;//need to set to best fit curve of hood angle vs distance
+    public static final double hoodAngleBestFit = 0; //need to set to best fit curve of hood angle vs distance
+
+    //angle of hood so that it is just under trench height; 22 inches
+    public final double hoodStowAngle = 20;//estimation
+    
+    //time it takes hood to rotate 1 degree; seconds
+    private final double timerPerAngle = .2;
+
+    public double timeToStow(double hoodAngle){
+        double rotateAngle = hoodAngle - hoodStowAngle;
+        return rotateAngle * timerPerAngle;
+
+    }
 }

@@ -108,7 +108,7 @@ public class ShootCommand extends Command {
   public void end(boolean interrupted) {
     //sets rpm of shooter to some constants rpm when not shooting; talkes less time to spin up
     //shooter.setVoltage(shooterPID.calculate(shooter.getRPM(), shooterConstants.coastRPM));
-    led.setLEDColor(LEDConstants.kIdlePattern);
+    // led.setLEDColor(LEDConstants.kIdlePattern);
   }
 
   // Returns true when the command should end.

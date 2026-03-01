@@ -49,17 +49,14 @@ public class ShooterConstants {
     public static final double coastRPM = 0;
 
     //distance vs rpm 2D array
-        //TODO: set good rpm values for given distance range
     public static final double[][] distanceVSRPM = {{24,48,72,96,120,144,168,192,216,240,264},
                                                     {0,0,0,0,0,0,0,0,0,0,0}};
         //TODO: set good hood angle values for given distance range
     public static final double[][] distanceVsHoodAngle = {{24,48,72,96,120,144,168,192,216,240,264},
                                                           {0,0,0,0,0,0,0,0,0,0,0}};
-    //                                               r:1 2 3 4 5 6 7 8 9 10 11
-    public static final double[][] hoodAngleRanges = {{0,0,0,0,0,0,0,0,0,0,0}, 
-                                                      {0,0,0,0,0,0,0,0,0,0,0}};
+    
 
-    //TODO: instead of 2, use best fit curve to return correct amount of iterations needed
+    //TODO: return needed amount of iterations;
     public static double targetHubPoseIterations(double robotVelocity){
         return robotVelocity * 2;
     }

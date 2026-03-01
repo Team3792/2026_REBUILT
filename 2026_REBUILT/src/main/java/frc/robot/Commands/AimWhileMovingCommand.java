@@ -20,7 +20,7 @@ public class AimWhileMovingCommand extends Command {
   /** Creates a new TurnToTargetHubCommand. */
   Swerve swerve;
   Pose2d hubPose;
-  ProfiledPIDController tController = new ProfiledPIDController(0, 0, 0, new TrapezoidProfile.Constraints(360, 720));
+  ProfiledPIDController headingPID = new ProfiledPIDController(0, 0, 0, new TrapezoidProfile.Constraints(360, 720));
   private Supplier<Double> xSupplier, ySupplier;
 
   double targetHubPositionX;
@@ -37,7 +37,7 @@ public class AimWhileMovingCommand extends Command {
     this.xSupplier = x;
     this.ySupplier = y;
 
-    tController.enableContinuousInput(-180, 180);
+    headingPID.enableContinuousInput(-180, 180);
 
     addRequirements(swerve);
   }
@@ -56,29 +56,30 @@ public class AimWhileMovingCommand extends Command {
     Pose2d currentPose = swerve.getPose();
     Translation2d robotToHub = hubPose.getTranslation().minus(currentPose.getTranslation());
 
-    double robotToHubDistance = robotToHub.getDistance(currentPose.getTranslation());
+    //double robotToHubDistance = robotToHub.getDistance(currentPose.getTranslation());
 
     double robotToHubDistanceX = robotToHub.getX();
     double robotToHubDistanceY = robotToHub.getY();
 
-    //target hub is where robot should aim; not at the hub istelfs, unless robot V_y = 0
-    //velocity_y of target hub = opposite of robot velocity_y: m/s
+    //target hub is where robot should aim; not at the hub istelf, unless robot Velocity = 0
+    //target hub is moving in opposite direction of robot
     double targetHubVelocityX = -swerve.getFieldRelativeSpeeds()[0];
     double targetHubVelocityY = -swerve.getFieldRelativeSpeeds()[1];
-    double targetHubVelocityTotal = Math.hypot(targetHubVelocityX, targetHubVelocityY);
+    double targetHubVelocity = Math.hypot(targetHubVelocityX, targetHubVelocityY);
     
     
-    //update target hub position by calculating distance to hub using time it takes ball to travel
+    //update target hub position by calculating distance to hub using ball time of flight
     //using distance, recalculate time of flight
-    //repeat until percent error is low enough to shoot ball while moving
-    for(int i = 0; i < ShooterConstants.targetHubPoseIterations(targetHubVelocityTotal); i++){
+    //repeat until error is low enough
+    for(int i = 0; i < ShooterConstants.targetHubPoseIterations(targetHubVelocity); i++){
       if(i == 0){
         //calculate based on actual hub pose once
-        targetHubPositionY =  targetHubVelocityY * ShooterConstants.fuelFlightTimeVsDistance(robotToHubDistance);
-        targetHubPositionX = targetHubVelocityX * ShooterConstants.fuelFlightTimeVsDistance(robotToHubDistance);
+        targetHubPositionY =  targetHubVelocityY * ShooterConstants.fuelFlightTimeVsDistance(robotToHubDistanceY);
+        targetHubPositionX = targetHubVelocityX * ShooterConstants.fuelFlightTimeVsDistance(robotToHubDistanceX);
         newRobotToHubDistance = Math.hypot(targetHubPositionX, targetHubPositionY);
         ballFlightTime = ShooterConstants.fuelFlightTimeVsDistance(newRobotToHubDistance);
       }else{
+        //calculate target hub pose based on time of flight; iteratively
         targetHubPositionY =  targetHubVelocityY * ballFlightTime;
         targetHubPositionX = targetHubVelocityX * ballFlightTime;
         newRobotToHubDistance = Math.hypot(targetHubPositionX, targetHubPositionY);
@@ -86,12 +87,12 @@ public class AimWhileMovingCommand extends Command {
       }
     }
     
-    // Translation2d targetHubPose = new Translation2d(targetHubPositionX, targetHubPositionY);
+    //angle of target hub
     double targetYaw = Math.atan2(targetHubPositionX, targetHubPositionY);
 
-    double tOut = tController.calculate(swerve.getRotation2dHeading().getDegrees(), targetYaw);
+    double PIDOutput = headingPID.calculate(swerve.getRotation2dHeading().getDegrees(), targetYaw);
 
-    ChassisSpeeds chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, tOut);
+    ChassisSpeeds chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, PIDOutput);
     swerve.drive(chassisSpeeds, swerve.getRotation2dHeading());
   }
 

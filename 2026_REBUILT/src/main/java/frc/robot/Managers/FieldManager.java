@@ -8,9 +8,12 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import frc.robot.Managers.GameManager.AllianceColor;
+import frc.robot.Subsystems.SwerveSubsystem.Swerve;
 
 /** Add your docs here. */
 public class FieldManager {
+
+
 
     //coordinates in meters
     //pose based off bottom left of field elements
@@ -21,17 +24,17 @@ public class FieldManager {
     
     //trench
     Translation2d bottomRedTrench = new Translation2d(0,0);
-    Translation2d topRedTrench = new Translation2d();
-    Translation2d bottomBlueTrench = new Translation2d();
-    Translation2d topBlueTrench = new Translation2d();
+    Translation2d topRedTrench = new Translation2d(0,0);
+    Translation2d bottomBlueTrench = new Translation2d(0,0);
+    Translation2d topBlueTrench = new Translation2d(0,0);
 
-    public static double trenchWidth = 1.278636; 
-    public static double trenchDepth = 1.194;
+    private double trenchWidth = 1.278636; 
+    private double trenchDepth = 1.194;
 
-    public static double trenchZoneDepth = 1;
-    public static double trenchZoneWidth = trenchDepth;
+    private double trenchZoneDepth = 1;
+    private double trenchZoneWidth = trenchDepth;
 
-    public static double a;
+
 
 
 
@@ -47,5 +50,15 @@ public class FieldManager {
     //         case Blue:
 
     // }
+
+    // public boolean trenchZoneSize(){
+    //     Swerve.getPose.
+    // }
+
+    // //use robot pose to determine if robot is within a trench zone
+    // public boolean inTrenchZone(Pose2d robotPose){
+    //     return false;
+    // }
+    
     
 }
