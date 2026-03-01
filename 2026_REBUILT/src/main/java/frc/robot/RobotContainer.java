@@ -88,10 +88,12 @@ public class RobotContainer {
     driver.R2().whileTrue(new TurnToHubCommand(swerve, new Pose2d(), () -> driver.getLeftY(), () -> driver.getLeftX()));
 
     //Intake
-    driver.R1().onTrue(intake.runToPosition(IntakeConstants.kIntakePosition));
-    driver.R1().onFalse(intake.runToPosition(IntakeConstants.kStowedPosition));
+   // driver.R1().onTrue(intake.runToPosition(IntakeConstants.kIntakePosition));
+    //driver.R1().onFalse(intake.runToPosition(IntakeConstants.kStowedPosition));
     driver.R1().whileTrue(intake.runIntake(IntakeConstants.kIntakeVoltage));
     driver.L1().whileTrue(intake.runIntake(-IntakeConstants.kIntakeVoltage));
+
+    
   }
 
   //operator

@@ -31,6 +31,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.HardwareMap;
 import frc.robot.Localization.AntPoseEstimator;
 
 public class Swerve extends SubsystemBase {
@@ -42,7 +43,7 @@ public class Swerve extends SubsystemBase {
 
   SwerveModule[] modules = {frontLeft, frontRight, backLeft, backRight};
 
-  public static Pigeon2 pigeon = new Pigeon2(0);
+  public static Pigeon2 pigeon = new Pigeon2(HardwareMap.kPigeon);
 
   //AntPoseEstimator antPose = new AntPoseEstimator(SwerveConstants.kDriveKinematics, getRotation2dHeading(), getModulePositions(), new Pose2d());
   //Pose2d robotPose = new Pose2d();

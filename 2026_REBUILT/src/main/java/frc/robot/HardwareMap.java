@@ -19,7 +19,7 @@ public class HardwareMap {
     public static final int kPDH = 1;
 
     //drive
-    public static final int kPigeon = 1;
+    public static final int kPigeon = 12;
 
     //intake
     public static final int intakePivotID = 20;

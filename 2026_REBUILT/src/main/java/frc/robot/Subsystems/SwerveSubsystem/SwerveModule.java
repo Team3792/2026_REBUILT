@@ -48,9 +48,10 @@ public class SwerveModule{
 
 
     public void resetTurnEncoder(){
+        System.out.println("Resetting encoder" + name);
         double position = encoder.getPosition().getValueAsDouble() * ModuleConstants.kTurnRatio;
         turn.setPosition(position);
-        //turn.setPosition(0);
+       // turn.setPosition(0);
     }
 
     public void zeroTurnEncoder(){
@@ -97,8 +98,8 @@ public class SwerveModule{
 
     public void setState(SwerveModuleState state){
         //System.out.println(state.speedMetersPerSecond);
-        if(Math.abs(state.speedMetersPerSecond) >= 0){
-            //state.optimize(getTurnPosition());
+        if(Math.abs(state.speedMetersPerSecond) > 0.05){
+            state.optimize(getTurnPosition());
 
             drive.setControl(driveController.withVelocity(state.speedMetersPerSecond / ModuleConstants.kMetersPerMotorRotation));
             

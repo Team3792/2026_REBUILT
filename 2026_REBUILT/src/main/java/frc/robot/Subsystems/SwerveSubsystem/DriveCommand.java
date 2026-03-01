@@ -35,9 +35,9 @@ public class DriveCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double xSpeed = xSupplier.get();
-    double ySpeed = ySupplier.get();
-    double tSpeed = tSupplier.get();
+    double xSpeed = 3 * xSupplier.get();
+    double ySpeed = 3 * ySupplier.get();
+    double tSpeed = 5 * tSupplier.get();
 
     //apply deadband
     xSpeed = Math.abs(xSpeed) < 0.05 ? 0.0 : xSpeed;
@@ -47,7 +47,7 @@ public class DriveCommand extends Command {
 
     ChassisSpeeds chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, tSpeed);
 
-    swerve.drive(chassisSpeeds, new Rotation2d());//swerve.getRotation2dHeading());
+    swerve.drive(chassisSpeeds, swerve.getRotation2dHeading());
   }
 
   // Called once the command ends or is interrupted.

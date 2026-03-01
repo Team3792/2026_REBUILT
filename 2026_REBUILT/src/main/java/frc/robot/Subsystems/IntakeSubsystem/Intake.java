@@ -1,5 +1,6 @@
 package frc.robot.Subsystems.IntakeSubsystem;
 
+import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.math.MathUtil;
@@ -17,6 +18,7 @@ public class Intake extends SubsystemBase {
     TalonFX intake = new TalonFX(HardwareMap.intakeDriveID);
     TalonFX pivot = new TalonFX(HardwareMap.intakePivotID);
     PIDController pid = new PIDController(IntakeConstants.kP, IntakeConstants.kI, IntakeConstants.kD);
+    PositionVoltage pivotController = new PositionVoltage(0);
 
     public Intake(){
         intake.getConfigurator().apply(IntakeConstants.applyIntakeConfig());
@@ -43,13 +45,21 @@ public class Intake extends SubsystemBase {
     }
 
     public Command runIntake(double voltage){
-        return Commands.runOnce(()-> setVoltage(voltage));
+        return Commands.startEnd(()-> setVoltage(voltage), () -> setVoltage(0));
     }
 
     public void setPosition(double position){
         double pidOutput = pid.calculate(getPosition(), position) 
                          + IntakeConstants.kFrictionFF 
                          + IntakeConstants.GravityFF(getPosition());
+    }
+
+    public void runPivot(double voltage){
+        pivot.setVoltage(voltage);
+    }
+
+    public Command movePivot(double voltage){
+        return Commands.runOnce(() -> runPivot(voltage));
     }
 
     public Command runToPosition(double position){

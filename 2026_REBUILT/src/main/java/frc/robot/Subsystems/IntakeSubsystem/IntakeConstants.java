@@ -25,15 +25,15 @@ public class IntakeConstants {
     public static TalonFXConfiguration applyIntakeConfig(){
         
         TalonFXConfiguration config = new TalonFXConfiguration();
-        config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;//TO-DO; make accurate
-        config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;//TO-DO; make accurate
+        config.MotorOutput.NeutralMode = NeutralModeValue.Coast;
         return config;
     }
 
     public static TalonFXConfiguration applyPivotConfig(){
         TalonFXConfiguration config = new TalonFXConfiguration();
-        config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive; //TO-DO; make accurate
-        config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive; //TO-DO; make accurate
+        config.MotorOutput.NeutralMode = NeutralModeValue.Coast;
         return config;
     }
 
