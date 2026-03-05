@@ -14,6 +14,7 @@ public class GameManager {
     public Optional<Alliance> alliance = DriverStation.getAlliance();
     public GameManager(){}
 
+
     public AllianceColor getAllianceColor(){
      if (alliance.get() == Alliance.Blue){
         return AllianceColor.Blue;
@@ -25,5 +26,10 @@ public class GameManager {
     public enum AllianceColor{
         Blue, Red
     }
+    
+    // public double gameState(){
+        
+    // }
+
 }
 

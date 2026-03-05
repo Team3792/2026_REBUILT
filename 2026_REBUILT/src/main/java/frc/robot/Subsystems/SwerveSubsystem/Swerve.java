@@ -74,6 +74,9 @@ public class Swerve extends SubsystemBase {
     return Rotation2d.fromDegrees(getHeading());
   }
 
+  public double getPitch(){
+    return pigeon.getPitch().getValueAsDouble();
+  }
 
   private void configureAutoBuilder() {
     RobotConfig config;

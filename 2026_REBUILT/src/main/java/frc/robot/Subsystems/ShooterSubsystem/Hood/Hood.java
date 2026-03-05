@@ -46,6 +46,8 @@ public class Hood extends SubsystemBase {
     return encoder.get();
   }
 
+  
+
   //returns hood positions in degrees 
   //where an angle of 0 is a ball exit angle along the horizontal axis
   //an angle of 90 is ball exit angle along the vertical axis

@@ -43,12 +43,12 @@ public class ZoneManager {
         return robotVelocity * hoodConstants.timeToStow(robotVelocity);
     }
 
-    // public double[] trenchZoneCoordinates(double robotVelocity){
-    //     double trenchZoneX = fieldManager.trenchWidth - trenchZoneSize(robotVelocity);
-    //     double trenchZoneY = trenchZoneSize(robotVelocity);
-    //     double[] trenchZone = {trenchZoneX, trenchZoneY};
-    //     return trenchZone;
-    // }
+    public double[] trenchZoneCoordinates(double robotVelocity){
+        double trenchZoneX = fieldManager.trenchWidth - trenchZoneSize(robotVelocity);
+        double trenchZoneY = trenchZoneSize(robotVelocity);
+        double[] trenchZone = {trenchZoneX, trenchZoneY};
+        return trenchZone;
+    }
 
     // public boolean inTrenchZone(Pose2d robotPose){
 

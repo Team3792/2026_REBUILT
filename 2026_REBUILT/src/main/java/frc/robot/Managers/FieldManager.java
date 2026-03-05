@@ -17,6 +17,12 @@ public class FieldManager {
 
     //coordinates in meters
     //pose based off bottom left of field elements
+    /**
+     * -------
+     * -------
+     * x------
+     * 
+     */
 
     //hub
     Translation2d blueHubPos = new Translation2d(0,0);
@@ -36,7 +42,7 @@ public class FieldManager {
     //climb
     Translation2d blueTowerPos = new Translation2d(0,0);
     Translation2d redTowerPos = new Translation2d(0,0);
-    
+
     
     // public void setFieldElementPoses(AllianceColor color){
     //     switch (color) {
@@ -44,7 +50,18 @@ public class FieldManager {
 
     // }
 
-    public double[] distanceToTrench(Pose2d )
+    public Translation2d[] distanceToTrenches(Pose2d robotPose){
+        Translation2d robotPos = robotPose.getTranslation();
+
+        Translation2d distanceToBottomRed = bottomRedTrench.minus(robotPos);
+        Translation2d distanceToTopRed = topRedTrench.minus(robotPos);
+        Translation2d distanceToBottomBlue = bottomRedTrench.minus(robotPos);
+        Translation2d distanceToTopBlue = topRedTrench.minus(robotPos);
+        
+        Translation2d[] distanceToTrenches = {distanceToBottomRed,distanceToTopRed, distanceToBottomBlue, distanceToTopBlue};
+        return  distanceToTrenches;
+
+    }
 
     
     
