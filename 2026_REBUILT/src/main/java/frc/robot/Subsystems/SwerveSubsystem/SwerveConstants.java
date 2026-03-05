@@ -30,4 +30,13 @@ public class SwerveConstants {
     public static PIDController kTranslationController = new PIDController(1, 0.1, 0);
     public static ProfiledPIDController kRotationController = new ProfiledPIDController(0.1, 0, 0, new TrapezoidProfile.Constraints(3.14, 6.28));
     
+    private double kDeadBandTreshold = 0.1;
+
+    public double deadBand(double input){
+        if(input > kDeadBandTreshold){
+            return input;
+        }else{
+            return 0;
+        }
+    }
 }
