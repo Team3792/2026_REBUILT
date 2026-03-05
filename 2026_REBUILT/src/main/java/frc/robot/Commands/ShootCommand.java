@@ -68,7 +68,6 @@ public class ShootCommand extends Command {
 
 
 
-
     for(int i = 1; i < ShooterConstants.distanceVSRPM[0].length; i++){
 
       if(robotToHubDistance > ShooterConstants.distanceVSRPM[0][i]){

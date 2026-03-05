@@ -94,13 +94,12 @@ public class RobotContainer {
     driver.L1().whileTrue(intake.runIntake(-IntakeConstants.kIntakeVoltage));
 
 
-    
+
     driver.povRight().whileTrue(intake.movePivot(2));
     driver.povLeft().whileTrue(intake.movePivot(-2));
 
-
-    operator.povUp().whileTrue(climb.climbUpCommand());
-    operator.povDown().whileTrue(climb.climbDownCommand());
+    driver.povUp().whileTrue(climb.climbUpCommand());
+    driver.povDown().whileTrue(climb.climbDownCommand());
   }
 
   //operator
@@ -113,12 +112,12 @@ public class RobotContainer {
     operator.triangle().whileTrue(feeder.runFeederSubsystem());
 
     //Manual Feeder
-    operator.povRight().onTrue(feeder.runConveyor(FeederConstants.kConveyorVoltage));
-    operator.povLeft().onTrue(feeder.runConveyor(-FeederConstants.kConveyorVoltage));
+    // operator.povRight().onTrue(feeder.runConveyor(FeederConstants.kConveyorVoltage));
+    // operator.povLeft().onTrue(feeder.runConveyor(-FeederConstants.kConveyorVoltage));
 
-    //Climb
-    operator.povUp().whileTrue(climb.climbUpCommand());
-    operator.povDown().whileTrue(climb.climbDownCommand());
+    // //Climb
+    // operator.povUp().whileTrue(climb.climbUpCommand());
+    // operator.povDown().whileTrue(climb.climbDownCommand());
   }
 
   
