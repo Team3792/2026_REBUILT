@@ -4,10 +4,21 @@
 
 package frc.robot.Managers;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 
 /** Add your docs here. */
 public class FieldManager {
+
+    //coordinates in meters
+    //pose based on bottom left of field element
+    /*
+    * 
+    * -------
+    * -------
+    * x------
+    * 
+    */
 
     //hub
     Translation2d blueHubPos = new Translation2d(0,0);
@@ -20,7 +31,7 @@ public class FieldManager {
     Translation2d topBlueTrench = new Translation2d(0,0);
 
     public static double trenchWidth = 1.278636;
-    private double trenchDepth = 1.194;
+    //private double trenchDepth = 1.194;
 
     //bump
 
@@ -28,9 +39,18 @@ public class FieldManager {
     Translation2d blueTowerPos = new Translation2d(0,0);
     Translation2d redTowerPos = new Translation2d(0,0);
 
-    // public double[] distanceToTrench(Pose2d){
+    public Translation2d[] distanceToTrenches(Pose2d robotPose){
+        Translation2d robotPos = robotPose.getTranslation();
 
-    // }
+        Translation2d distanceToBottomRed = bottomRedTrench.minus(robotPos);
+        Translation2d distanceToTopRed = topRedTrench.minus(robotPos);
+        Translation2d distanceToBottomBlue = bottomRedTrench.minus(robotPos);
+        Translation2d distanceToTopBlue = topRedTrench.minus(robotPos);
+        
+        Translation2d[] distanceToTrenches = {distanceToBottomRed,distanceToTopRed, distanceToBottomBlue, distanceToTopBlue};
+        return  distanceToTrenches;
+
+    }
 
 }
 
