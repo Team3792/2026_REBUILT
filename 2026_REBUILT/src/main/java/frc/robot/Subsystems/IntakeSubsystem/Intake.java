@@ -1,5 +1,7 @@
 package frc.robot.Subsystems.IntakeSubsystem;
 
+import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
@@ -8,6 +10,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -17,22 +20,19 @@ import frc.robot.HardwareMap;
 public class Intake extends SubsystemBase {
     TalonFX intake = new TalonFX(HardwareMap.intakeDriveID);
     TalonFX pivot = new TalonFX(HardwareMap.intakePivotID);
-    PIDController pid = new PIDController(IntakeConstants.kP, IntakeConstants.kI, IntakeConstants.kD);
-    PositionVoltage pivotController = new PositionVoltage(0);
+    ProfiledPIDController pid = new ProfiledPIDController(IntakeConstants.kP, IntakeConstants.kI, IntakeConstants.kD, 
+    new TrapezoidProfile.Constraints(360, 720));
+    MotionMagicVoltage motionMagic = new MotionMagicVoltage(0);
 
     public Intake(){
         intake.getConfigurator().apply(IntakeConstants.applyIntakeConfig());
         pivot.getConfigurator().apply(IntakeConstants.applyPivotConfig());
 
-        pivot.setPosition(0);
-
+        motionMagic.Slot = 0;
+        pivot.setControl(motionMagic);
+        //pivot.setPosition(0);
     }
 
-    // return angle of intake in degrees
-    // where an angle of 0 is vertical
-    public double intakeAngle(){
-        return MathUtil.inputModulus((pivot.getPosition().getValueAsDouble() - IntakeConstants.kEncoderOffset) * 360,0,360);
-    }
 
     //returns angle of pivot motor in degrees
     public double getPosition(){
@@ -48,10 +48,9 @@ public class Intake extends SubsystemBase {
         return Commands.startEnd(()-> setVoltage(voltage), () -> setVoltage(0));
     }
 
+    // Position in rotations
     public void setPosition(double position){
-        double pidOutput = pid.calculate(getPosition(), position) 
-                         + IntakeConstants.kFrictionFF 
-                         + IntakeConstants.GravityFF(getPosition());
+        pivot.setControl(motionMagic.withPosition(position));
     }
 
     public void runPivot(double voltage){
@@ -67,6 +66,8 @@ public class Intake extends SubsystemBase {
     }
 
     
-
-
+    @Override
+    public void periodic() {
+        SmartDashboard.putNumber("Intake Position", getPosition());
+    }
 }

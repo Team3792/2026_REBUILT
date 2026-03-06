@@ -16,7 +16,9 @@ public class ZoneManager {
 
     public trenchZone getRobotZone(){
         if(0<robotX && topTrenchWidth>robotX && 0<robotY && topTrenchHeight>robotY){
-        return trenchZone.topTrench;
+            return trenchZone.topTrench;
+        } else {
+            return null;
         }
     }
 

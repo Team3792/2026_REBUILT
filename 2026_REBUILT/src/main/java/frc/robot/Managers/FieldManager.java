@@ -19,7 +19,7 @@ public class FieldManager {
     Translation2d bottomBlueTrench = new Translation2d(0,0);
     Translation2d topBlueTrench = new Translation2d(0,0);
 
-    public static double trenchWidth 1.278636;
+    public static double trenchWidth = 1.278636;
     private double trenchDepth = 1.194;
 
     //bump
