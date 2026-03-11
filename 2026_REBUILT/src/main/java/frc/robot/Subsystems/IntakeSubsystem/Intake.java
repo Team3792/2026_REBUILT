@@ -27,17 +27,21 @@ public class Intake extends SubsystemBase {
     public Intake(){
         intake.getConfigurator().apply(IntakeConstants.applyIntakeConfig());
         pivot.getConfigurator().apply(IntakeConstants.applyPivotConfig());
-
         motionMagic.Slot = 0;
-        pivot.setControl(motionMagic);
         //pivot.setPosition(0);
     }
 
 
-    //returns angle of pivot motor in degrees
+    //returns position in rotations
     public double getPosition(){
-        double angle = pivot.getPosition().getValueAsDouble();//in rotations
-        return angle * 360;                                   //degrees
+        double position = pivot.getPosition().getValueAsDouble();
+        return position;                                  
+    }
+
+    //returns angle in degrees
+    public double getAngle(){
+        double position = pivot.getPosition().getValueAsDouble();
+        return position * 360;
     }
 
     public void setVoltage(double voltage){
@@ -64,7 +68,6 @@ public class Intake extends SubsystemBase {
     public Command runToPosition(double position){
         return Commands.runOnce(() -> setPosition(position));
     }
-
     
     @Override
     public void periodic() {

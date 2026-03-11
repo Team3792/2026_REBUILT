@@ -53,5 +53,11 @@ public class HoodConstants {
 
     public static final double kEncoderAngleOffset = 0; //need to make accurate
     public static final double hoodAngleBestFit = 0;//need to set to best fit curve of hood angle vs distance
+    private static final double timePerAngle = 0.1;
+
+        //time to stow hood in seconds
+        public static double timeToStow(double robotVelocity){
+            return robotVelocity * timePerAngle; //need to make accurate
+        }
 
 }

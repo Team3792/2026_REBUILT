@@ -38,11 +38,11 @@ public class ZoneManager {
 
      //radius of zone circle; size based on robotVelocity, and time taken to stow hood
     public double trenchZoneSize(double robotVelocity){
-        return robotVelocity * hoodConstants.timeToStow(robotVelocity);
+        return robotVelocity * HoodConstants.timeToStow(robotVelocity);
     }
 
     public double[] trenchZoneCoordinates(double robotVelocity){
-        double trenchZoneX = fieldManager.trenchWidth - trenchZoneSize(robotVelocity);
+        double trenchZoneX = FieldManager.trenchWidth - trenchZoneSize(robotVelocity);
         double trenchZoneY = trenchZoneSize(robotVelocity);
         double[] trenchZone = {trenchZoneX, trenchZoneY};
         return trenchZone;

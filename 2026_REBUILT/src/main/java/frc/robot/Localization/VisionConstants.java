@@ -25,13 +25,5 @@ public class VisionConstants {
     public static final Transform3d kRobotToBackCam = new Transform3d(new Translation3d(0,0,0), new Rotation3d(0,0,0));
 
     public static final AprilTagFieldLayout kFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltAndymark);
-
-    // private Optional<Alliance> alliance = DriverStation.getAlliance();
-
-    // if (alliance.isPresent() && alliance.get() == Alliance.Red) {
-    //     Pose2d hub = kFieldLayout.getTagPose(10).get().plus(new Transform3d(new Translation3d(0,0,0), new Rotation3d(0,0,0))).toPose2d();
-    // } else {
-    //     Pose2d hub = kFieldLayout.getTagPose(25).get().plus(new Transform3d(new Translation3d(0,0,0), new Rotation3d(0,0,0))).toPose2d();
-    // }
 }
 

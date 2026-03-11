@@ -93,8 +93,6 @@ public class AimWhileMovingCommand extends Command {
 
     ChassisSpeeds chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, tOut);
     swerve.drive(chassisSpeeds, swerve.getRotation2dHeading());
-
-    
   }
 
   // Called once the command ends or is interrupted.

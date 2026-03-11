@@ -21,8 +21,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
+import frc.robot.Commands.AimWhileMovingCommand;
 import frc.robot.Localization.AntPoseEstimator;
 import frc.robot.Localization.Vision;
+import frc.robot.Managers.FieldManager;
 import frc.robot.Subsystems.ClimbSubsytem.Climb;
 import frc.robot.Subsystems.ClimbSubsytem.ClimbConstants;
 import frc.robot.Subsystems.FeederSubsystem.Feeder;
@@ -70,61 +72,40 @@ public class RobotContainer {
   //driver
   private void configureDriverBindings() {
     //Swerve
-    //swerve.setDefaultCommand(new DriveCommand(swerve, () -> -driver.getLeftY(), () -> -driver.getLeftX(), () -> -driver.getRightX()));
-      
-   // Commands.run(() -> swerve.drive(new ChassisSpeeds(0, 0, 1), new Rotation2d()), swerve));
-      
-    
-    //driver.options().onTrue(Commands.runOnce(() -> swerve.resetHeading(0)));
-    // driver.cross().onTrue(Commands.runOnce(() -> swerve.zeroEncodersAll()));
-    //driver.triangle().whileTrue(Commands.run(() -> swerve.setVoltage(1.0)));
-    // driver.triangle().onFalse(Commands.runOnce(() -> swerve.setVoltage(0)));
+    swerve.setDefaultCommand(new DriveCommand(swerve, () -> -driver.getLeftY(), () -> -driver.getLeftX(), () -> -driver.getRightX()));      
+    driver.options().onTrue(Commands.runOnce(() -> swerve.resetHeading(0)));
 
-    // //driver.povUp().whileTrue(Commands.(() -> swerve.setTurnAngleAll(Math.PI/2), () -> swerve.setTurnAngleAll(0)));
-   // driver.povRight().whileTrue(Commands.run(() -> swerve.setTurnAngleAll(Math.PI/2)));
-    // driver.povRight().whileFalse(Commands.run(() -> swerve.setTurnAngleAll(0)));
-  
-    //driver.R2().whileTrue(new TurnToHubCommand(swerve, new Pose2d(), () -> driver.getLeftY(), () -> driver.getLeftX()));
+    driver.R2().onTrue(new AimWhileMovingCommand(swerve, FieldManager.hub, null, null))
+
 
     //Intake
-   // driver.R1().onTrue(intake.runToPosition(IntakeConstants.kIntakePosition));
-    //driver.R1().onFalse(intake.runToPosition(IntakeConstants.kStowedPosition));
+    driver.R1().onTrue(intake.runToPosition(IntakeConstants.kIntakePosition));
+    driver.R1().onFalse(intake.runToPosition(IntakeConstants.kStowedPosition));
     driver.R1().whileTrue(intake.runIntake(IntakeConstants.kIntakeVoltage));
     driver.L1().whileTrue(intake.runIntake(-IntakeConstants.kIntakeVoltage));
 
-    driver.R2().onTrue(intake.runToPosition(IntakeConstants.kIntakePosition));
-    driver.R2().onFalse(intake.runToPosition(IntakeConstants.kStowedPosition));
 
     //Hood
     // driver.triangle().whileTrue(Commands.startEnd(() -> hood.setAngle(30), () -> hood.setAngle(15)));
     // //driver.circle().whileTrue(Commands.runOnce(() -> hood.setAngle(30), hood));
     // driver.cross().onTrue(Commands.runOnce(() -> hood.setAngle(15), hood));
-
-
-
-    // driver.povRight().whileTrue(intake.movePivot(2));
-    // driver.povLeft().whileTrue(intake.movePivot(-2));
-
-    // driver.povUp().whileTrue(climb.climbUpCommand());
-    // driver.povDown().whileTrue(climb.climbDownCommand());
   }
 
   //operator
   private void configureOperatorBindings(){
     //Shoot
-    //operator.L2().onTrue(hood.setPosition(HoodConstants.kZone1Angle));
     operator.R2().onTrue(shooter.setFlywheelRPM(100));//for testing
 
     //Feeder
     operator.triangle().whileTrue(feeder.runFeederSubsystem());
 
     //Manual Feeder
-    // operator.povRight().onTrue(feeder.runConveyor(FeederConstants.kConveyorVoltage));
-    // operator.povLeft().onTrue(feeder.runConveyor(-FeederConstants.kConveyorVoltage));
+    operator.povRight().onTrue(feeder.runConveyor(FeederConstants.kConveyorVoltage));
+    operator.povLeft().onTrue(feeder.runConveyor(-FeederConstants.kConveyorVoltage));
 
-    // //Climb
-    // operator.povUp().whileTrue(climb.climbUpCommand());
-    // operator.povDown().whileTrue(climb.climbDownCommand());
+    //Climb
+    operator.povUp().whileTrue(climb.climbUpCommand());
+    operator.povDown().whileTrue(climb.climbDownCommand());
   }
 
   

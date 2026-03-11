@@ -49,41 +49,19 @@ public class AntPoseEstimator extends SwerveDrivePoseEstimator {
         }
         return true;
     }
-    /** 
-     * 6328's STD scaling
-     * don't use ambiguity
-     * reference 6328 2025 github for full implementation in their vision subsystem
-     */
-    // double xyStdDev =
-    //         xyStdDevCoefficient
-    //             * Math.pow(avgDistance, 1.2)
-    //             / Math.pow(tagPoses.size(), 2.0)
-    //             * cameras[instanceIndex].stdDevFactor();
-    //     double thetaStdDev =
-    //         useVisionRotation
-    //             ? thetaStdDevCoefficient
-    //                 * Math.pow(avgDistance, 1.2)
-    //                 / Math.pow(tagPoses.size(), 2.0)
-    //                 * cameras[instanceIndex].stdDevFactor()
-    //             : Double.POSITIVE_INFINITY;
-    //TODO: implement logging
-    // Team 971 seems like they have a good kalman filter but it's in C
+
     private Matrix<N3, N1> getVisionStd(Optional<EstimatedRobotPose> robotPose, List<PhotonTrackedTarget> targets){
 
         Matrix<N3, N1> std = VecBuilder.fill(0.0, 0.0, 0.0); 
 
-        double baseXY = 0.1;
-        double baseT = 0.2;
+        double baseXY = 0.2;
+        double baseT = 0.3;
 
         int numTags = 0;
 
         // can change this to be max or to be weighted with combo of avg & max
         double avgDis = 0.0;
         double avgYaw = 0.0; 
-
-        //can change this to be max or to be weighted with combo of avg & max
-        //ambiguity above 0.2 in considered ambiguous
-        double avgAbg = 0.0;
         
         for (var target : targets){
             var targetPose = frontCamPoseEstimator.getFieldTags().getTagPose(target.getFiducialId());
@@ -93,11 +71,9 @@ public class AntPoseEstimator extends SwerveDrivePoseEstimator {
             numTags++;
             avgDis += targetPose.get().toPose2d().getTranslation().getDistance(this.getEstimatedPosition().getTranslation());
             avgYaw += target.getYaw();
-            avgAbg += target.getPoseAmbiguity();
         }
         avgDis /= numTags;
         avgYaw /= numTags;
-        avgAbg /= numTags;
 
         if (numTags == 0){
             std = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
@@ -115,30 +91,43 @@ public class AntPoseEstimator extends SwerveDrivePoseEstimator {
              * below k is a great reading so scale more
              * above k is a bad reading (0.2 is thershold for ambiguous so keep in mind)
              */
-            double abgScale = avgAbg / 0.05;
             double tagScale = 1.0 / Math.sqrt(numTags); //got from team 564, saw vid of local. and it was good
 
-            double stdXY = baseXY * disScale * abgScale * tagScale;
-            double stdT = baseT * yawScale * abgScale * tagScale;
+            double stdXY = baseXY * disScale * tagScale;
+            double stdT = baseT * yawScale * tagScale;
             std = VecBuilder.fill(stdXY, stdXY, stdT);
         }
         return std;
     }
 
-    private void updateVisionMeasurements(List<PhotonPipelineResult> pipelineResults) {
-        Optional<EstimatedRobotPose> visionEstFront = Optional.empty();
-
-        for (var result : pipelineResults){
-            visionEstFront = frontCamPoseEstimator.estimateCoprocMultiTagPose(result);
-            List<PhotonTrackedTarget> targets = result.getTargets();
-            if (visionEstFront.isEmpty()){
-                continue;
+    private void updateVisionMeasurements(List<PhotonPipelineResult> pipelineResults, String camera) {
+        Optional<EstimatedRobotPose> visionEst = Optional.empty();
+        if (camera == "front"){
+            for (var result : pipelineResults){
+                visionEst = frontCamPoseEstimator.estimateCoprocMultiTagPose(result);
+                List<PhotonTrackedTarget> targets = result.getTargets();
+                if (visionEst.isEmpty()){
+                    continue;
+                }
+                if (!isVisionDataValid(visionEst.get())){
+                    continue;
+                }
+                Matrix<N3,N1> std = getVisionStd(visionEst, targets);
+                addVisMeasurement(visionEst, result.getTimestampSeconds(), std);
             }
-            if (!isVisionDataValid(visionEstFront.get())){
-                continue;
+        } else{
+            for (var result : pipelineResults){
+                visionEst = backCamPoseEstimator.estimateCoprocMultiTagPose(result);
+                List<PhotonTrackedTarget> targets = result.getTargets();
+                if (visionEst.isEmpty()){
+                    continue;
+                }
+                if (!isVisionDataValid(visionEst.get())){
+                    continue;
+                }
+                Matrix<N3, N1> std = getVisionStd(visionEst, targets);
+                addVisMeasurement(visionEst, result.getTimestampSeconds(), std);
             }
-            Matrix<N3,N1> std = getVisionStd(visionEstFront, targets);
-            addVisMeasurement(visionEstFront, result.getTimestampSeconds(), std);
         }
     }
 
@@ -150,8 +139,8 @@ public class AntPoseEstimator extends SwerveDrivePoseEstimator {
     }
 
     public void updateAllVisionMeasurements(){
-        updateVisionMeasurements(vision.getFrontCamPipelineResults());
-        updateVisionMeasurements(vision.getBackCamPipelineResults());
+        updateVisionMeasurements(vision.getFrontCamPipelineResults(), "front");
+        updateVisionMeasurements(vision.getBackCamPipelineResults(), "back");
     }
 
     //TODO: Find a way to update odometry with different stds

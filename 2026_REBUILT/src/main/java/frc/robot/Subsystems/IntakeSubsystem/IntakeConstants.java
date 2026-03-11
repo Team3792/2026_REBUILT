@@ -1,5 +1,6 @@
 package frc.robot.Subsystems.IntakeSubsystem;
 
+import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -39,25 +40,24 @@ public class IntakeConstants {
 
     public static TalonFXConfiguration applyPivotConfig(){
         TalonFXConfiguration config = new TalonFXConfiguration();
+
+        //Motor Configs
         config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive; //TO-DO; make accurate
         config.MotorOutput.NeutralMode = NeutralModeValue.Coast;
         config.CurrentLimits.StatorCurrentLimit = 30;
 
         //Slot 0 configs
-        var slot0 = new Slot0Configs();
+        Slot0Configs slot0 = config.Slot0;
         slot0.kS = kFrictionFF;
         slot0.kV = kVelocityFF;
         slot0.kP = kP;
         slot0.kI = kI;
         slot0.kD = kD;
 
-        var motionMagicConfig = config.MotionMagic;
-        motionMagicConfig.MotionMagicCruiseVelocity = 80;
-        motionMagicConfig.MotionMagicAcceleration = 160;
-
-        config.Slot0 = slot0;
-        config.MotionMagic = motionMagicConfig;
-
+        //Motion Magic Configs
+        MotionMagicConfigs mm = config.MotionMagic;
+        mm.MotionMagicCruiseVelocity = 80;
+        mm.MotionMagicAcceleration = 160;
 
         return config;
     }
