@@ -40,8 +40,7 @@ public class Intake extends SubsystemBase {
 
     //returns angle in degrees
     public double getAngle(){
-        double position = pivot.getPosition().getValueAsDouble();
-        return position * 360;
+        return getPosition() * 360;
     }
 
     public void setVoltage(double voltage){
@@ -72,5 +71,6 @@ public class Intake extends SubsystemBase {
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Intake Position", getPosition());
+        SmartDashboard.putNumber("Intake Angle", getAngle());
     }
 }

@@ -6,18 +6,18 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 public class FeederConstants {
     //need to tune
-    public static final double kKickerVoltage = 2;
-    public static final double kConveyorVoltage = 1;
+    public static final double kKickerVoltage = 10;
+    public static final double kConveyorVoltage = 4;
 
     public static TalonFXConfiguration getKickerConfig(){
         TalonFXConfiguration config = new TalonFXConfiguration();
-        config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;//TO-DO; make accurate
+        config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
         config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
         return config;
     }
     public static TalonFXConfiguration getConveyorConfig(){
         TalonFXConfiguration config = new TalonFXConfiguration();
-        config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;//TO-DO; make accurate
+        config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
         config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
         return config;
     }

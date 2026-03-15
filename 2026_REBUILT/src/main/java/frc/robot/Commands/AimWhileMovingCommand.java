@@ -71,6 +71,8 @@ public class AimWhileMovingCommand extends Command {
     //update target hub position by calculating distance to hub using time it takes ball to travel
     //using distance, recalculate time of flight
     //repeat until percent error is low enough to shoot ball while moving
+
+    // won't work right now have to fix
     for(int i = 0; i < ShooterConstants.targetHubPoseIterations(targetHubVelocityTotal); i++){
       if(i == 0){
         //calculate based on actual hub pose once

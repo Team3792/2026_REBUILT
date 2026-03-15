@@ -14,12 +14,12 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 /** Add your docs here. */
 public class HoodConstants {
 
-    public static final double kP = 0.075;
-    public static final double kI = 0.0001;
+    public static final double kP = 0.2;
+    public static final double kI = 0;//0.0001;
     public static final double kD = 0.005;
     public static final double kFrictionFF = 0;
-    public static final double kMotorRatio = 5;
-    public static final double kHoodRatio = 300./26;
+    public static final double kMotorRatio = 25;
+    public static final double kHoodRatio = 300.0/26;
     public static final double kZeroPosition = 12;// degrees
 
     // All in degrees
@@ -42,8 +42,8 @@ public class HoodConstants {
         config.closedLoop.pid(kP, kI, kD);
 
         config.closedLoop.feedbackSensor(FeedbackSensor.kNoSensor);
-        config.closedLoop.maxOutput(0.5);
-        config.closedLoop.minOutput(-0.5);
+        config.closedLoop.maxOutput(0.8);
+        config.closedLoop.minOutput(-0.8);
    
         //config.closedLoop.iMaxAccum(0.2);
         return config;

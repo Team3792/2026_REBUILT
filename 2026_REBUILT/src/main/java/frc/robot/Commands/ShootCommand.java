@@ -99,7 +99,7 @@ public class ShootCommand extends Command {
     double shooterPower = shooterPID.calculate(shooter.getRPM(), targetRPM) + ShooterConstants.kFrictionFF;
     shooter.setVoltage(shooterPower);
 
-    feeder.setSubsystemVoltage();
+    feeder.setSubsystemVoltage(FeederConstants.kKickerVoltage, FeederConstants.kConveyorVoltage);
   }
 
   // Called once the command ends or is interrupted.

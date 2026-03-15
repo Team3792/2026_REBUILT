@@ -11,10 +11,10 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 
 /** Add your docs here. */
 public class GameManager {
-    public Optional<Alliance> alliance = DriverStation.getAlliance();
+    public static Optional<Alliance> alliance = DriverStation.getAlliance();
     public GameManager(){}
 
-    public AllianceColor getAllianceColor(){
+    public static AllianceColor getAllianceColor(){
      if (alliance.get() == Alliance.Blue){
         return AllianceColor.Blue;
      } else {

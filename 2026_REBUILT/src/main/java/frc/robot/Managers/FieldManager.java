@@ -5,7 +5,11 @@
 package frc.robot.Managers;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import frc.robot.Managers.GameManager.AllianceColor;
 
 /** Add your docs here. */
 public class FieldManager {
@@ -21,8 +25,8 @@ public class FieldManager {
     */
 
     //hub
-    Translation2d blueHubPos = new Translation2d(0,0);
-    Translation2d redHubPos = new Translation2d(0,0);
+    public static Pose2d blueHubPos = new Pose2d(new Translation2d(158.61,135.34), new Rotation2d(0));
+    public static Pose2d redHubPos = new Pose2d(new Translation2d(445.61, 135.34), new Rotation2d(0));
     
     //trench
     Translation2d bottomRedTrench = new Translation2d(0,0);
@@ -51,6 +55,17 @@ public class FieldManager {
         return  distanceToTrenches;
 
     }
+
+    public static Pose2d getHubPose(){
+        Pose2d hubPos;
+        if (GameManager.getAllianceColor() == AllianceColor.Blue){
+            hubPos = blueHubPos;
+        } else{
+            hubPos = redHubPos;
+        }
+        return hubPos;
+    }
+
 
 }
 

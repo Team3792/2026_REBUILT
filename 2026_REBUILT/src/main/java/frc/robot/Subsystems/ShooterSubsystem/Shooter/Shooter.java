@@ -6,6 +6,7 @@ package frc.robot.Subsystems.ShooterSubsystem.Shooter;
 
 import com.ctre.phoenix6.controls.ControlRequest;
 import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 import com.ctre.phoenix6.controls.TorqueCurrentFOC;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -39,6 +40,8 @@ public class Shooter extends SubsystemBase {
   TalonFX rightMotor = new TalonFX(HardwareMap.shootLeaderID);
   TalonFX leftMotor = new TalonFX(HardwareMap.shootFollowerID);
 
+  MotionMagicVelocityVoltage mmVelocity = new MotionMagicVelocityVoltage(0);
+
   AnalogInput lightSensor = new AnalogInput(0);
 
   PIDController pidController = new PIDController(ShooterConstants.kP, ShooterConstants.kI, ShooterConstants.kD);
@@ -56,11 +59,14 @@ public class Shooter extends SubsystemBase {
 
     //left motor follows right motor
     //aligned means on same shaft; may need to change to opposed
-    leftMotor.setControl(new Follower(rightMotor.getDeviceID(), MotorAlignmentValue.Aligned));
+    leftMotor.setControl(new Follower(rightMotor.getDeviceID(), MotorAlignmentValue.Opposed));
+
+    mmVelocity.Slot = 0;
+  
          
-  DataLogManager.start();
-  DataLog log = DataLogManager.getLog();
-  rpmLog = new DoubleLogEntry(log, "/my/double");
+  // DataLogManager.start();
+  // DataLog log = DataLogManager.getLog();
+  // rpmLog = new DoubleLogEntry(log, "/my/double");
 }
 
 
@@ -86,9 +92,12 @@ public double getTangentialVelocity(){
 //need to add in piece wise best fit polynomial for RPM target RPM estimation
 
 public void setRPM(double targetVelocity){
-  double pidOutput = pidController.calculate(targetVelocity,getRPM()) + ShooterConstants.kFrictionFF;
-  VoltageOut motorVoltage = new VoltageOut(pidOutput).withEnableFOC(true);
-  rightMotor.setControl(motorVoltage);
+  // double pidOutput = pidController.calculate(targetVelocity,getRPM()) + ShooterConstants.kFrictionFF;
+  // VoltageOut motorVoltage = new VoltageOut(pidOutput).withEnableFOC(true);
+  // rightMotor.setControl(motorVoltage);
+
+  // mm.withVelocity in rps
+  rightMotor.setControl(mmVelocity.withVelocity(targetVelocity / 60)); // convert from rpm to rps
 }
 
 public Command setFlywheelRPM(double targetRPM){
@@ -147,6 +156,6 @@ public double flywheelStatorCurrent(){
     SmartDashboard.putNumber("ShooterSubsystems/Shooter", getRPM());
     SmartDashboard.putNumber("ShooterSubsystems/Shooter", getTangentialVelocity());
 
-    rpmLog.append(getRPM());
+    //rpmLog.append(getRPM());
   }
 }

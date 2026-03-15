@@ -6,10 +6,13 @@ package frc.robot.Subsystems.ShooterSubsystem.Shooter;
 
 import java.io.ObjectInputFilter.Config;
 
+import com.ctre.phoenix6.configs.MotionMagicConfigs;
+import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.motorcontrol.Talon;
 
 /** Add your docs here. */
@@ -29,20 +32,46 @@ public class ShooterConstants {
 
     public static TalonFXConfiguration applyRightMotorConfig(){
         TalonFXConfiguration config = new TalonFXConfiguration();
-         config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;//TO-DO; make accurate
+        config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
         config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        config.CurrentLimits.StatorCurrentLimitEnable = true;
+        config.CurrentLimits.StatorCurrentLimit = 70;
+
+        Slot0Configs slot0 = config.Slot0;
+        slot0.kV = 0;
+        slot0.kP = kP;
+        slot0.kI = kI;
+        slot0.kD = kD;
+
+        MotionMagicConfigs mmconfig = config.MotionMagic;
+        mmconfig.MotionMagicAcceleration = 400;
+        mmconfig.MotionMagicJerk = 4000;
         return config;
     }
     public static TalonFXConfiguration applyLeftMotorConfig(){
         TalonFXConfiguration config = new TalonFXConfiguration();
-         config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;//TO-DO; make accurate
+        config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
         config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        config.CurrentLimits.StatorCurrentLimitEnable = true;
+        config.CurrentLimits.StatorCurrentLimit = 70;
+
+        Slot0Configs slot0 = config.Slot0;
+        slot0.kV = 0;
+        slot0.kP = kP;
+        slot0.kI = kI;
+        slot0.kD = kD;
+
+        MotionMagicConfigs mmconfig = config.MotionMagic;
+        mmconfig.MotionMagicAcceleration = 400;
+        mmconfig.MotionMagicJerk = 4000;
         return config;
     }
 
     private static final double kFlywheelDiameterInches = 4; //diameter in inches
-    public static final double kFlywheelDiameter = kFlywheelDiameterInches * 0.0254; //convert inches to meters
+    public static final double kFlywheelDiameter =  Units.inchesToMeters(kFlywheelDiameterInches); //kFlywheelDiameterInches * 0.0254; //convert inches to meters
     public static final double kFlywheelRadius = kFlywheelDiameter / 2;
+
+    public static final double kFallBackHubVoltage = 6.0;
 
     public static final double maxShooterRPM = 6000;
     //rpm value for flywheel while not shooting; less time to spin up to target rpm

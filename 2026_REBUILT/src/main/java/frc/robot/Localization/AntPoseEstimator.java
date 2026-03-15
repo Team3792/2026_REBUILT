@@ -85,12 +85,6 @@ public class AntPoseEstimator extends SwerveDrivePoseEstimator {
         else{
             double disScale = avgDis / 3.0; //3 meters. can tune to be different
             double yawScale = avgYaw / 30.0; //30 degreees. can tune to be different
-            /** Tune 0.05 value (refer as k)
-             * tune by seeing what a good threshold for abg is
-             * if k is a average threshold that can give good readings then use that
-             * below k is a great reading so scale more
-             * above k is a bad reading (0.2 is thershold for ambiguous so keep in mind)
-             */
             double tagScale = 1.0 / Math.sqrt(numTags); //got from team 564, saw vid of local. and it was good
 
             double stdXY = baseXY * disScale * tagScale;

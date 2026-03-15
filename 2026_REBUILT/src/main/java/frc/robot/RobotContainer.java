@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import frc.robot.Commands.AimWhileMovingCommand;
 import frc.robot.Localization.AntPoseEstimator;
@@ -75,20 +76,31 @@ public class RobotContainer {
     swerve.setDefaultCommand(new DriveCommand(swerve, () -> -driver.getLeftY(), () -> -driver.getLeftX(), () -> -driver.getRightX()));      
     driver.options().onTrue(Commands.runOnce(() -> swerve.resetHeading(0)));
 
-    driver.R2().onTrue(new AimWhileMovingCommand(swerve, FieldManager.hub, null, null))
-
+    // driver.R2().onTrue(new AimWhileMovingCommand(swerve, FieldManager.getHubPose(), () -> -driver.getLeftY(), () -> -driver.getLeftX()));
+    // driver.R2().onFalse(new DriveCommand(swerve, () -> -driver.getLeftY(), () -> -driver.getLeftX(), () -> -driver.getRightX()));
 
     //Intake
-    driver.R1().onTrue(intake.runToPosition(IntakeConstants.kIntakePosition));
-    driver.R1().onFalse(intake.runToPosition(IntakeConstants.kStowedPosition));
-    driver.R1().whileTrue(intake.runIntake(IntakeConstants.kIntakeVoltage));
-    driver.L1().whileTrue(intake.runIntake(-IntakeConstants.kIntakeVoltage));
+    // driver.R1().onTrue(intake.runToPosition(IntakeConstants.kIntakePosition));
+    // driver.R1().onFalse(intake.runToPosition(IntakeConstants.kStowedPosition));
+    // driver.R1().whileTrue(intake.runIntake(IntakeConstants.kIntakeVoltage));
+    // driver.L1().whileTrue(intake.runIntake(-IntakeConstants.kIntakeVoltage));
+
+
+    driver.R2().whileTrue(new StartEndCommand(() -> feeder.setConveyorVoltage(4), () -> feeder.setConveyorVoltage(0)));
+    driver.L2().whileTrue(new StartEndCommand(() -> feeder.setConveyorVoltage(-4), () -> feeder.setConveyorVoltage(0)));
+    driver.R1().whileTrue(new StartEndCommand(() -> feeder.setKickerVoltage(10), () -> feeder.setKickerVoltage(0)));
+    driver.L1().whileTrue(new StartEndCommand(() -> feeder.setKickerVoltage(-10), () -> feeder.setKickerVoltage(0)));
+    driver.povUp().whileTrue(new StartEndCommand(() -> shooter.setVoltage(6 ), () -> shooter.setVoltage(0)));
+
+    // driver.R1().onTrue(feeder.runKicker(3).alongWith(shooter.applyVoltage(4)));
+    // driver.R1().onFalse(feeder.runKicker(0).alongWith(shooter.applyVoltage(0)));
+
 
 
     //Hood
-    // driver.triangle().whileTrue(Commands.startEnd(() -> hood.setAngle(30), () -> hood.setAngle(15)));
-    // //driver.circle().whileTrue(Commands.runOnce(() -> hood.setAngle(30), hood));
-    // driver.cross().onTrue(Commands.runOnce(() -> hood.setAngle(15), hood));
+    driver.triangle().whileTrue(Commands.runOnce(() -> hood.setAngle(45)));
+    driver.square().whileTrue(Commands.runOnce(() -> hood.setAngle(30), hood));
+    driver.cross().onTrue(Commands.runOnce(() -> hood.setAngle(15), hood));
   }
 
   //operator
@@ -97,11 +109,13 @@ public class RobotContainer {
     operator.R2().onTrue(shooter.setFlywheelRPM(100));//for testing
 
     //Feeder
-    operator.triangle().whileTrue(feeder.runFeederSubsystem());
+    operator.triangle().whileTrue(feeder.runFeeder(FeederConstants.kKickerVoltage, FeederConstants.kConveyorVoltage));
 
     //Manual Feeder
     operator.povRight().onTrue(feeder.runConveyor(FeederConstants.kConveyorVoltage));
     operator.povLeft().onTrue(feeder.runConveyor(-FeederConstants.kConveyorVoltage));
+
+  
 
     //Climb
     operator.povUp().whileTrue(climb.climbUpCommand());

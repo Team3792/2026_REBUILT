@@ -29,9 +29,9 @@ public class Feeder extends SubsystemBase{
         Conveyor.setVoltage(voltage);
     }
 
-    public void setSubsystemVoltage(){
-        setKickerVoltage(FeederConstants.kKickerVoltage);
-        setConveyorVoltage(FeederConstants.kConveyorVoltage);
+    public void setSubsystemVoltage(double voltage1, double voltage2){
+        setKickerVoltage(voltage1);
+        setConveyorVoltage(voltage2);
     }
 
     public Command runKicker(double voltage){
@@ -40,6 +40,10 @@ public class Feeder extends SubsystemBase{
 
     public Command runConveyor(double voltage){
         return Commands.runOnce(() -> setConveyorVoltage(voltage));
+    }
+
+    public Command runFeeder(double kicker, double belts){
+        return Commands.startEnd(() -> setSubsystemVoltage(kicker, belts), () -> setSubsystemVoltage(0, 0));
     }
 
     //run both conveyor, and kicker
