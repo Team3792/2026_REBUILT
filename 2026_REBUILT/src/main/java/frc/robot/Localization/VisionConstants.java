@@ -18,8 +18,8 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 /** Add your docs here. */
 public class VisionConstants {
 
-    public static final String kFrontCamName = "frontCam";
-    public static final String kBackCamName = "backCam";
+    public static final String kFrontCamName = "front";
+    public static final String kBackCamName = "back";
 
     public static final Transform3d kRobotToFrontCam = new Transform3d(new Translation3d(0,0,0), new Rotation3d(0,0,0));
     public static final Transform3d kRobotToBackCam = new Transform3d(new Translation3d(0,0,0), new Rotation3d(0,0,0));

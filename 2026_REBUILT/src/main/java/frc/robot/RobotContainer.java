@@ -82,44 +82,37 @@ public class RobotContainer {
     //Intake
     // driver.R1().onTrue(intake.runToPosition(IntakeConstants.kIntakePosition));
     // driver.R1().onFalse(intake.runToPosition(IntakeConstants.kStowedPosition));
-    // driver.R1().whileTrue(intake.runIntake(IntakeConstants.kIntakeVoltage));
-    // driver.L1().whileTrue(intake.runIntake(-IntakeConstants.kIntakeVoltage));
-
-
-    driver.R2().whileTrue(new StartEndCommand(() -> feeder.setConveyorVoltage(4), () -> feeder.setConveyorVoltage(0)));
-    driver.L2().whileTrue(new StartEndCommand(() -> feeder.setConveyorVoltage(-4), () -> feeder.setConveyorVoltage(0)));
-    driver.R1().whileTrue(new StartEndCommand(() -> feeder.setKickerVoltage(10), () -> feeder.setKickerVoltage(0)));
-    driver.L1().whileTrue(new StartEndCommand(() -> feeder.setKickerVoltage(-10), () -> feeder.setKickerVoltage(0)));
-    driver.povUp().whileTrue(new StartEndCommand(() -> shooter.setVoltage(6 ), () -> shooter.setVoltage(0)));
-
-    // driver.R1().onTrue(feeder.runKicker(3).alongWith(shooter.applyVoltage(4)));
-    // driver.R1().onFalse(feeder.runKicker(0).alongWith(shooter.applyVoltage(0)));
-
-
-
-    //Hood
-    driver.triangle().whileTrue(Commands.runOnce(() -> hood.setAngle(45)));
-    driver.square().whileTrue(Commands.runOnce(() -> hood.setAngle(30), hood));
-    driver.cross().onTrue(Commands.runOnce(() -> hood.setAngle(15), hood));
+    driver.R2().whileTrue(intake.movePivot(0.5));
+    driver.L2().whileTrue(intake.movePivot(-0.5));
+    driver.R1().whileTrue(intake.runIntake(IntakeConstants.kIntakeVoltage));
+    driver.L1().whileTrue(intake.runIntake(-IntakeConstants.kIntakeVoltage));
   }
 
   //operator
   private void configureOperatorBindings(){
     //Shoot
-    operator.R2().onTrue(shooter.setFlywheelRPM(100));//for testing
+    //operator.R2().onTrue(shooter.setFlywheelRPM(100));//for testing
 
     //Feeder
-    operator.triangle().whileTrue(feeder.runFeeder(FeederConstants.kKickerVoltage, FeederConstants.kConveyorVoltage));
+    //operator.triangle().whileTrue(feeder.runFeeder(FeederConstants.kKickerVoltage, FeederConstants.kConveyorVoltage));
 
     //Manual Feeder
-    operator.povRight().onTrue(feeder.runConveyor(FeederConstants.kConveyorVoltage));
-    operator.povLeft().onTrue(feeder.runConveyor(-FeederConstants.kConveyorVoltage));
+    operator.R2().whileTrue(new StartEndCommand(() -> feeder.setConveyorVoltage(8), () -> feeder.setConveyorVoltage(0)));
+    operator.L2().whileTrue(new StartEndCommand(() -> feeder.setConveyorVoltage(-8), () -> feeder.setConveyorVoltage(0)));
+    operator.R1().whileTrue(new StartEndCommand(() -> feeder.setKickerVoltage(12), () -> feeder.setKickerVoltage(0)));
+    operator.L1().whileTrue(new StartEndCommand(() -> feeder.setKickerVoltage(-12), () -> feeder.setKickerVoltage(0)));
+    operator.square().whileTrue(new StartEndCommand(() -> shooter.setVoltage(7), () -> shooter.setVoltage(0)));
+
+    //Hood
+    operator.povUp().whileTrue(Commands.startEnd(() -> hood.setAngle(45), () -> hood.setAngle(12)));
+    //operator.circle().whileTrue(Commands.runOnce(() -> hood.setAngle(30), hood));
+    //operator.cross().onTrue(Commands.runOnce(() -> hood.setAngle(15), hood));
 
   
 
     //Climb
-    operator.povUp().whileTrue(climb.climbUpCommand());
-    operator.povDown().whileTrue(climb.climbDownCommand());
+    // operator.povUp().whileTrue(climb.climbUpCommand());
+    // operator.povDown().whileTrue(climb.climbDownCommand());
   }
 
   

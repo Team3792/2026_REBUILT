@@ -21,10 +21,10 @@ public class ModuleConstants {
     
 
     //Module Configurations.     Offsets need to be tuned
-    public static final ModuleConfig kFrontLeft = new ModuleConfig(0, 1, 2, -0.607);
-    public static final ModuleConfig kFrontRight = new ModuleConfig(3, 4, 5, -0.404);
-    public static final ModuleConfig kBackLeft = new ModuleConfig(6, 7, 8, -0.665);
-    public static final ModuleConfig kBackRight = new ModuleConfig(9, 10, 11, -0.442);
+    public static final ModuleConfig kFrontLeft = new ModuleConfig(0, 1, 2, -0.618);
+    public static final ModuleConfig kFrontRight = new ModuleConfig(3, 4, 5, -0.40);
+    public static final ModuleConfig kBackLeft = new ModuleConfig(6, 7, 8, -0.6645);
+    public static final ModuleConfig kBackRight = new ModuleConfig(9, 10, 11, -0.4445);
 
 
 

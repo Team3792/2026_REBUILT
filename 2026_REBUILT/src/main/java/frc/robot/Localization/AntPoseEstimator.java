@@ -96,7 +96,7 @@ public class AntPoseEstimator extends SwerveDrivePoseEstimator {
 
     private void updateVisionMeasurements(List<PhotonPipelineResult> pipelineResults, String camera) {
         Optional<EstimatedRobotPose> visionEst = Optional.empty();
-        if (camera == "front"){
+        if (camera == VisionConstants.kFrontCamName){
             for (var result : pipelineResults){
                 visionEst = frontCamPoseEstimator.estimateCoprocMultiTagPose(result);
                 List<PhotonTrackedTarget> targets = result.getTargets();
@@ -109,7 +109,7 @@ public class AntPoseEstimator extends SwerveDrivePoseEstimator {
                 Matrix<N3,N1> std = getVisionStd(visionEst, targets);
                 addVisMeasurement(visionEst, result.getTimestampSeconds(), std);
             }
-        } else{
+        } else if (camera == VisionConstants.kBackCamName){
             for (var result : pipelineResults){
                 visionEst = backCamPoseEstimator.estimateCoprocMultiTagPose(result);
                 List<PhotonTrackedTarget> targets = result.getTargets();
@@ -133,8 +133,8 @@ public class AntPoseEstimator extends SwerveDrivePoseEstimator {
     }
 
     public void updateAllVisionMeasurements(){
-        updateVisionMeasurements(vision.getFrontCamPipelineResults(), "front");
-        updateVisionMeasurements(vision.getBackCamPipelineResults(), "back");
+        updateVisionMeasurements(vision.getFrontCamPipelineResults(), VisionConstants.kFrontCamName);
+        updateVisionMeasurements(vision.getBackCamPipelineResults(), VisionConstants.kBackCamName);
     }
 
     //TODO: Find a way to update odometry with different stds

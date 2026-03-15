@@ -40,9 +40,10 @@ public class DriveCommand extends Command {
     double tSpeed = 5 * tSupplier.get();
 
     //apply deadband
-    xSpeed = Math.abs(xSpeed) < 0.05 ? 0.0 : xSpeed;
-    ySpeed = Math.abs(ySpeed) < 0.05 ? 0.0 : ySpeed;
-    tSpeed = Math.abs(tSpeed) < 0.05 ? 0.0 : tSpeed;
+    xSpeed = Math.abs(xSpeed) < 0.1 ? 0.0 : xSpeed;
+    ySpeed = Math.abs(ySpeed) < 0.1 ? 0.0 : ySpeed;
+    tSpeed = Math.abs(tSpeed) < 0.1 ? 0.0 : tSpeed;
+    System.out.println(xSpeed);
 
 
     ChassisSpeeds chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, tSpeed);

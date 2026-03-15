@@ -28,7 +28,7 @@ public class Vision extends SubsystemBase {
   /** Creates a new Vision. */
   
   //PhotonCamera frontCam, backCam;
-  public static PhotonCamera frontCam, backCam, fuelCam;
+  public static PhotonCamera frontCam, backCam; //, fuelCam;
   //PhotonPoseEstimator frontCamPoseEstimation;
   //PhotonPoseEstimator backCamPoseEstimation;
 
@@ -40,11 +40,12 @@ public class Vision extends SubsystemBase {
     //Can do HSV yellow detection to do fuel detection. 
     //Need to do tuning and setup in photonvision dashboard
     //create a new pipeline
-    fuelCam = new PhotonCamera("fuelCam");
+    //fuelCam = new PhotonCamera("fuelCam");
 
     //moved to AntPose
     //frontCamPoseEstimation = new PhotonPoseEstimator(VisionConstants.kFieldLayout, VisionConstants.kRobotToFrontCam);
     //backCamPoseEstimation = new PhotonPoseEstimator(VisionConstants.kFieldLayout, VisionConstants.kRobotToBackCam);
+
   }
 
   public boolean hasTarget(PhotonCamera cam){
@@ -57,7 +58,7 @@ public class Vision extends SubsystemBase {
     List<PhotonPipelineResult> pipelineResults = frontCam.getAllUnreadResults();
     return pipelineResults;
   }
-
+ 
   public List<PhotonPipelineResult> getBackCamPipelineResults(){
     List<PhotonPipelineResult> pipelineResults = backCam.getAllUnreadResults();
     return pipelineResults;
@@ -65,8 +66,7 @@ public class Vision extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
-    SmartDashboard.putBoolean("VisionSubsystem/frontCam", hasTarget(frontCam));
-    SmartDashboard.putBoolean("VisionSubsystem/backCam", hasTarget(backCam));   
+    SmartDashboard.putBoolean("Subsystems/Localization/Vision/Back Cam", hasTarget(backCam));
+    SmartDashboard.putBoolean("Subsystems/Localization/Vision/Front Cam", hasTarget(frontCam));
   }
 }

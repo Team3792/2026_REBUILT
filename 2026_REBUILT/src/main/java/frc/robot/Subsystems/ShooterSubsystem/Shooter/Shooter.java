@@ -80,8 +80,9 @@ public Command applyVoltage(double voltage){
 }
 
 public double getRPM(){
-   double rps = rightMotor.getVelocity().getValueAsDouble();
-  return rps * 60;
+  double rps = rightMotor.getVelocity().getValueAsDouble();
+  int rpm = ((int) rps) * 60;
+  return rpm;
 }
 
 public double getTangentialVelocity(){
@@ -153,8 +154,8 @@ public double flywheelStatorCurrent(){
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("ShooterSubsystems/Shooter", getRPM());
-    SmartDashboard.putNumber("ShooterSubsystems/Shooter", getTangentialVelocity());
+    SmartDashboard.putNumber("Shooter RPM", getRPM());
+    SmartDashboard.putNumber("Shooter Tangential Velocity", getTangentialVelocity());
 
     //rpmLog.append(getRPM());
   }

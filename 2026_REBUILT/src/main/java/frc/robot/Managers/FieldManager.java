@@ -53,8 +53,13 @@ public class FieldManager {
         
         Translation2d[] distanceToTrenches = {distanceToBottomRed,distanceToTopRed, distanceToBottomBlue, distanceToTopBlue};
         return  distanceToTrenches;
-
     }
+
+    // public double calculateDistance(Translation2d[] distances){
+    //     Translation2d closestTrench = robotPos;
+    // }
+
+
 
     public static Pose2d getHubPose(){
         Pose2d hubPos;
