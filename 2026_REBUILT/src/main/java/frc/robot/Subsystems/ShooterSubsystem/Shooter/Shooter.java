@@ -58,7 +58,6 @@ public class Shooter extends SubsystemBase {
     
 
     //left motor follows right motor
-    //aligned means on same shaft; may need to change to opposed
     leftMotor.setControl(new Follower(rightMotor.getDeviceID(), MotorAlignmentValue.Opposed));
 
     mmVelocity.Slot = 0;
@@ -79,30 +78,47 @@ public Command applyVoltage(double voltage){
   return Commands.runOnce(() -> setVoltage(voltage));
 }
 
-public double getRPM(){
+public double getRPS(){
   double rps = rightMotor.getVelocity().getValueAsDouble();
-  int rpm = ((int) rps) * 60;
+  int rpm = ((int) rps);
   return rpm;
 }
 
 public double getTangentialVelocity(){
-  double radiansPerMinute = getRPM() * 2 * Math.PI;           // radians per minute
-  return radiansPerMinute * ShooterConstants.kFlywheelRadius;// tangential velocity (meters / minute)
+  double radiansPerMinute = getRPS() * 2 * Math.PI;           // radians per second
+  return radiansPerMinute * ShooterConstants.kFlywheelRadius;// tangential velocity (meters / second)
+}
+
+public double getTargetRPM(double distance){
+  double targetRPM = 0;
+  for (int i = 0; i < ShooterConstants.distanceVSRPM[0].length - 1; i++){
+    if (distance > ShooterConstants.distanceVSRPM[0][i]){
+      targetRPM = ShooterConstants.distanceVSRPM[1][i-1];
+    }
+  }
+  return targetRPM;
+}
+
+public boolean isAtTargetRPM(double targetRPM){
+  if (Math.abs(getRPS() - targetRPM) < 100){
+    return true;
+  } else {
+    return false;
+  }
 }
 
 //need to add in piece wise best fit polynomial for RPM target RPM estimation
-
-public void setRPM(double targetVelocity){
+public void setRPS(double targetVelocity){
   // double pidOutput = pidController.calculate(targetVelocity,getRPM()) + ShooterConstants.kFrictionFF;
   // VoltageOut motorVoltage = new VoltageOut(pidOutput).withEnableFOC(true);
   // rightMotor.setControl(motorVoltage);
 
   // mm.withVelocity in rps
-  rightMotor.setControl(mmVelocity.withVelocity(targetVelocity / 60)); // convert from rpm to rps
+  rightMotor.setControl(mmVelocity.withVelocity(targetVelocity)); 
 }
 
-public Command setFlywheelRPM(double targetRPM){
-  return Commands.runOnce(() -> setRPM(targetRPM));
+public Command setFlywheelRPS(double targetRPM){
+  return Commands.runOnce(() -> setRPS(targetRPM));
 }
 
 public void setTorque(double torque){
@@ -148,13 +164,10 @@ public double flywheelStatorCurrent(){
   return rightMotor.getStatorCurrent().getValueAsDouble();
 }
 
-
-
-
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Shooter RPM", getRPM());
+    SmartDashboard.putNumber("Shooter RPS", getRPS());
     SmartDashboard.putNumber("Shooter Tangential Velocity", getTangentialVelocity());
 
     //rpmLog.append(getRPM());

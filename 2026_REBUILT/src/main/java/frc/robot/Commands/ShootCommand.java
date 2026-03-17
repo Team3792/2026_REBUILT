@@ -96,7 +96,7 @@ public class ShootCommand extends Command {
     //hood.setVoltage(hoodPower);
 
     //TODO: add velocity feedforward (could do in slot0 configs)
-    double shooterPower = shooterPID.calculate(shooter.getRPM(), targetRPM) + ShooterConstants.kFrictionFF;
+    double shooterPower = shooterPID.calculate(shooter.getRPS(), targetRPM) + ShooterConstants.kFrictionFF;
     shooter.setVoltage(shooterPower);
 
     feeder.setSubsystemVoltage(FeederConstants.kKickerVoltage, FeederConstants.kConveyorVoltage);

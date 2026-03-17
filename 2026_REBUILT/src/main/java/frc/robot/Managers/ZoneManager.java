@@ -13,7 +13,7 @@ public class ZoneManager {
 
     FieldManager fieldManager = new FieldManager();
     
-    Hood hood = new Hood();
+    
     HoodConstants hoodConstants = new HoodConstants();
 
     double robotX = 0;
@@ -53,6 +53,11 @@ public class ZoneManager {
     //     return trenchZone.topTrench;
     //     }
     // }
+
+    // Implement
+    public boolean isCloseToTrench(){
+        return true;
+    }
 
 
     // public enum trenchZone{

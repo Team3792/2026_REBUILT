@@ -28,7 +28,7 @@ public class Intake extends SubsystemBase {
         intake.getConfigurator().apply(IntakeConstants.applyIntakeConfig());
         pivot.getConfigurator().apply(IntakeConstants.applyPivotConfig());
         motionMagic.Slot = 0;
-        //pivot.setPosition(0);
+        pivot.setPosition(0);
     }
 
 

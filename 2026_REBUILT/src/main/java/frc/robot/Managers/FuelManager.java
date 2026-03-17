@@ -22,7 +22,7 @@ public class FuelManager extends SubsystemBase {
     public static double ballsShot = 0;
 
     public double RPM(){
-        return shooter.getRPM();
+        return shooter.getRPS();
     }
 
     public boolean ballInShooter(){

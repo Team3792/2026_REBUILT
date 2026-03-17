@@ -29,7 +29,7 @@ public class Hood extends SubsystemBase {
   SparkClosedLoopController controller;
   
   public Hood() {
-    hood.configure(HoodConstants.configHood(), ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
+    hood.configure(HoodConstants.configHood(), ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
     controller = hood.getClosedLoopController();
     hood.getEncoder().setPosition(0);
     zeroHood();

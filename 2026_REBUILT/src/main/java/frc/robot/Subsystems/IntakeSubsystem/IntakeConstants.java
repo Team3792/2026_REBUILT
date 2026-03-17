@@ -16,6 +16,8 @@ public class IntakeConstants {
 
     public static final double kEncoderOffset = 0;
 
+    public static final double kGearRatio = 0;
+
 
     public final static double kP = 0.1;
     public final static double kI = 0;

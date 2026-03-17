@@ -24,8 +24,12 @@ public class ShooterConstants {
     public static final double kballSeperationTime = 0.1;
     public static final double kFlywheelBallLoadCurrent = 0;//amps
 
-    //pid
-    public static final double kP = 0;
+    //pid & FF
+    public static final double kV = 0.1163;
+    public static final double kS = 0.23;
+    public static final double kMMAccel = 200;
+    public static final double kMMJerk = 2100;
+    public static final double kP = 0.1; //0.1 def works
     public static final double kI = 0;
     public static final double kD = 0;
     public static final double kFrictionFF = 0;
@@ -33,37 +37,39 @@ public class ShooterConstants {
     public static TalonFXConfiguration applyRightMotorConfig(){
         TalonFXConfiguration config = new TalonFXConfiguration();
         config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
-        config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        config.MotorOutput.NeutralMode = NeutralModeValue.Coast;
         config.CurrentLimits.StatorCurrentLimitEnable = true;
         config.CurrentLimits.StatorCurrentLimit = 70;
 
         Slot0Configs slot0 = config.Slot0;
-        slot0.kV = 0;
+        slot0.kS = kS;
+        slot0.kV = kV;
         slot0.kP = kP;
         slot0.kI = kI;
         slot0.kD = kD;
 
         MotionMagicConfigs mmconfig = config.MotionMagic;
-        mmconfig.MotionMagicAcceleration = 400;
-        mmconfig.MotionMagicJerk = 4000;
+        mmconfig.MotionMagicAcceleration = kMMAccel;
+        mmconfig.MotionMagicJerk = kMMJerk;
         return config;
     }
     public static TalonFXConfiguration applyLeftMotorConfig(){
         TalonFXConfiguration config = new TalonFXConfiguration();
         config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
-        config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        config.MotorOutput.NeutralMode = NeutralModeValue.Coast;
         config.CurrentLimits.StatorCurrentLimitEnable = true;
         config.CurrentLimits.StatorCurrentLimit = 70;
 
         Slot0Configs slot0 = config.Slot0;
-        slot0.kV = 0;
+        slot0.kS = kS;
+        slot0.kV = kV;
         slot0.kP = kP;
         slot0.kI = kI;
         slot0.kD = kD;
 
         MotionMagicConfigs mmconfig = config.MotionMagic;
-        mmconfig.MotionMagicAcceleration = 400;
-        mmconfig.MotionMagicJerk = 4000;
+        mmconfig.MotionMagicAcceleration = kMMAccel;
+        mmconfig.MotionMagicJerk = kMMJerk;
         return config;
     }
 
