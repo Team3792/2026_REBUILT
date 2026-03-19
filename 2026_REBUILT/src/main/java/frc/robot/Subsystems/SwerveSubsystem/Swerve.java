@@ -45,6 +45,8 @@ public class Swerve extends SubsystemBase {
 
   public static Pigeon2 pigeon = new Pigeon2(HardwareMap.kPigeon);
 
+
+
   //AntPoseEstimator antPose = new AntPoseEstimator(SwerveConstants.kDriveKinematics, getRotation2dHeading(), getModulePositions(), new Pose2d());
   //Pose2d robotPose = new Pose2d();
 
@@ -54,6 +56,13 @@ public class Swerve extends SubsystemBase {
 
   // HolonomicDriveController swerveController = new HolonomicDriveController(SwerveConstants.kTranslationController, 
   //                                       SwerveConstants.kTranslationController, SwerveConstants.kRotationController);
+
+  ProfiledPIDController tController = SwerveConstants.kThetaController;
+
+  double tOut0;
+  double tOut90;
+  double tOut180;
+  double tOut270;
     
   public Swerve() {
     zeroHeading();
@@ -64,7 +73,8 @@ public class Swerve extends SubsystemBase {
   }
 
   public static double getHeading(){
-    return pigeon.getYaw().getValueAsDouble();
+    double robotHeading = (pigeon.getYaw().getValueAsDouble()) % 360;
+    return robotHeading;
   }
 
   public void resetHeading(double yawDegrees){
@@ -82,7 +92,6 @@ public class Swerve extends SubsystemBase {
       module.resetDriveEncoder();
       module.resetTurnEncoder();
     }
-  
   }
 
   public Rotation2d getRotation2dHeading(){
@@ -117,12 +126,39 @@ public class Swerve extends SubsystemBase {
   //   this);
   // }
 
+  public double getThetaOut0(){
+    tOut0 = tController.calculate(getRotation2dHeading().getDegrees(), 0);
+    return tOut0;
+  }
+
+  public double getThetaOut90(){
+    tOut90 = tController.calculate(getRotation2dHeading().getDegrees(), 90);
+    return tOut90;
+  }
+  
+  public double getThetaOut180(){
+    tOut180 = tController.calculate(getRotation2dHeading().getDegrees(), 180);
+    return tOut180;
+  }
+
+  public double getThetaOut270(){
+    tOut270 = tController.calculate(getRotation2dHeading().getDegrees(), 270);
+    return tOut270;
+  }
+
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Robot Heading", getHeading());
 
     //modules[0].getTurnPosition();
+
+    // tOut0 = tController.calculate(getRotation2dHeading().getDegrees(), 0);
+    // tOut90 = tController.calculate(getRotation2dHeading().getDegrees(), 90);
+    // tOut180 = tController.calculate(getRotation2dHeading().getDegrees(), 180);
+    // tOut270 = tController.calculate(getRotation2dHeading().getDegrees(), 270);
+
 
 
     //currentTimestamp = Timer.getFPGATimestamp();
@@ -222,6 +258,16 @@ public class Swerve extends SubsystemBase {
     double[] fieldRelativeVelocities = {fieldRelativeVelocityX, fieldRelativeVelocityY};
     return fieldRelativeVelocities;
   }
+
+  public boolean robotNotMoving(){
+    double[] speeds = getFieldRelativeSpeeds();
+    if ((speeds[0] == 0) && (speeds[1] == 0)){
+      return true;
+    } else{
+      return false;
+    }
+  }
+
   //Use for testitng
   // public void turnToTag(double tagYaw) {
   //   ProfiledPIDController pid = new ProfiledPIDController(0.01, 0, 0, new TrapezoidProfile.Constraints(SwerveConstants.kMaxOmega, SwerveConstants.kMaxOmega));

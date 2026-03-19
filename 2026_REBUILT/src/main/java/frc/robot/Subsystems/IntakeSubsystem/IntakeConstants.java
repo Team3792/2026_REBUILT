@@ -11,15 +11,19 @@ public class IntakeConstants {
     
     public final static double kIntakeVoltage = 7;
 
-    public final static double kIntakePosition = 0; // need to set
+    public final static double kIntakePosition = 12.29; // need to set
+    public final static double kHoldPosition = 6.15;
     public final static double kStowedPosition = 0; //need to set
 
     public static final double kEncoderOffset = 0;
+    //8 to 56
+    //16 to 64
+    //16 to 34
 
-    public static final double kGearRatio = 0;
+    public static final double kGearRatio = (8/56) * (16/64) * (16/34);
 
 
-    public final static double kP = 0.1;
+    public final static double kP = 2;
     public final static double kI = 0;
     public final static double kD = 0;
     public final static double kVelocityFF = 0;

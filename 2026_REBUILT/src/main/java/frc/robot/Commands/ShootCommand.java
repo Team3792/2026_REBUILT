@@ -30,7 +30,7 @@ public class ShootCommand extends Command {
   Feeder feeder = new Feeder();
 
 
-  double targetRPM;
+  double targetRPS;
   double rangePercentage;
   double targetHoodAngle;
 
@@ -68,11 +68,11 @@ public class ShootCommand extends Command {
 
 
 
-    for(int i = 1; i < ShooterConstants.distanceVSRPM[0].length; i++){
+    for(int i = 1; i < ShooterConstants.distanceVSRPS[0].length; i++){
 
-      if(robotToHubDistance > ShooterConstants.distanceVSRPM[0][i]){
+      if(robotToHubDistance > ShooterConstants.distanceVSRPS[0][i]){
         //return target flywheel RPM
-        targetRPM = ShooterConstants.distanceVSRPM[1][i-1];
+        targetRPS = ShooterConstants.distanceVSRPS[1][i-1];
 
         //returns what percentage of the distance range the robot is in
         double lowerDistance = ShooterConstants.distanceVsHoodAngle[0][i-1];
@@ -85,21 +85,11 @@ public class ShootCommand extends Command {
         targetHoodAngle = ((upperHoodAngle-lowerHoodAngle) * rangePercentage) + lowerHoodAngle;
         break;
       }
-      
     }
-    
-  
-    //based off best fit curve
-    //double hoodPower = hoodPID.calculate(hood.hoodAngle(), HoodConstants.hoodAngleBestFit) + HoodConstants.kFrictionFF;
-    //based off array value interpolation
-    //double hoodPower = hoodPID.calculate(hood.hoodAngle(), targetHoodAngle) + HoodConstants.kFrictionFF;
-    //hood.setVoltage(hoodPower);
 
-    //TODO: add velocity feedforward (could do in slot0 configs)
-    double shooterPower = shooterPID.calculate(shooter.getRPS(), targetRPM) + ShooterConstants.kFrictionFF;
-    shooter.setVoltage(shooterPower);
-
-    feeder.setSubsystemVoltage(FeederConstants.kKickerVoltage, FeederConstants.kConveyorVoltage);
+    hood.setAngle(targetHoodAngle);
+    shooter.setRPS(targetRPS);
+    //shooter.setRPS(shooter.getTargetRPS(robotToHubDistance));
   }
 
   // Called once the command ends or is interrupted.

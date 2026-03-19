@@ -38,6 +38,14 @@ public class Intake extends SubsystemBase {
         return position;                                  
     }
 
+    public void setIntakePosition(){
+        pivot.setPosition(0);
+    }
+
+    public Command zeroIntake(){
+        return Commands.runOnce(() -> setIntakePosition());
+    }
+
     //returns angle in degrees
     public double getAngle(){
         return getPosition() * 360;
@@ -53,7 +61,7 @@ public class Intake extends SubsystemBase {
 
     // Position in rotations
     public void setPosition(double position){
-        pivot.setControl(motionMagic.withPosition(position));
+        pivot.setControl(motionMagic.withPosition(position).withFeedForward(0.2));
     }
 
     public void runPivot(double voltage){

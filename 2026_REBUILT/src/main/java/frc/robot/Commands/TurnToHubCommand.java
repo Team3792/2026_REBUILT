@@ -19,7 +19,7 @@ public class TurnToHubCommand extends Command {
 
   Swerve swerve;
   Pose2d hubPose;
-  ProfiledPIDController tController = new ProfiledPIDController(5, 0, 0, new TrapezoidProfile.Constraints(360, 720));
+  ProfiledPIDController tController = SwerveConstants.kThetaController;
   private Supplier<Double> xSupplier, ySupplier;
 
   public TurnToHubCommand(Swerve swerve, Pose2d hubPose, Supplier<Double> x, Supplier<Double> y) {

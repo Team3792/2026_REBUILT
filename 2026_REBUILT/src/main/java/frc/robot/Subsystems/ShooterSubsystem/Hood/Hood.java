@@ -75,13 +75,17 @@ public class Hood extends SubsystemBase {
     hood.getEncoder().setPosition(HoodConstants.kZeroAngle / 360.0 * HoodConstants.kHoodRatio * HoodConstants.kMotorRatio);
   }
 
-  // public Command setPosition(double angle){
-  //   return Commands.runOnce(() -> setAngle(angle));
-  // }
+  public Command setHoodAngle(double angle){
+    return Commands.startEnd(() -> setAngle(angle), () -> setAngle(12));
+  }
 
-  
-
-
+  public boolean isAtTargetAngle(double angle){
+    if (Math.abs(hoodAngle() - angle) < 0.25){
+      return true;
+    } else {
+      return false;
+    }
+  }
 
   @Override
   public void periodic() {

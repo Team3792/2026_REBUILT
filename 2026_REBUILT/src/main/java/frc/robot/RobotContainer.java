@@ -53,26 +53,28 @@ public class RobotContainer {
   Shooter shooter = new Shooter();
   Hood hood = new Hood();
   //Vision vision = new Vision();
-  //LED led = new LED();
 
   ZoneManager zoneManager = new ZoneManager();
   FieldManager fieldManager = new FieldManager();
 
-  CommandPS5Controller driver = new CommandPS5Controller(0);
-  CommandPS5Controller operator = new CommandPS5Controller(1);
-  CommandXboxController aneesh = new CommandXboxController(2);
+  CommandXboxController aneesh = new CommandXboxController(1);
+  CommandXboxController ellis = new CommandXboxController(0);
 
   //Trigger nearTrench = new Trigger(() -> zoneManager.isCloseToTrench());
 
   // Implement so that when the flywheel is up to speed the controller rumbles
   //Trigger shooterReady = new Trigger(() -> shooter.isAtTargetRPM(shooter.getTargetRPM(fieldManager.getRobotToHubDis(swerve.getPose()))));
+  Trigger readyToShoot = new Trigger(() -> (shooter.isAtTargetRPS(ShooterConstants.kHubRPS) 
+                    && hood.isAtTargetAngle(HoodConstants.kHubHoodAngle)));
+  Trigger robotNotMoving = new Trigger(() -> swerve.robotNotMoving());
 
   private SendableChooser<Command> autoChooser;
 
   public RobotContainer() {
-    configureDriverBindings();
-    configureOperatorBindings();
+    // configureDriverBindings();
+    // configureOperatorBindings();
     configureAneeshBindings();
+    configureEllisBindings();
 
     //Register Named Commands
 
@@ -84,86 +86,73 @@ public class RobotContainer {
   //   SmartDashboard.putData("Auto Chooser", autoChooser);
     }
 
-  //driver
-  private void configureDriverBindings() {
-    //Swerve
-    swerve.setDefaultCommand(new DriveCommand(swerve, () -> -driver.getLeftY(), () -> -driver.getLeftX(), () -> -driver.getRightX()));      
-    driver.options().onTrue(Commands.runOnce(() -> swerve.resetHeading(0)));
-
-    // driver.R2().onTrue(new AimWhileMovingCommand(swerve, FieldManager.getHubPose(), () -> -driver.getLeftY(), () -> -driver.getLeftX()));
-    // driver.R2().onFalse(new DriveCommand(swerve, () -> -driver.getLeftY(), () -> -driver.getLeftX(), () -> -driver.getRightX()));
-
-    //Intake
-    // driver.R2().onTrue(intake.runToPosition(IntakeConstants.kIntakePosition));
-    // driver.R2().onFalse(intake.runToPosition(IntakeConstants.kStowedPosition));
-    // driver.R2().whileTrue(new StartEndCommand(() -> intake.runToPosition(10), 
-    //                       () -> intake.runToPosition(IntakeConstants.kStowedPosition)));
-
-    driver.povUp().whileTrue(intake.movePivot(1));  
-    driver.povDown().whileTrue(intake.movePivot(-1));
-    driver.R1().whileTrue(intake.runIntake(IntakeConstants.kIntakeVoltage).alongWith(new StartEndCommand(() -> feeder.setConveyorVoltage(8), () -> feeder.setConveyorVoltage(0))));
-    driver.L1().whileTrue(intake.runIntake(-IntakeConstants.kIntakeVoltage).alongWith(new StartEndCommand(() -> feeder.setConveyorVoltage(-8), () -> feeder.setConveyorVoltage(0))));
-  }
-
-  //operator
-  private void configureOperatorBindings(){
-    //Shoot
-    //operator.R2().onTrue(shooter.setFlywheelRPM(100));//for testing
-
-    //Feeder
-    //operator.triangle().whileTrue(feeder.runFeeder(FeederConstants.kKickerVoltage, FeederConstants.kConveyorVoltage));
-
-    //Manual Feeder
-    operator.R2().whileTrue(new StartEndCommand(() -> feeder.setConveyorVoltage(8), () -> feeder.setConveyorVoltage(0)));
-    operator.L2().whileTrue(new StartEndCommand(() -> feeder.setConveyorVoltage(-8), () -> feeder.setConveyorVoltage(0)));
-    operator.R1().whileTrue(new StartEndCommand(() -> {feeder.setKickerVoltage(12); feeder.setConveyorVoltage(8);}, () -> {feeder.setKickerVoltage(0); feeder.setConveyorVoltage(0);}));
-    operator.L1().whileTrue(new StartEndCommand(() -> feeder.setKickerVoltage(-12), () -> feeder.setKickerVoltage(0)));
-
-
-    // //operator.square().whileTrue(new StartEndCommand(() -> shooter.setVoltage(4), () -> shooter.setVoltage(0)));
-    // SmartDashboard.putNumber("Set RPS", 55);
-    // operator.square().whileTrue(Commands.startEnd(() -> shooter.setRPS(SmartDashboard.getNumber("Set RPS", 0)), 
-    //                             () -> shooter.setVoltage(0)).alongWith(Commands.startEnd(() -> hood.setAngle(SmartDashboard.getNumber("Set Hood Angle", 12)), 
-    //                               () -> hood.setAngle(12))));
-
-    // //Hood
-    // operator.povUp().whileTrue(Commands.startEnd(() -> hood.setAngle(45), () -> hood.setAngle(12)));
-
-    // SmartDashboard.putNumber("Set Hood Angle", 43);
-    // operator.povRight().whileTrue(Commands.startEnd(() -> hood.setAngle(SmartDashboard.getNumber("Set Hood Angle", 12)), 
-    //                               () -> hood.setAngle(12)));
-
-    operator.circle().whileTrue(Commands.runOnce(() -> hood.setAngle(30), hood));
-    operator.cross().onTrue(Commands.runOnce(() -> hood.setAngle(15), hood));
-
-    
-
-    //Climb
-    // operator.povUp().whileTrue(climb.climbUpCommand());
-    // operator.povDown().whileTrue(climb.climbDownCommand());
-  }
-
   private void configureAneeshBindings(){
     //nearTrench.whileTrue(rumble(0.7, 5));
 
-    aneesh.rightTrigger().whileTrue(rumble(0.75));
+    aneesh.rightTrigger().whileTrue(rumble(0.75, aneesh));
+    
+    robotNotMoving.whileTrue(Commands.startEnd(() -> rumble(.7, aneesh), () -> rumble(0, aneesh)));
+    readyToShoot.whileTrue(rumble(0.7, 4, aneesh));
+    //readyToShoot.whileTrue(Commands.startEnd(() -> {feeder.setKickerVoltage(12); feeder.setConveyorVoltage(8);}, () -> {feeder.setKickerVoltage(0); feeder.setConveyorVoltage(0);}));
 
+    //Feeder
     aneesh.rightBumper().whileTrue(new StartEndCommand(() -> {feeder.setKickerVoltage(12); feeder.setConveyorVoltage(8);}, () -> {feeder.setKickerVoltage(0); feeder.setConveyorVoltage(0);}));
+    aneesh.leftBumper().whileTrue(new StartEndCommand(() -> {feeder.setKickerVoltage(-12); feeder.setConveyorVoltage(-8);}, () -> {feeder.setKickerVoltage(0); feeder.setConveyorVoltage(0);}));
+
+    //Shooter and Hood
+    //Hub Shot
+    aneesh.a().whileTrue(Commands.startEnd(() -> shooter.setRPS(50), 
+                                () -> shooter.setVoltage(0)).alongWith(Commands.startEnd(() -> hood.setAngle(15), 
+                                  () -> hood.setAngle(12))));
+
+    //Changeable Shot                  
+    SmartDashboard.putNumber("Set RPS", 45);
+    SmartDashboard.putNumber("Set Hood Angle", 20);            
     aneesh.x().whileTrue(Commands.startEnd(() -> shooter.setRPS(SmartDashboard.getNumber("Set RPS", 0)), 
                                 () -> shooter.setVoltage(0)).alongWith(Commands.startEnd(() -> hood.setAngle(SmartDashboard.getNumber("Set Hood Angle", 12)), 
                                   () -> hood.setAngle(12))));
-    aneesh.leftBumper().whileTrue(new StartEndCommand(() -> {feeder.setKickerVoltage(-12); feeder.setConveyorVoltage(-8);}, () -> {feeder.setKickerVoltage(0); feeder.setConveyorVoltage(0);}));
+    aneesh.y().onTrue(intake.zeroIntake());                           
+  }
+
+  private void configureEllisBindings(){
+    // Swerve
+    swerve.setDefaultCommand(new DriveCommand(swerve, () -> -ellis.getLeftY(), () -> -ellis.getLeftX(), () -> -ellis.getRightX()));      
+    ellis.leftStick().onTrue(Commands.runOnce(() -> swerve.resetHeading(0)));
+
+   // robotNotMoving.whileTrue(Commands.startEnd(() -> rumble(.75), () -> rumble(0)));
+    readyToShoot.whileTrue(rumble(0.7, 4, ellis));
+
+
+    ellis.povUp().whileTrue(new DriveCommand(swerve, () -> -ellis.getLeftY(), () -> -ellis.getLeftX(), () -> swerve.getThetaOut0()));
+    ellis.povDown().whileTrue(new DriveCommand(swerve, () -> -ellis.getLeftY(), () -> -ellis.getLeftX(), () -> swerve.getThetaOut180()));
+    ellis.povRight().whileTrue(new DriveCommand(swerve, () -> -ellis.getLeftY(), () -> -ellis.getLeftX(), () -> swerve.getThetaOut270()));
+    ellis.povLeft().whileTrue(new DriveCommand(swerve, () -> -ellis.getLeftY(), () -> -ellis.getLeftX(), () -> swerve.getThetaOut90()));
+
+    // ellis.rightStick().onTrue(new AimWhileMovingCommand(swerve, FieldManager.getHubPose(), () -> -ellis.getLeftY(), () -> -ellis.getLeftX()));
+    // ellis.rightStick().onFalse(new DriveCommand(swerve, () -> -ellis.getLeftY(), () -> -ellis.getLeftX(), () -> -ellis.getRightX()));
+
+
+    // Intake 
+    ellis.povUp().whileTrue(intake.movePivot(1));  
+    ellis.povDown().whileTrue(intake.movePivot(-1));
+    ellis.rightBumper().whileTrue(intake.runIntake(IntakeConstants.kIntakeVoltage).alongWith(Commands.startEnd(() -> feeder.setConveyorVoltage(FeederConstants.kConveyorVoltage), () -> feeder.setConveyorVoltage(0))));
+    ellis.leftBumper().whileTrue(intake.runIntake(-IntakeConstants.kIntakeVoltage).alongWith(Commands.startEnd(() -> feeder.setConveyorVoltage(-FeederConstants.kConveyorVoltage), () -> feeder.setConveyorVoltage(0))));
+      
+    ellis.rightTrigger().whileTrue(Commands.startEnd(() -> intake.setPosition(IntakeConstants.kIntakePosition), 
+                        () -> intake.setPosition(IntakeConstants.kStowedPosition)));
   }
 
 
   // intensity on a scale of 0-1 and duration in seconds
-  private Command rumble(double intensity, double duration){
-      return Commands.startEnd(() -> aneesh.setRumble(RumbleType.kBothRumble, intensity), () -> aneesh.setRumble(RumbleType.kBothRumble, 0)).withTimeout(duration);
+  private Command rumble(double intensity, double duration, CommandXboxController controller){
+      return Commands.startEnd(() -> controller.setRumble(RumbleType.kBothRumble, intensity), () -> controller.setRumble(RumbleType.kBothRumble, 0)).withTimeout(duration);
   }
 
-  private Command rumble(double intensity){
-    return Commands.startEnd(() -> aneesh.setRumble(RumbleType.kBothRumble, intensity), () -> aneesh.setRumble(RumbleType.kBothRumble, 0));
+  private Command rumble(double intensity, CommandXboxController controller){
+    return Commands.startEnd(() -> controller.setRumble(RumbleType.kBothRumble, intensity), () -> controller.setRumble(RumbleType.kBothRumble, 0));
   }
+
+
 
   
   public Command getAutonomousCommand() {

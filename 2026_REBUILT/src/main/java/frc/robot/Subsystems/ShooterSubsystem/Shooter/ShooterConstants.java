@@ -29,7 +29,7 @@ public class ShooterConstants {
     public static final double kS = 0.23;
     public static final double kMMAccel = 200;
     public static final double kMMJerk = 2100;
-    public static final double kP = 0.1; //0.1 def works
+    public static final double kP = 0.1; 
     public static final double kI = 0;
     public static final double kD = 0;
     public static final double kFrictionFF = 0;
@@ -79,13 +79,15 @@ public class ShooterConstants {
 
     public static final double kFallBackHubVoltage = 6.0;
 
-    public static final double maxShooterRPM = 6000;
+    public static final double maxShooterRPS = 6000;
     //rpm value for flywheel while not shooting; less time to spin up to target rpm
     public static final double coastRPM = 0;
 
-    //distance vs rpm 2D array
-        //TODO: set good rpm values for given distance range
-    public static final double[][] distanceVSRPM = {{24,48,72,96,120,144,168,192,216,240,264},
+    public static final double kHubRPS = 45;
+
+    //distance vs rps 2D array
+        //TODO: set good rps values for given distance range
+    public static final double[][] distanceVSRPS = {{24,48,72,96,120,144,168,192,216,240,264},
                                                     {0,0,0,0,0,0,0,0,0,0,0}};
         //TODO: set good hood angle values for given distance range
     public static final double[][] distanceVsHoodAngle = {{24,48,72,96,120,144,168,192,216,240,264},

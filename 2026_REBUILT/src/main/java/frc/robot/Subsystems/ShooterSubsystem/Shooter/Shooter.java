@@ -79,9 +79,8 @@ public Command applyVoltage(double voltage){
 }
 
 public double getRPS(){
-  double rps = rightMotor.getVelocity().getValueAsDouble();
-  int rpm = ((int) rps);
-  return rpm;
+  int rps = (int) rightMotor.getVelocity().getValueAsDouble();
+  return rps;
 }
 
 public double getTangentialVelocity(){
@@ -89,18 +88,18 @@ public double getTangentialVelocity(){
   return radiansPerMinute * ShooterConstants.kFlywheelRadius;// tangential velocity (meters / second)
 }
 
-public double getTargetRPM(double distance){
-  double targetRPM = 0;
-  for (int i = 0; i < ShooterConstants.distanceVSRPM[0].length - 1; i++){
-    if (distance > ShooterConstants.distanceVSRPM[0][i]){
-      targetRPM = ShooterConstants.distanceVSRPM[1][i-1];
+public double getTargetRPS(double distance){
+  double targetRPS = 0;
+  for (int i = 0; i < ShooterConstants.distanceVSRPS[0].length - 1; i++){
+    if (distance > ShooterConstants.distanceVSRPS[0][i]){
+      targetRPS = ShooterConstants.distanceVSRPS[1][i-1];
     }
   }
-  return targetRPM;
+  return targetRPS;
 }
 
-public boolean isAtTargetRPM(double targetRPM){
-  if (Math.abs(getRPS() - targetRPM) < 100){
+public boolean isAtTargetRPS(double targetRPS){
+  if (Math.abs(getRPS() - targetRPS) < 4){
     return true;
   } else {
     return false;
@@ -118,7 +117,7 @@ public void setRPS(double targetVelocity){
 }
 
 public Command setFlywheelRPS(double targetRPM){
-  return Commands.runOnce(() -> setRPS(targetRPM));
+  return Commands.startEnd(() -> setRPS(targetRPM), () -> setRPS(0));
 }
 
 public void setTorque(double torque){
