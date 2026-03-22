@@ -1,15 +1,6 @@
 package frc.robot.Subsystems.SwerveSubsystem;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.config.ModuleConfig;
-import com.pathplanner.lib.config.PIDConstants;
-import com.pathplanner.lib.config.RobotConfig;
-import com.pathplanner.lib.controllers.PPHolonomicDriveController;
-
-import edu.wpi.first.math.Matrix;
-import edu.wpi.first.math.controller.HolonomicDriveController;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -18,67 +9,44 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.numbers.N1;
-import edu.wpi.first.math.numbers.N3;
-import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.HardwareMap;
 import frc.robot.Localization.AntPoseEstimator;
+import frc.robot.Localization.VisionConstants;
+import frc.robot.Managers.FieldManager;
 
 public class Swerve extends SubsystemBase {
       
-  static SwerveModule frontLeft = new SwerveModule(ModuleConstants.kFrontLeft, "front left");
-  static SwerveModule frontRight = new SwerveModule(ModuleConstants.kFrontRight, "front right");
-  static SwerveModule backLeft = new SwerveModule(ModuleConstants.kBackLeft, "back left");
-  static SwerveModule backRight = new SwerveModule(ModuleConstants.kBackRight, "back right");
+  SwerveModule frontLeft = new SwerveModule(ModuleConstants.kFrontLeft, "front left");
+  SwerveModule frontRight = new SwerveModule(ModuleConstants.kFrontRight, "front right");
+  SwerveModule backLeft = new SwerveModule(ModuleConstants.kBackLeft, "back left");
+  SwerveModule backRight = new SwerveModule(ModuleConstants.kBackRight, "back right");
 
   SwerveModule[] modules = {frontLeft, frontRight, backLeft, backRight};
 
-  public static Pigeon2 pigeon = new Pigeon2(HardwareMap.kPigeon);
-
-
-
-  //AntPoseEstimator antPose = new AntPoseEstimator(SwerveConstants.kDriveKinematics, getRotation2dHeading(), getModulePositions(), new Pose2d());
-  //Pose2d robotPose = new Pose2d();
-
-  //Field2d field = new Field2d();
-
+  Pigeon2 pigeon = new Pigeon2(HardwareMap.kPigeon);
+  ChassisSpeeds lastRobotRelativeSpeeds;
   double currentTimestamp = 0.0;
+  AntPoseEstimator antPose;
 
   // HolonomicDriveController swerveController = new HolonomicDriveController(SwerveConstants.kTranslationController, 
   //                                       SwerveConstants.kTranslationController, SwerveConstants.kRotationController);
-
-  ProfiledPIDController tController = SwerveConstants.kThetaController;
-
-  double tOut0;
-  double tOut90;
-  double tOut180;
-  double tOut270;
-    
+  
   public Swerve() {
-    zeroHeading();
-  }
-
-  public void zeroHeading(){
-    pigeon.reset();
-  }
-
-  public static double getHeading(){
-    double robotHeading = (pigeon.getYaw().getValueAsDouble()) % 360;
-    return robotHeading;
+    antPose = new AntPoseEstimator(SwerveConstants.kDriveKinematics, getPigeonHeading(), getModulePositions(), new Pose2d());
+    resetHeading();
   }
 
   public void resetHeading(double yawDegrees){
     pigeon.setYaw(yawDegrees);
+  }
+
+  public void resetHeading(){
+    resetHeading(0);
   }
 
   public void resetTurnEncoders(){
@@ -87,15 +55,12 @@ public class Swerve extends SubsystemBase {
     }
   }
 
-  public void zeroEncodersAll(){
-    for (SwerveModule module : modules) {
-      module.resetDriveEncoder();
-      module.resetTurnEncoder();
-    }
+  public Rotation2d getPigeonHeading(){
+    return pigeon.getRotation2d();
   }
 
-  public Rotation2d getRotation2dHeading(){
-    return Rotation2d.fromDegrees(getHeading());
+  public Rotation2d getPoseHeading(){
+    return antPose.getEstimatedPosition().getRotation();
   }
 
 
@@ -126,54 +91,28 @@ public class Swerve extends SubsystemBase {
   //   this);
   // }
 
-  public double getThetaOut0(){
-    tOut0 = tController.calculate(getRotation2dHeading().getDegrees(), 0);
-    return tOut0;
-  }
-
-  public double getThetaOut90(){
-    tOut90 = tController.calculate(getRotation2dHeading().getDegrees(), 90);
-    return tOut90;
-  }
-  
-  public double getThetaOut180(){
-    tOut180 = tController.calculate(getRotation2dHeading().getDegrees(), 180);
-    return tOut180;
-  }
-
-  public double getThetaOut270(){
-    tOut270 = tController.calculate(getRotation2dHeading().getDegrees(), 270);
-    return tOut270;
-  }
-
-
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Robot Heading", getHeading());
-
-    //modules[0].getTurnPosition();
-
-    // tOut0 = tController.calculate(getRotation2dHeading().getDegrees(), 0);
-    // tOut90 = tController.calculate(getRotation2dHeading().getDegrees(), 90);
-    // tOut180 = tController.calculate(getRotation2dHeading().getDegrees(), 180);
-    // tOut270 = tController.calculate(getRotation2dHeading().getDegrees(), 270);
 
 
 
     //currentTimestamp = Timer.getFPGATimestamp();
-    //antPose.updateWithTime(currentTimestamp, getRotation2dHeading(), getModulePositions());
+    //antPose.updateWithTime(currentTimestamp, getPigeonHeading(), getModulePositions());
 
     //Update Localization
-    // antPose.updateAllVisionMeasurements();
-    // antPose.update(getRotation2dHeading(), getModulePositions());
-    // robotPose = antPose.getEstimatedPosition();
-    // field.setRobotPose(robotPose);
-    // SmartDashboard.putData("Robot Pose Estimate", field);
+    antPose.updateAll(getPigeonHeading(), getModulePositions());
+    printDebug();
+  }
+
+  public void printDebug(){
+    SmartDashboard.putNumber("Robot Heading (deg)", getPigeonHeading().getDegrees());
     frontLeft.printEncoders();
     frontRight.printEncoders();
     backLeft.printEncoders();
     backRight.printEncoders();
+
+    SmartDashboard.putNumber("Distance to hub (in)", FieldManager.getRobotToHubDis(getShooterPose()));
   }
 
   public void stopModules(){
@@ -183,6 +122,7 @@ public class Swerve extends SubsystemBase {
     backRight.stop();
   }
 
+  //Testing method to drive all modules straight
   public void setVoltage(double voltage){
     for (SwerveModule mod : modules){
       mod.driveVoltage(voltage);
@@ -196,7 +136,7 @@ public class Swerve extends SubsystemBase {
     backRight.setState(new SwerveModuleState(0, new Rotation2d(angleRadians)));
   }
 
-  public static SwerveModulePosition[] getModulePositions(){
+  public SwerveModulePosition[] getModulePositions(){
     SwerveModulePosition frontLeftPos = frontLeft.getPosition();
     SwerveModulePosition frontRightPos = frontRight.getPosition();
     SwerveModulePosition backLeftPos = backLeft.getPosition();
@@ -207,33 +147,28 @@ public class Swerve extends SubsystemBase {
   }
 
   public void setModuleStates(SwerveModuleState[] desiredStates){
-    SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, SwerveConstants.kMaxSpeedMetersPerSecond);
-    frontLeft.setState(desiredStates[0]);
-    frontRight.setState(desiredStates[1]);
-    backLeft.setState(desiredStates[2]);
-    backRight.setState(desiredStates[3]);
+    SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, ModuleConstants.kMaxModuleSpeedMetersPerSecond);
+    
+    for(int i = 0; i < 4; i++)
+      modules[i].setState(desiredStates[i]);
   }
 
-  public void drive(ChassisSpeeds speeds, Rotation2d rotation){
-    speeds = ChassisSpeeds.discretize(speeds, 0.002);
-    speeds = ChassisSpeeds.fromFieldRelativeSpeeds(speeds, rotation);
 
-    SwerveModuleState[] desiredStates = SwerveConstants.kDriveKinematics.toSwerveModuleStates(speeds);
-    setModuleStates(desiredStates);
-  }
 
   public void drive(ChassisSpeeds speeds) {
     speeds = ChassisSpeeds.discretize(speeds, 0.002);
-    speeds = ChassisSpeeds.fromFieldRelativeSpeeds(speeds, getRotation2dHeading());
-    
+
     SwerveModuleState[] desiredStates = SwerveConstants.kDriveKinematics.toSwerveModuleStates(speeds);
     setModuleStates(desiredStates);
   }
 
-  public void driveAuto(ChassisSpeeds speeds){
-    speeds = ChassisSpeeds.discretize(speeds, 0.002);
-    SwerveModuleState[] desiredStates = SwerveConstants.kDriveKinematics.toSwerveModuleStates(speeds);
-    setModuleStates(desiredStates);
+  public Command crossCommand(){
+    return this.run(() -> {
+      frontLeft.setState(new SwerveModuleState(0, new Rotation2d(Math.PI/4)));
+      frontRight.setState(new SwerveModuleState(0, new Rotation2d(-Math.PI/4)));
+      backLeft.setState(new SwerveModuleState(0, new Rotation2d(-Math.PI/4)));
+      backRight.setState(new SwerveModuleState(0, new Rotation2d(Math.PI/4)));
+    });
   }
 
   // public void resetPose(Pose2d pose){
@@ -241,20 +176,23 @@ public class Swerve extends SubsystemBase {
   // }
 
   public Pose2d getPose(){
-    //return antPose.getEstimatedPosition();
-    return new Pose2d();
+    return antPose.getEstimatedPosition();
   } 
+
+  public Pose2d getShooterPose(){
+    return VisionConstants.kRobotToShooter.transformBy(new Transform2d(getPose().getTranslation(), getPose().getRotation()));
+  }
 
   public ChassisSpeeds getRobotRelativeSpeeds(){
     return SwerveConstants.kDriveKinematics.toChassisSpeeds(frontLeft.getState(), frontRight.getState(), backLeft.getState(), backRight.getState());
   }
+
   //returns array of field relative robot velocity [x,y]
   public double[] getFieldRelativeSpeeds(){
     double robotRelativeVelocityX = getRobotRelativeSpeeds().vxMetersPerSecond;
     double robotRelativeVelocityY = getRobotRelativeSpeeds().vyMetersPerSecond;
-    double heading = getHeading();
-    double fieldRelativeVelocityX = robotRelativeVelocityX * Math.cos(heading) + robotRelativeVelocityY * Math.sin(heading);
-    double fieldRelativeVelocityY = robotRelativeVelocityX * Math.sin(heading) + robotRelativeVelocityY * Math.cos(heading);
+    double fieldRelativeVelocityX = robotRelativeVelocityX * getPigeonHeading().getCos() + robotRelativeVelocityY * getPigeonHeading().getSin();
+    double fieldRelativeVelocityY = robotRelativeVelocityX * getPigeonHeading().getSin() + robotRelativeVelocityY * getPigeonHeading().getCos();
     double[] fieldRelativeVelocities = {fieldRelativeVelocityX, fieldRelativeVelocityY};
     return fieldRelativeVelocities;
   }

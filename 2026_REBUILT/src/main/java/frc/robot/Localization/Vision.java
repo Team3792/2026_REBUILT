@@ -4,33 +4,14 @@
 
 package frc.robot.Localization;
 
-import java.lang.StackWalker.Option;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-
-import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
-import org.photonvision.PhotonPoseEstimator;
-import org.photonvision.estimation.VisionEstimation;
-import org.photonvision.simulation.PhotonCameraSim;
 import org.photonvision.targeting.PhotonPipelineResult;
-import org.photonvision.targeting.PhotonTrackedTarget;
-
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Vision extends SubsystemBase {
-  /** Creates a new Vision. */
-  
-  //PhotonCamera frontCam, backCam;
-  public static PhotonCamera frontCam, backCam; //, fuelCam;
-  //PhotonPoseEstimator frontCamPoseEstimation;
-  //PhotonPoseEstimator backCamPoseEstimation;
+  public PhotonCamera frontCam, backCam;
 
   public Vision() {
 
@@ -41,11 +22,6 @@ public class Vision extends SubsystemBase {
     //Need to do tuning and setup in photonvision dashboard
     //create a new pipeline
     //fuelCam = new PhotonCamera("fuelCam");
-
-    //moved to AntPose
-    //frontCamPoseEstimation = new PhotonPoseEstimator(VisionConstants.kFieldLayout, VisionConstants.kRobotToFrontCam);
-    //backCamPoseEstimation = new PhotonPoseEstimator(VisionConstants.kFieldLayout, VisionConstants.kRobotToBackCam);
-
   }
 
   public boolean hasTarget(PhotonCamera cam){

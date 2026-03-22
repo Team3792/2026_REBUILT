@@ -4,50 +4,47 @@
 
 package frc.robot.Localization;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.OptionalInt;
-
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
+import com.ctre.phoenix6.swerve.SwerveModule;
 import com.ctre.phoenix6.swerve.jni.SwerveJNI.ModulePosition;
-
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.estimator.PoseEstimator;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.Kinematics;
-import edu.wpi.first.math.kinematics.Odometry;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 /** Add your docs here. */
 public class AntPoseEstimator extends SwerveDrivePoseEstimator {
-
     Vision vision = new Vision();
     PhotonPoseEstimator frontCamPoseEstimator = new PhotonPoseEstimator(VisionConstants.kFieldLayout, VisionConstants.kRobotToFrontCam);
     PhotonPoseEstimator backCamPoseEstimator = new PhotonPoseEstimator(VisionConstants.kFieldLayout, VisionConstants.kRobotToBackCam);
+    Field2d field = new Field2d();
 
-    public AntPoseEstimator (SwerveDriveKinematics kin, Rotation2d gyroAngle, SwerveModulePosition[] modulePositions,
-        Pose2d initialPoseMeters){
-        super(kin, gyroAngle, modulePositions, initialPoseMeters);
+    public AntPoseEstimator(SwerveDriveKinematics kinematics, Rotation2d gyroAngle, SwerveModulePosition[] modulePositions, Pose2d initialPoseMeters){
+        super(kinematics, gyroAngle, modulePositions, initialPoseMeters);
+        SmartDashboard.putData("AntPose Pose Estimate", field);
     }
 
     private boolean isVisionDataValid(EstimatedRobotPose pose){
-        double distance = pose.estimatedPose.toPose2d().getTranslation().getDistance(this.getEstimatedPosition().getTranslation());
-        if (distance > 6.0) { //TODO: find good distance threshold
-            return false;
-        }
         return true;
+        // double distance = pose.estimatedPose.toPose2d().getTranslation().getDistance(this.getEstimatedPosition().getTranslation());
+        // if (distance > 6.0) { //TODO: find good distance threshold
+        //     return false;
+        // }
+        // return true;
     }
 
     private Matrix<N3, N1> getVisionStd(Optional<EstimatedRobotPose> robotPose, List<PhotonTrackedTarget> targets){
@@ -94,35 +91,42 @@ public class AntPoseEstimator extends SwerveDrivePoseEstimator {
         return std;
     }
 
-    private void updateVisionMeasurements(List<PhotonPipelineResult> pipelineResults, String camera) {
-        Optional<EstimatedRobotPose> visionEst = Optional.empty();
-        if (camera == VisionConstants.kFrontCamName){
+    private void updateVisionMeasurements(List<PhotonPipelineResult> pipelineResults) {
+        Optional<EstimatedRobotPose> visionEst;// = Optional.empty();
+        //System.out.println(pipelineResults.size());
             for (var result : pipelineResults){
                 visionEst = frontCamPoseEstimator.estimateCoprocMultiTagPose(result);
                 List<PhotonTrackedTarget> targets = result.getTargets();
+                //System.out.println(targets.size());
                 if (visionEst.isEmpty()){
+                    //System.out.println("empty");
+
                     continue;
                 }
                 if (!isVisionDataValid(visionEst.get())){
+                    //System.out.println("not valid");
                     continue;
                 }
-                Matrix<N3,N1> std = getVisionStd(visionEst, targets);
-                addVisMeasurement(visionEst, result.getTimestampSeconds(), std);
+
+                System.out.println("valid");
+                //Matrix<N3,N1> std = getVisionStd(visionEst, targets);
+                System.out.println(visionEst.get().estimatedPose.toPose2d());
+                addVisionMeasurement(visionEst.get().estimatedPose.toPose2d(), result.getTimestampSeconds());// std);
             }
-        } else if (camera == VisionConstants.kBackCamName){
-            for (var result : pipelineResults){
-                visionEst = backCamPoseEstimator.estimateCoprocMultiTagPose(result);
-                List<PhotonTrackedTarget> targets = result.getTargets();
-                if (visionEst.isEmpty()){
-                    continue;
-                }
-                if (!isVisionDataValid(visionEst.get())){
-                    continue;
-                }
-                Matrix<N3, N1> std = getVisionStd(visionEst, targets);
-                addVisMeasurement(visionEst, result.getTimestampSeconds(), std);
-            }
-        }
+        // } //else if (camera == VisionConstants.kBackCamName){
+        //     for (var result : pipelineResults){
+        //         visionEst = backCamPoseEstimator.estimateCoprocMultiTagPose(result);
+        //         List<PhotonTrackedTarget> targets = result.getTargets();
+        //         if (visionEst.isEmpty()){
+        //             continue;
+        //         }
+        //         if (!isVisionDataValid(visionEst.get())){
+        //             continue;
+        //         }
+        //         Matrix<N3, N1> std = getVisionStd(visionEst, targets);
+        //         addVisMeasurement(visionEst, result.getTimestampSeconds(), std);
+        //     }
+        // }
     }
 
     private void addVisMeasurement(Optional<EstimatedRobotPose> visionPose, double timestamp, Matrix<N3,N1> visionSTD){
@@ -133,11 +137,17 @@ public class AntPoseEstimator extends SwerveDrivePoseEstimator {
     }
 
     public void updateAllVisionMeasurements(){
-        updateVisionMeasurements(vision.getFrontCamPipelineResults(), VisionConstants.kFrontCamName);
-       // updateVisionMeasurements(vision.getBackCamPipelineResults(), VisionConstants.kBackCamName);
+        updateVisionMeasurements(vision.getFrontCamPipelineResults());//, VisionConstants.kFrontCamName);
+        // updateVisionMeasurements(vision.getBackCamPipelineResults(), VisionConstants.kBackCamName);
     }
 
-    //TODO: Find a way to update odometry with different stds
-    //Lowkirkenuinly there may not be a way to do ts
-    public void updateOdometry(Rotation2d gyroYaw, ModulePosition[] modPositions){}
+    public void updateAll(Rotation2d gyroHeading, SwerveModulePosition[] modulePositions){
+        super.update(gyroHeading, modulePositions);  //odometry update
+        updateAllVisionMeasurements();
+        field.setRobotPose(getEstimatedPosition());
+    }
+
+    
+
+
 }

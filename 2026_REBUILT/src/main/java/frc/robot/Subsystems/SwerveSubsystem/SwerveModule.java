@@ -8,9 +8,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Subsystems.SwerveSubsystem.ModuleConstants.ModuleConfig;
 
 public class SwerveModule{
@@ -18,8 +16,6 @@ public class SwerveModule{
     CANcoder encoder;
     PIDController turnController;
     VelocityVoltage driveController;
-    SwerveModuleState state = new SwerveModuleState(0, new Rotation2d(0));
-
     String name;
 
     public SwerveModule(ModuleConfig config, String name) {
@@ -36,36 +32,26 @@ public class SwerveModule{
         turnController = new PIDController(6, 0, 0.05);
         turnController.enableContinuousInput(-Math.PI, Math.PI);   
 
-        drive.setPosition(0); 
-        resetTurnEncoder();
+        resetEncoders();
     }
 
     public void resetEncoders(){
         resetTurnEncoder();
         resetDriveEncoder();
-        resetCancoder();
     }
 
 
     public void resetTurnEncoder(){
-        System.out.println("Resetting encoder" + name);
-        double position = encoder.getPosition().getValueAsDouble() * ModuleConstants.kTurnRatio;
-        turn.setPosition(position);
-       // turn.setPosition(0);
-    }
-
-    public void zeroTurnEncoder(){
-        turn.setPosition(0);
+        //Everything is in rotations
+        double newPosition = encoder.getPosition().getValueAsDouble() * ModuleConstants.kTurnRatio;
+        turn.setPosition(newPosition);
     }
 
     public void resetDriveEncoder(){
         drive.setPosition(0);
     }
 
-    public void resetCancoder(){
-        //encoder.setPosition(0);
-    }
-
+    //Testing method for driving wheel forward at voltage
     public void driveVoltage(double voltage){
         drive.setVoltage(voltage);
         double turnVoltage = turnController.calculate(getTurnPosition().getRadians(), 0);
@@ -74,14 +60,6 @@ public class SwerveModule{
 
     public Rotation2d getTurnPosition(){
         return new Rotation2d(turn.getPosition().getValueAsDouble() * ModuleConstants.kRadiansPerMotorRotation);
-    }
-
-    public double getTurnPositionDegrees(){
-        return encoder.getPosition().getValueAsDouble() * 360.0;
-    }
-
-    public SwerveModulePosition getPosition(){
-        return new SwerveModulePosition(getDrivePosition(), getTurnPosition());
     }
     
     public double getDrivePosition(){
@@ -96,18 +74,17 @@ public class SwerveModule{
         return new SwerveModuleState(getDriveVelocity(), getTurnPosition());
     }
 
-    public void setState(SwerveModuleState state){
-        //System.out.println(state.speedMetersPerSecond);
-        if(Math.abs(state.speedMetersPerSecond) > 0.05){
-            state.optimize(getTurnPosition());
+     public SwerveModulePosition getPosition(){
+        return new SwerveModulePosition(getDrivePosition(), getTurnPosition());
+    }
 
-            drive.setControl(driveController.withVelocity(state.speedMetersPerSecond / ModuleConstants.kMetersPerMotorRotation));
-            
-            double turnVoltage = turnController.calculate(getTurnPosition().getRadians(), state.angle.getRadians());
-            turn.setVoltage(turnVoltage);
-        } else {
-            stop();
-        }
+    public void setState(SwerveModuleState state){
+        state.optimize(getTurnPosition());
+
+        drive.setControl(driveController.withVelocity(state.speedMetersPerSecond / ModuleConstants.kMetersPerMotorRotation));
+        
+        double turnVoltage = turnController.calculate(getTurnPosition().getRadians(), state.angle.getRadians());
+        turn.setVoltage(turnVoltage);
     }
 
     public void stop(){

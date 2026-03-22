@@ -16,20 +16,7 @@ public class GameManager {
     Timer timer;
     public GameManager(){
     }
-    
-   
 
-    public static AllianceColor getAllianceColor(){
-     if (alliance.get() == Alliance.Blue){
-        return AllianceColor.Blue;
-     } else {
-        return AllianceColor.Red;
-     }   
-    }
-
-    public enum AllianceColor{
-        Blue, Red
-    }
 
     public static boolean atTransitionShift(){
         if (Timer.getMatchTime() > 130){
@@ -78,5 +65,11 @@ public class GameManager {
             return false;
         }
     }
+
+    public static Alliance getAllianceColor(){
+        if(alliance.isPresent())
+            return alliance.get();
+        return Alliance.Blue; //Default is blue
+    }  
 }
 

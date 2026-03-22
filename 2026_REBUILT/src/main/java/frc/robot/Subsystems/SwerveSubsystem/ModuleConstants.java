@@ -12,23 +12,22 @@ import edu.wpi.first.math.util.Units;
 
 public class ModuleConstants {
 
+    public static final double kMaxModuleSpeedMetersPerSecond = 5.0;
+
     //Conversion Factors
     public static final double kTurnRatio = 25.9;
-    public static final double kDriveRatio = 6.0; //1/6 wheel rotations per motor rotation
+    public static final double kDriveRatio = 6.0; //Equivalent to 1/6 wheel rotations per motor rotation
     public static final double kMetersPerWheelRotation = Math.PI * Units.inchesToMeters(3.5); //3.5 is wheel diameter 
     public static final double kRadiansPerMotorRotation = Math.PI*2 / kTurnRatio;
     public static final double kMetersPerMotorRotation = kMetersPerWheelRotation / kDriveRatio;
     
+    //Module Configurations
+    public static record ModuleConfig (int driveAddress, int turnAddress, int encoderAddress, double encoderOffset){}
 
-    //Module Configurations.     Offsets need to be tuned
     public static final ModuleConfig kFrontLeft = new ModuleConfig(0, 1, 2, -0.618);
     public static final ModuleConfig kFrontRight = new ModuleConfig(3, 4, 5, -0.40);
     public static final ModuleConfig kBackLeft = new ModuleConfig(6, 7, 8, -0.6645);
     public static final ModuleConfig kBackRight = new ModuleConfig(9, 10, 11, -0.4445);
-
-
-
-    public static record ModuleConfig (int driveAddress, int turnAddress, int encoderAddress, double encoderOffset){}
 
     public static MagnetSensorConfigs getEncoderConfig(double offset){
         MagnetSensorConfigs config = new MagnetSensorConfigs();
@@ -57,7 +56,7 @@ public class ModuleConstants {
 
     public static TalonFXConfiguration getTurnConfig(){
         TalonFXConfiguration config = new TalonFXConfiguration();
-        config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        config.MotorOutput.NeutralMode = NeutralModeValue.Coast;
         config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
         config.CurrentLimits.StatorCurrentLimit = 30;
         config.CurrentLimits.StatorCurrentLimitEnable = true;
