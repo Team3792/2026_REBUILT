@@ -70,9 +70,9 @@ public class FieldManager {
         return hubPos;
     }
 
-    public static double getRobotToHubDis(Pose2d robotPose){
+    public static double getRobotToHubDis(Pose2d shooter){
         Pose2d hubPos = getHubPose();
-        double distance = robotPose.getTranslation().getDistance(hubPos.getTranslation());
+        double distance = shooter.getTranslation().getDistance(hubPos.getTranslation());
         return distance;
     }
 

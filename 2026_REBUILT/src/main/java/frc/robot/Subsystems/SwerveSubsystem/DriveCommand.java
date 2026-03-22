@@ -67,8 +67,10 @@ public class DriveCommand extends Command {
 
     //Field relative transformation
     Rotation2d heading = swerve.getPoseHeading();
-    if(GameManager.getAllianceColor() == Alliance.Blue)
-      heading.plus(new Rotation2d(Math.PI)); //Rotate heading for red alliance
+    //System.out.println(GameManager.getAllianceColor());
+    if(GameManager.getAllianceColor() == Alliance.Red)
+      heading = heading.plus(new Rotation2d(Math.PI)); //Rotate heading for red alliance
+    //System.out.println(heading.getDegrees());
     
     chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(chassisSpeeds, heading);
     //TODO: check signs on vx and vy for different alliance colors 

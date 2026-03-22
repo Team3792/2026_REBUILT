@@ -108,8 +108,11 @@ public class RobotContainer {
     // Intake 
     ellis.povUp().whileTrue(intake.movePivot(1));  
     ellis.povDown().whileTrue(intake.movePivot(-1));
-    ellis.rightBumper().whileTrue(intake.runIntake(IntakeConstants.kIntakeVoltage).alongWith(Commands.startEnd(() -> feeder.setConveyorVoltage(FeederConstants.kConveyorVoltage), () -> feeder.setConveyorVoltage(0))));
-    ellis.leftBumper().whileTrue(intake.runIntake(-IntakeConstants.kIntakeVoltage).alongWith(Commands.startEnd(() -> feeder.setConveyorVoltage(-FeederConstants.kConveyorVoltage), () -> feeder.setConveyorVoltage(0))));
+    ellis.rightBumper().whileTrue(intake.runIntake(IntakeConstants.kIntakeVoltage).alongWith(Commands.startEnd(() -> feeder.setConveyorVoltage(FeederConstants.kConveyorVoltage), () -> feeder.setConveyorVoltage(0)))
+    .alongWith(Commands.startEnd(() -> intake.setPosition(IntakeConstants.kIntakePosition), () -> intake.setPosition(IntakeConstants.kStowedPosition))));
+    ellis.leftBumper().whileTrue(intake.runIntake(-IntakeConstants.kIntakeVoltage).alongWith(Commands.startEnd(() -> feeder.setConveyorVoltage(-FeederConstants.kConveyorVoltage), () -> feeder.setConveyorVoltage(0)))
+    .alongWith(Commands.startEnd(() -> intake.setPosition(IntakeConstants.kIntakePosition), () -> intake.setPosition(IntakeConstants.kStowedPosition))));
+    
     //ellis.rightTrigger().whileTrue(Commands.startEnd(() -> intake.setPosition(IntakeConstants.kIntakePosition), 
                         //() -> intake.setPosition(IntakeConstants.kStowedPosition)));
   }

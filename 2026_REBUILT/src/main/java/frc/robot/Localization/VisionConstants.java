@@ -54,7 +54,7 @@ public class VisionConstants {
     public static final Pose2d kRobotToShooter = new Pose2d(
         new Translation2d(
             Units.inchesToMeters(-8.5),
-            Units.inchesToMeters(8)),
+            Units.inchesToMeters(-8)),
         new Rotation2d(0)
     );
 

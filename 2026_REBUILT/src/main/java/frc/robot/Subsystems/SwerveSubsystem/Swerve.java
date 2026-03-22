@@ -9,6 +9,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -16,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.HardwareMap;
 import frc.robot.Localization.AntPoseEstimator;
 import frc.robot.Localization.VisionConstants;
+import frc.robot.Managers.FieldManager;
 
 public class Swerve extends SubsystemBase {
       
@@ -109,6 +111,8 @@ public class Swerve extends SubsystemBase {
     frontRight.printEncoders();
     backLeft.printEncoders();
     backRight.printEncoders();
+
+    SmartDashboard.putNumber("Distance to hub (in)", FieldManager.getRobotToHubDis(getShooterPose()));
   }
 
   public void stopModules(){
