@@ -91,10 +91,10 @@ public class AimWhileMovingCommand extends Command {
     // Translation2d targetHubPose = new Translation2d(targetHubPositionX, targetHubPositionY);
     double targetYaw = Math.atan2(targetHubPositionX, targetHubPositionY);
 
-    double tOut = tController.calculate(swerve.getRotation2dHeading().getDegrees(), targetYaw);
+    double tOut = tController.calculate(swerve.getPigeonHeading().getDegrees(), targetYaw);
 
     ChassisSpeeds chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, tOut);
-    swerve.drive(chassisSpeeds, swerve.getRotation2dHeading());
+    swerve.drive(chassisSpeeds);//, swerve.getPigeonHeading());
   }
 
   // Called once the command ends or is interrupted.

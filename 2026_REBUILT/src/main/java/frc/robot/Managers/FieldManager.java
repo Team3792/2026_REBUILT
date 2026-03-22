@@ -9,7 +9,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import frc.robot.Managers.GameManager.AllianceColor;
 
 /** Add your docs here. */
 public class FieldManager {
@@ -63,7 +62,7 @@ public class FieldManager {
 
     public static Pose2d getHubPose(){
         Pose2d hubPos;
-        if (GameManager.getAllianceColor() == AllianceColor.Blue){
+        if (GameManager.getAllianceColor() == Alliance.Blue){
             hubPos = blueHubPos;
         } else{
             hubPos = redHubPos;
@@ -71,10 +70,14 @@ public class FieldManager {
         return hubPos;
     }
 
-    public double getRobotToHubDis(Pose2d robotPose){
+    public static double getRobotToHubDis(Pose2d robotPose){
         Pose2d hubPos = getHubPose();
         double distance = robotPose.getTranslation().getDistance(hubPos.getTranslation());
         return distance;
+    }
+
+    public static Rotation2d getHubRotation(Pose2d robotPose){
+        return getHubPose().getTranslation().minus(robotPose.getTranslation()).getAngle();
     }
 
 

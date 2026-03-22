@@ -6,24 +6,36 @@ package frc.robot.Subsystems.SwerveSubsystem;
 
 import java.util.function.Supplier;
 
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Managers.FieldManager;
+import frc.robot.Managers.GameManager;
+import frc.robot.util.JoystickInput;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class DriveCommand extends Command {
   /** Creates a new DriveCommand. */
   Swerve swerve;
-  private Supplier<Double> xSupplier, ySupplier, tSupplier; 
+  Supplier<Double> xSupplier, ySupplier, tSupplier;
+  Supplier<Boolean> headingLockSupplier; 
+  double vx, vy, omega; //stored to access last
+  JoystickInput translationJoystick = new JoystickInput(SwerveConstants.kMaxLinearVelocity, 0.05); //used for both x and y
+  JoystickInput rotationJoystick = new JoystickInput(SwerveConstants.kMaxOmega, 0.05);
+  ProfiledPIDController headingLockController = SwerveConstants.kHeadingLockControllerConfig.getController();
+  boolean headingLock = false;
 
 
-
-  public DriveCommand(Swerve swerve, Supplier<Double> x, Supplier<Double> y, Supplier<Double> t) {
-    // Use addRequirements() here to declare subsystem dependencies.
+  public DriveCommand(Swerve swerve, Supplier<Double> x, Supplier<Double> y, Supplier<Double> t, Supplier<Boolean> headingLock) {
     this.swerve = swerve;
     this.xSupplier = x;
     this.ySupplier = y;
     this.tSupplier = t;
+    this.headingLockSupplier = headingLock;
+    headingLockController.enableContinuousInput(-Math.PI, Math.PI);
 
     addRequirements(swerve);
   }
@@ -35,20 +47,32 @@ public class DriveCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double xSpeed = 3 * xSupplier.get();
-    double ySpeed = 3 * ySupplier.get();
-    double tSpeed = 5 * tSupplier.get();
+    vx = translationJoystick.get(xSupplier.get());
+    vy = translationJoystick.get(ySupplier.get());
+  
+    if(headingLockSupplier.get()){
+      //Determine setpoint 
+      headingLockController.setGoal(FieldManager.getHubRotation(swerve.getPose()).getRadians());
+      if(!headingLock){
+        headingLockController.reset(swerve.getPoseHeading().getRadians(), omega);
+        headingLock = true;
+      }
+      omega = headingLockController.getSetpoint().velocity + headingLockController.calculate(swerve.getPoseHeading().getRadians());
+    } else {
+      omega = rotationJoystick.get(tSupplier.get());
+      headingLock = false;
+    }
 
-    //apply deadband
-    xSpeed = Math.abs(xSpeed) < 0.15 ? 0.0 : xSpeed;
-    ySpeed = Math.abs(ySpeed) < 0.15 ? 0.0 : ySpeed;
-    tSpeed = Math.abs(tSpeed) < 0.15 ? 0.0 : tSpeed;
-    System.out.println(xSpeed);
+    ChassisSpeeds chassisSpeeds = new ChassisSpeeds(vx, vy, omega);
 
+    //Field relative transformation
+    Rotation2d heading = swerve.getPoseHeading();
+    if(GameManager.getAllianceColor() == Alliance.Red)
+      heading.plus(new Rotation2d(Math.PI)); //Rotate heading for red alliance
+    
+    chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(chassisSpeeds, heading);
 
-    ChassisSpeeds chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, tSpeed);
-
-    swerve.drive(chassisSpeeds, swerve.getRotation2dHeading());
+    swerve.drive(chassisSpeeds);
   }
 
   // Called once the command ends or is interrupted.

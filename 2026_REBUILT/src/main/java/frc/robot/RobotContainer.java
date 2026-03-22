@@ -4,45 +4,26 @@
 
 package frc.robot;
 
-import java.util.regex.Pattern;
-
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.NeutralModeValue;
-import com.pathplanner.lib.auto.AutoBuilder;
-
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.wpilibj.LEDPattern;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
-import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Commands.AimWhileMovingCommand;
-import frc.robot.Localization.AntPoseEstimator;
 import frc.robot.Localization.Vision;
 import frc.robot.Managers.FieldManager;
 import frc.robot.Managers.ZoneManager;
 import frc.robot.Subsystems.ClimbSubsytem.Climb;
-import frc.robot.Subsystems.ClimbSubsytem.ClimbConstants;
 import frc.robot.Subsystems.FeederSubsystem.Feeder;
 import frc.robot.Subsystems.FeederSubsystem.FeederConstants;
 import frc.robot.Subsystems.IntakeSubsystem.Intake;
 import frc.robot.Subsystems.IntakeSubsystem.IntakeConstants;
-import frc.robot.Subsystems.LEDSubsystem.LED;
-import frc.robot.Subsystems.LEDSubsystem.LEDConstants;
 import frc.robot.Subsystems.ShooterSubsystem.Hood.*;
 import frc.robot.Subsystems.ShooterSubsystem.Shooter.*;
 import frc.robot.Subsystems.SwerveSubsystem.DriveCommand;
 import frc.robot.Subsystems.SwerveSubsystem.Swerve;
-import frc.robot.Subsystems.SwerveSubsystem.SwerveConstants;
 
 public class RobotContainer {
 
@@ -57,8 +38,8 @@ public class RobotContainer {
   ZoneManager zoneManager = new ZoneManager();
   FieldManager fieldManager = new FieldManager();
 
-  CommandXboxController aneesh = new CommandXboxController(1);
   CommandXboxController ellis = new CommandXboxController(0);
+  CommandXboxController aneesh = new CommandXboxController(1);
 
   //Trigger nearTrench = new Trigger(() -> zoneManager.isCloseToTrench());
 
@@ -72,13 +53,10 @@ public class RobotContainer {
   private SendableChooser<Command> autoChooser;
 
   public RobotContainer() {
-    // configureDriverBindings();
-    // configureOperatorBindings();
     configureAneeshBindings();
     configureEllisBindings();
 
     //Register Named Commands
-
 
   //   boolean isCompetition = false;
   //   autoChooser = AutoBuilder.buildAutoChooserWithOptionsModifier((stream) -> isCompetition 
@@ -117,17 +95,11 @@ public class RobotContainer {
 
   private void configureEllisBindings(){
     // Swerve
-    swerve.setDefaultCommand(new DriveCommand(swerve, () -> -ellis.getLeftY(), () -> -ellis.getLeftX(), () -> -ellis.getRightX()));      
-    ellis.leftStick().onTrue(Commands.runOnce(() -> swerve.resetHeading(0)));
-
+    swerve.setDefaultCommand(new DriveCommand(swerve, () -> -ellis.getLeftY(), () -> -ellis.getLeftX(), () -> -ellis.getRightX(), () -> ellis.getRightTriggerAxis() > 0.1));      
+    ellis.leftStick().onTrue(Commands.runOnce(() -> swerve.resetHeading(0), swerve));
+    ellis.leftTrigger().whileTrue(swerve.crossCommand());
    // robotNotMoving.whileTrue(Commands.startEnd(() -> rumble(.75), () -> rumble(0)));
     //readyToShoot.whileTrue(rumble(0.7, 4, ellis));
-
-
-    ellis.povUp().whileTrue(new DriveCommand(swerve, () -> -ellis.getLeftY(), () -> -ellis.getLeftX(), () -> swerve.getThetaOut0()));
-    ellis.povDown().whileTrue(new DriveCommand(swerve, () -> -ellis.getLeftY(), () -> -ellis.getLeftX(), () -> swerve.getThetaOut180()));
-    ellis.povRight().whileTrue(new DriveCommand(swerve, () -> -ellis.getLeftY(), () -> -ellis.getLeftX(), () -> swerve.getThetaOut270()));
-    ellis.povLeft().whileTrue(new DriveCommand(swerve, () -> -ellis.getLeftY(), () -> -ellis.getLeftX(), () -> swerve.getThetaOut90()));
 
     // ellis.rightStick().onTrue(new AimWhileMovingCommand(swerve, FieldManager.getHubPose(), () -> -ellis.getLeftY(), () -> -ellis.getLeftX()));
     // ellis.rightStick().onFalse(new DriveCommand(swerve, () -> -ellis.getLeftY(), () -> -ellis.getLeftX(), () -> -ellis.getRightX()));
@@ -152,9 +124,6 @@ public class RobotContainer {
     return Commands.startEnd(() -> controller.setRumble(RumbleType.kBothRumble, intensity), () -> controller.setRumble(RumbleType.kBothRumble, 0));
   }
 
-
-
-  
   public Command getAutonomousCommand() {
     //return autoChooser.getSelected();
     return Commands.print("No autonomous command configured");

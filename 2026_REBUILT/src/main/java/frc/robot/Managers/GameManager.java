@@ -14,18 +14,10 @@ public class GameManager {
     public static Optional<Alliance> alliance = DriverStation.getAlliance();
     public GameManager(){}
 
-    public static AllianceColor getAllianceColor(){
-     if (alliance.get() == Alliance.Blue){
-        return AllianceColor.Blue;
-     } else {
-        return AllianceColor.Red;
-     }   
-    }
-
-    public enum AllianceColor{
-        Blue, Red
-    }
-
-    
+    public static Alliance getAllianceColor(){
+        if(alliance.isPresent())
+            return alliance.get();
+        return Alliance.Blue; //Default is blue
+    }  
 }
 
