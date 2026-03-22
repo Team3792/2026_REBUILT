@@ -7,12 +7,17 @@ package frc.robot.Managers;
 import java.util.Optional;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 
 /** Add your docs here. */
 public class GameManager {
     public static Optional<Alliance> alliance = DriverStation.getAlliance();
-    public GameManager(){}
+    Timer timer;
+    public GameManager(){
+    }
+    
+   
 
     public static AllianceColor getAllianceColor(){
      if (alliance.get() == Alliance.Blue){
@@ -26,6 +31,52 @@ public class GameManager {
         Blue, Red
     }
 
-    
+    public static boolean atTransitionShift(){
+        if (Timer.getMatchTime() > 130){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static boolean atShiftOne(){
+        if (130 > Timer.getMatchTime() && Timer.getMatchTime() < 105){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static boolean atShiftTwo(){
+        if (105 > Timer.getMatchTime() && Timer.getMatchTime() < 80){
+            return true;
+        } else{
+            return false;
+        }
+    }
+
+     public static boolean atShiftThree(){
+        if (80 > Timer.getMatchTime() && Timer.getMatchTime() < 55){
+            return true;
+        } else{
+            return false;
+        }
+    }
+
+     public static boolean atShiftFour(){
+        if (55 > Timer.getMatchTime() && Timer.getMatchTime() < 30){
+            return true;
+        } else{
+            return false;
+        }
+    }
+
+     public static boolean atEndGame(){
+        if (30 > Timer.getMatchTime() && Timer.getMatchTime() < 0){
+            return true;
+        } else{
+            return false;
+        }
+    }
 }
 
