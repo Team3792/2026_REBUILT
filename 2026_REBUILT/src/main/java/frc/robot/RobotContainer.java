@@ -52,7 +52,7 @@ public class RobotContainer {
   Swerve swerve = new Swerve();
   Shooter shooter = new Shooter();
   Hood hood = new Hood();
-  //Vision vision = new Vision();
+  Vision vision = new Vision();
 
   ZoneManager zoneManager = new ZoneManager();
   FieldManager fieldManager = new FieldManager();
@@ -67,6 +67,7 @@ public class RobotContainer {
   Trigger readyToShoot = new Trigger(() -> (shooter.isAtTargetRPS(ShooterConstants.kHubRPS) 
                     && hood.isAtTargetAngle(HoodConstants.kHubHoodAngle)));
   Trigger robotNotMoving = new Trigger(() -> swerve.robotNotMoving());
+  Trigger intakeDeployed = new Trigger(() -> intake.intakeDeployed());
 
   private SendableChooser<Command> autoChooser;
 
@@ -120,7 +121,7 @@ public class RobotContainer {
     ellis.leftStick().onTrue(Commands.runOnce(() -> swerve.resetHeading(0)));
 
    // robotNotMoving.whileTrue(Commands.startEnd(() -> rumble(.75), () -> rumble(0)));
-    readyToShoot.whileTrue(rumble(0.7, 4, ellis));
+    //readyToShoot.whileTrue(rumble(0.7, 4, ellis));
 
 
     ellis.povUp().whileTrue(new DriveCommand(swerve, () -> -ellis.getLeftY(), () -> -ellis.getLeftX(), () -> swerve.getThetaOut0()));
@@ -137,7 +138,6 @@ public class RobotContainer {
     ellis.povDown().whileTrue(intake.movePivot(-1));
     ellis.rightBumper().whileTrue(intake.runIntake(IntakeConstants.kIntakeVoltage).alongWith(Commands.startEnd(() -> feeder.setConveyorVoltage(FeederConstants.kConveyorVoltage), () -> feeder.setConveyorVoltage(0))));
     ellis.leftBumper().whileTrue(intake.runIntake(-IntakeConstants.kIntakeVoltage).alongWith(Commands.startEnd(() -> feeder.setConveyorVoltage(-FeederConstants.kConveyorVoltage), () -> feeder.setConveyorVoltage(0))));
-      
     ellis.rightTrigger().whileTrue(Commands.startEnd(() -> intake.setPosition(IntakeConstants.kIntakePosition), 
                         () -> intake.setPosition(IntakeConstants.kStowedPosition)));
   }

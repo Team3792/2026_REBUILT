@@ -38,6 +38,15 @@ public class Intake extends SubsystemBase {
         return position;                                  
     }
 
+    public boolean intakeDeployed(){
+        double position = getPosition();
+        if ((position - IntakeConstants.kIntakePosition) < 3){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public void setIntakePosition(){
         pivot.setPosition(0);
     }
@@ -61,7 +70,7 @@ public class Intake extends SubsystemBase {
 
     // Position in rotations
     public void setPosition(double position){
-        pivot.setControl(motionMagic.withPosition(position).withFeedForward(0.2));
+        pivot.setControl(motionMagic.withPosition(position).withFeedForward(0.5));
     }
 
     public void runPivot(double voltage){

@@ -25,5 +25,7 @@ public class GameManager {
     public enum AllianceColor{
         Blue, Red
     }
+
+    
 }
 

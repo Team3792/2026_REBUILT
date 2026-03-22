@@ -134,7 +134,7 @@ public class AntPoseEstimator extends SwerveDrivePoseEstimator {
 
     public void updateAllVisionMeasurements(){
         updateVisionMeasurements(vision.getFrontCamPipelineResults(), VisionConstants.kFrontCamName);
-        updateVisionMeasurements(vision.getBackCamPipelineResults(), VisionConstants.kBackCamName);
+       // updateVisionMeasurements(vision.getBackCamPipelineResults(), VisionConstants.kBackCamName);
     }
 
     //TODO: Find a way to update odometry with different stds

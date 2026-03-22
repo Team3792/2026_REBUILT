@@ -66,7 +66,7 @@ public class Vision extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putBoolean("Subsystems/Localization/Vision/Back Cam", hasTarget(backCam));
-    SmartDashboard.putBoolean("Subsystems/Localization/Vision/Front Cam", hasTarget(frontCam));
+    SmartDashboard.putBoolean("back cam", hasTarget(backCam));
+    SmartDashboard.putBoolean("front cam", hasTarget(frontCam));
   }
 }
