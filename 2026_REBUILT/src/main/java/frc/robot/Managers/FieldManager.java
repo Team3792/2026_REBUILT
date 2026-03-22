@@ -24,8 +24,8 @@ public class FieldManager {
     */
 
     //hub
-    public static Pose2d blueHubPos = new Pose2d(new Translation2d(158.61,135.34), new Rotation2d(0));
-    public static Pose2d redHubPos = new Pose2d(new Translation2d(445.61, 135.34), new Rotation2d(0));
+    public static Pose2d blueHubPos = new Pose2d(new Translation2d(4.626,4.035), new Rotation2d(0));
+    public static Pose2d redHubPos = new Pose2d(new Translation2d(11.915, 4.035), new Rotation2d(0));
     
     //trench
     Translation2d bottomRedTrench = new Translation2d(0,0);
@@ -76,8 +76,8 @@ public class FieldManager {
         return distance;
     }
 
-    public static Rotation2d getHubRotation(Pose2d robotPose){
-        return getHubPose().getTranslation().minus(robotPose.getTranslation()).getAngle();
+    public static Rotation2d getHubRotation(Pose2d shooterPose){
+        return getHubPose().getTranslation().minus(shooterPose.getTranslation()).getAngle();
     }
 
 

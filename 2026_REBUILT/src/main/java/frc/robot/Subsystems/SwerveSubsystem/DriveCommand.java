@@ -52,7 +52,7 @@ public class DriveCommand extends Command {
   
     if(headingLockSupplier.get()){
       //Determine setpoint 
-      headingLockController.setGoal(FieldManager.getHubRotation(swerve.getPose()).getRadians());
+      headingLockController.setGoal(FieldManager.getHubRotation(swerve.getShooterPose()).getRadians());
       if(!headingLock){
         headingLockController.reset(swerve.getPoseHeading().getRadians(), omega);
         headingLock = true;
@@ -67,10 +67,11 @@ public class DriveCommand extends Command {
 
     //Field relative transformation
     Rotation2d heading = swerve.getPoseHeading();
-    if(GameManager.getAllianceColor() == Alliance.Red)
+    if(GameManager.getAllianceColor() == Alliance.Blue)
       heading.plus(new Rotation2d(Math.PI)); //Rotate heading for red alliance
     
     chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(chassisSpeeds, heading);
+    //TODO: check signs on vx and vy for different alliance colors 
 
     swerve.drive(chassisSpeeds);
   }

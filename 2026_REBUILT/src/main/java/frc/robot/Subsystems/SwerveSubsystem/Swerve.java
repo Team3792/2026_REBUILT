@@ -4,15 +4,18 @@ import com.ctre.phoenix6.hardware.Pigeon2;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.HardwareMap;
 import frc.robot.Localization.AntPoseEstimator;
+import frc.robot.Localization.VisionConstants;
 
 public class Swerve extends SubsystemBase {
       
@@ -93,10 +96,11 @@ public class Swerve extends SubsystemBase {
 
 
     //currentTimestamp = Timer.getFPGATimestamp();
-    antPose.updateWithTime(currentTimestamp, getPigeonHeading(), getModulePositions());
+    //antPose.updateWithTime(currentTimestamp, getPigeonHeading(), getModulePositions());
 
     //Update Localization
-    antPose.update(getPigeonHeading(), getModulePositions());
+    antPose.updateAll(getPigeonHeading(), getModulePositions());
+    printDebug();
   }
 
   public void printDebug(){
@@ -168,9 +172,12 @@ public class Swerve extends SubsystemBase {
   // }
 
   public Pose2d getPose(){
-    //return antPose.getEstimatedPosition();
-    return new Pose2d();
+    return antPose.getEstimatedPosition();
   } 
+
+  public Pose2d getShooterPose(){
+    return VisionConstants.kRobotToShooter.transformBy(new Transform2d(getPose().getTranslation(), getPose().getRotation()));
+  }
 
   public ChassisSpeeds getRobotRelativeSpeeds(){
     return SwerveConstants.kDriveKinematics.toChassisSpeeds(frontLeft.getState(), frontRight.getState(), backLeft.getState(), backRight.getState());

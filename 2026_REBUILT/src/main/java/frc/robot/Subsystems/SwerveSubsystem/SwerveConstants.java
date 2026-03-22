@@ -31,6 +31,6 @@ public class SwerveConstants {
     public static final PIDConfig kTranslationControllerConfig = new PIDConfig(1, 0.1, 0);
     public static final PIDConfig kTurnControllerConfig = new PIDConfig(2, 0.01, 0);
     
-    //Used for internal alignmen t
+    //Used for internal alignment
     public static final ProfiledPIDConfig kHeadingLockControllerConfig = new ProfiledPIDConfig(2, 0.01, 0, 6, 12);
 }
