@@ -1,6 +1,13 @@
 package frc.robot.Subsystems.SwerveSubsystem;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.ModuleConfig;
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+
+import edu.wpi.first.math.controller.HolonomicDriveController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -9,7 +16,9 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -64,32 +73,31 @@ public class Swerve extends SubsystemBase {
   }
 
 
-  // private void configureAutoBuilder() {
-  //   RobotConfig config;
-  //   try {
-  //     config = RobotConfig.fromGUISettings();
-  //   } catch (Exception e) {
-  //     config = new RobotConfig(0, 0, new ModuleConfig(0, 0, 0, new DCMotor(0, 0, 0, 0, 0, 4), 0, 4));
+  private void configureAutoBuilder() {
+    RobotConfig config;
+    try {
+      config = RobotConfig.fromGUISettings();
+    } catch (Exception e) {
+      config = new RobotConfig(0, 0, new ModuleConfig(0, 0, 0, new DCMotor(0, 0, 0, 0, 0, 4), 0, 4));
+      e.printStackTrace();
+    }
 
-  //     e.printStackTrace();
-  //   }
-
-  //   AutoBuilder.configure(
-  //     this::getPose,
-  //     this::resetPose,
-  //     this::getRobotRelativeSpeeds,
-  //     (speeds, feedforward) -> driveAuto(speeds),
-  //     new PPHolonomicDriveController(new PIDConstants(5.0, 0.0, 0.0), new PIDConstants(5.0, 0.0, 0.0)),
-  //     config,
-  //     () -> {
-  //     var alliance = DriverStation.getAlliance();
-  //     if (alliance.isPresent()){
-  //       return alliance.get() == DriverStation.Alliance.Red;
-  //     }
-  //     return false;
-  //   },
-  //   this);
-  // }
+    AutoBuilder.configure(
+      this::getPose,
+      this::resetPose,
+      this::getRobotRelativeSpeeds,
+      (speeds, feedforward) -> drive(speeds),
+      new PPHolonomicDriveController(new PIDConstants(5.0, 0.0, 0.0), new PIDConstants(5.0, 0.0, 0.0)),
+      config,
+      () -> {
+      var alliance = DriverStation.getAlliance();
+      if (alliance.isPresent()){
+        return alliance.get() == DriverStation.Alliance.Red;
+      }
+      return false;
+    },
+    this);
+  }
 
   @Override
   public void periodic() {
@@ -171,9 +179,9 @@ public class Swerve extends SubsystemBase {
     });
   }
 
-  // public void resetPose(Pose2d pose){
-  //   antPose.resetPose(pose);
-  // }
+  public void resetPose(Pose2d pose){
+    antPose.resetPose(pose);
+  }
 
   public Pose2d getPose(){
     return antPose.getEstimatedPosition();

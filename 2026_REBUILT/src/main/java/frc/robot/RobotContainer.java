@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -58,11 +60,11 @@ public class RobotContainer {
 
     //Register Named Commands
 
-  //   boolean isCompetition = false;
-  //   autoChooser = AutoBuilder.buildAutoChooserWithOptionsModifier((stream) -> isCompetition 
-  //                 ? stream.filter(auto -> auto.getName().startsWith("comp")) : stream);
+    boolean isCompetition = false;
+    autoChooser = AutoBuilder.buildAutoChooserWithOptionsModifier((stream) -> isCompetition 
+                  ? stream.filter(auto -> auto.getName().startsWith("comp")) : stream);
 
-  //   SmartDashboard.putData("Auto Chooser", autoChooser);
+    SmartDashboard.putData("Auto Chooser", autoChooser);
     }
 
   private void configureAneeshBindings(){
@@ -128,7 +130,7 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    //return autoChooser.getSelected();
-    return Commands.print("No autonomous command configured");
+    return autoChooser.getSelected();
+    //return Commands.print("No autonomous command configured");
   }
 }
