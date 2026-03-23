@@ -68,24 +68,24 @@ public class ShootCommand extends Command {
 
 
 
-    for(int i = 1; i < ShooterConstants.distanceVSRPS[0].length; i++){
+    // for(int i = 1; i < ShooterConstants.distanceVSRPS[0].length; i++){
 
-      if(robotToHubDistance > ShooterConstants.distanceVSRPS[0][i]){
-        //return target flywheel RPM
-        targetRPS = ShooterConstants.distanceVSRPS[1][i-1];
+    //   if(robotToHubDistance > ShooterConstants.distanceVSRPS[0][i]){
+    //     //return target flywheel RPM
+    //     targetRPS = ShooterConstants.distanceVSRPS[1][i-1];
 
-        //returns what percentage of the distance range the robot is in
-        double lowerDistance = ShooterConstants.distanceVsHoodAngle[0][i-1];
-        double upperDistance = ShooterConstants.distanceVsHoodAngle[0][i];
-        rangePercentage = (robotToHubDistance - lowerDistance) / (upperDistance - lowerDistance);
+    //     //returns what percentage of the distance range the robot is in
+    //     double lowerDistance = ShooterConstants.distanceVsHoodAngle[0][i-1];
+    //     double upperDistance = ShooterConstants.distanceVsHoodAngle[0][i];
+    //     rangePercentage = (robotToHubDistance - lowerDistance) / (upperDistance - lowerDistance);
 
-        //interpolate hood angle based on rangePercentage
-        double lowerHoodAngle = ShooterConstants.distanceVsHoodAngle[1][i-1];
-        double upperHoodAngle = ShooterConstants.distanceVsHoodAngle[1][i];
-        targetHoodAngle = ((upperHoodAngle-lowerHoodAngle) * rangePercentage) + lowerHoodAngle;
-        break;
-      }
-    }
+    //     //interpolate hood angle based on rangePercentage
+    //     double lowerHoodAngle = ShooterConstants.distanceVsHoodAngle[1][i-1];
+    //     double upperHoodAngle = ShooterConstants.distanceVsHoodAngle[1][i];
+    //     targetHoodAngle = ((upperHoodAngle-lowerHoodAngle) * rangePercentage) + lowerHoodAngle;
+    //     break;
+    //   }
+    //}
 
     hood.setAngle(targetHoodAngle);
     shooter.setRPS(targetRPS);

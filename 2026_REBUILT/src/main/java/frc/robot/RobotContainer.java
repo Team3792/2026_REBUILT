@@ -61,10 +61,10 @@ public class RobotContainer {
     //Register Named Commands
 
     boolean isCompetition = false;
-    autoChooser = AutoBuilder.buildAutoChooserWithOptionsModifier((stream) -> isCompetition 
-                  ? stream.filter(auto -> auto.getName().startsWith("comp")) : stream);
+    //autoChooser = AutoBuilder.buildAutoChooserWithOptionsModifier((stream) -> isCompetition 
+                  //? stream.filter(auto -> auto.getName().startsWith("comp")) : stream);
 
-    SmartDashboard.putData("Auto Chooser", autoChooser);
+    //SmartDashboard.putData("Auto Chooser", autoChooser);
     }
 
   private void configureAneeshBindings(){
@@ -110,10 +110,14 @@ public class RobotContainer {
     // Intake 
     ellis.povUp().whileTrue(intake.movePivot(1));  
     ellis.povDown().whileTrue(intake.movePivot(-1));
-    ellis.rightBumper().whileTrue(intake.runIntake(IntakeConstants.kIntakeVoltage).alongWith(Commands.startEnd(() -> feeder.setConveyorVoltage(FeederConstants.kConveyorVoltage), () -> feeder.setConveyorVoltage(0)))
-    .alongWith(Commands.startEnd(() -> intake.setPosition(IntakeConstants.kIntakePosition), () -> intake.setPosition(IntakeConstants.kStowedPosition))));
-    ellis.leftBumper().whileTrue(intake.runIntake(-IntakeConstants.kIntakeVoltage).alongWith(Commands.startEnd(() -> feeder.setConveyorVoltage(-FeederConstants.kConveyorVoltage), () -> feeder.setConveyorVoltage(0)))
-    .alongWith(Commands.startEnd(() -> intake.setPosition(IntakeConstants.kIntakePosition), () -> intake.setPosition(IntakeConstants.kStowedPosition))));
+      //intake
+    ellis.rightBumper().whileTrue(intake.intake(true).alongWith(feeder.runConveyor(FeederConstants.kConveyorVoltage)));
+    ellis.leftBumper().whileTrue(intake.intake(false).alongWith(feeder.runConveyor(-FeederConstants.kConveyorVoltage)));
+
+    ellis.x().onTrue(intake.pivotToAngle(IntakeConstants.kStowedPosition));
+    // alongWith(Commands.startEnd(() -> feeder.setConveyorVoltage(FeederConstants.kConveyorVoltage), () -> feeder.setConveyorVoltage(0)))
+    // .alongWith(Commands.startEnd(() -> intake.setPosition(IntakeConstants.kIntakePosition), () -> intake.setPosition(IntakeConstants.kStowedPosition))));
+    //   //outtake
     
     //ellis.rightTrigger().whileTrue(Commands.startEnd(() -> intake.setPosition(IntakeConstants.kIntakePosition), 
                         //() -> intake.setPosition(IntakeConstants.kStowedPosition)));
@@ -130,7 +134,7 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return autoChooser.getSelected();
-    //return Commands.print("No autonomous command configured");
+    //return autoChooser.getSelected();
+    return Commands.print("No autonomous command configured");
   }
 }

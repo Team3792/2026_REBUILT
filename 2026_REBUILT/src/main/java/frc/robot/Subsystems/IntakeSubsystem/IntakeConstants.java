@@ -9,9 +9,12 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 public class IntakeConstants {
     
-    public final static double kIntakeVoltage = 7;
+    public final static double kIntakeVoltage = 10;
+    public final static double kDrivePivotVoltage = 3;
+    public final static double kPivotHoldsVoltage = 0.5;
+    public final static double kPivotTheshold = 2;
 
-    public final static double kIntakePosition = 12.29; // need to set
+    public final static double kIntakePosition = 12.3; // need to set
     public final static double kHoldPosition = 6.15;
     public final static double kStowedPosition = 0; //need to set
 

@@ -39,7 +39,7 @@ public class Feeder extends SubsystemBase{
     }
 
     public Command runConveyor(double voltage){
-        return Commands.runOnce(() -> setConveyorVoltage(voltage));
+        return Commands.startEnd(() -> setConveyorVoltage(voltage), () -> setConveyorVoltage(0));
     }
 
     public Command runFeeder(double kicker, double belts){
