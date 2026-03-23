@@ -89,13 +89,17 @@ public double getTangentialVelocity(){
 }
 
 public double getTargetRPS(double distance){
-  double targetRPS = 0;
-  for (int i = 0; i < ShooterConstants.distanceVSRPS[0].length - 1; i++){
-    if (distance > ShooterConstants.distanceVSRPS[0][i]){
-      targetRPS = ShooterConstants.distanceVSRPS[1][i-1];
+  //Linear search (assume already sorted calibrated shots) --> could switch to binary search
+  for (int i = 0; i < ShooterConstants.kCalibratedShots.length - 1; i++){
+    double calibratedDistance = ShooterConstants.kCalibratedShots[i].distanceMeters();
+    if (distance > calibratedDistance){
+      //Linear interpolation between two 
+      double t = (distance - calibratedDistance) / (ShooterConstants.kCalibratedShots[i].distanceMeters() - calibratedDistance);
+      return ShooterConstants.kCalibratedShots[i].omegaRPS() * (1 - t)
+                 + ShooterConstants.kCalibratedShots[i].omegaRPS() *(t); 
     }
   }
-  return targetRPS;
+  return 0; //Out of range
 }
 
 public boolean isAtTargetRPS(double targetRPS){
