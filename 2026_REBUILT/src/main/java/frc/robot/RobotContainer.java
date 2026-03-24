@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Commands.ShootCommand;
 import frc.robot.Localization.Vision;
 import frc.robot.Managers.FieldManager;
+import frc.robot.Managers.GameManager;
 import frc.robot.Managers.ZoneManager;
 import frc.robot.Subsystems.ClimbSubsytem.Climb;
 import frc.robot.Subsystems.FeederSubsystem.Feeder;
@@ -44,14 +45,12 @@ public class RobotContainer {
   CommandXboxController ellis = new CommandXboxController(0);
   CommandXboxController aneesh = new CommandXboxController(1);
 
-  //Trigger nearTrench = new Trigger(() -> zoneManager.isCloseToTrench());
-
-  // Implement so that when the flywheel is up to speed the controller rumbles
-  //Trigger shooterReady = new Trigger(() -> shooter.isAtTargetRPM(shooter.getTargetRPM(fieldManager.getRobotToHubDis(swerve.getPose()))));
-  Trigger readyToShoot = new Trigger(() -> (shooter.isAtTargetRPS(ShooterConstants.kHubRPS) 
-                    && hood.isAtTargetAngle(HoodConstants.kHubHoodAngle)));
-  Trigger robotNotMoving = new Trigger(() -> swerve.robotNotMoving());
-  Trigger intakeDeployed = new Trigger(() -> intake.intakeDeployed());
+  Trigger transitionShift = new Trigger(() -> GameManager.atTransitionShift());
+  Trigger shiftOne = new Trigger(() -> GameManager.atShiftOne());
+  Trigger shiftTwo = new Trigger(() -> GameManager.atShiftTwo());
+  Trigger shiftThree = new Trigger(() -> GameManager.atShiftThree());
+  Trigger shiftFour = new Trigger(() -> GameManager.atShiftFour());
+  Trigger endGame = new Trigger(() -> GameManager.atEndGame());
 
   private SendableChooser<Command> autoChooser;
 
@@ -72,10 +71,14 @@ public class RobotContainer {
     //nearTrench.whileTrue(rumble(0.7, 5));
 
     aneesh.rightTrigger().whileTrue(rumble(0.75, aneesh));
-    
-    robotNotMoving.whileTrue(Commands.startEnd(() -> rumble(.7, aneesh), () -> rumble(0, aneesh)));
-    readyToShoot.whileTrue(rumble(0.7, 4, aneesh));
-    //readyToShoot.whileTrue(Commands.startEnd(() -> {feeder.setKickerVoltage(12); feeder.setConveyorVoltage(8);}, () -> {feeder.setKickerVoltage(0); feeder.setConveyorVoltage(0);}));
+
+    transitionShift.onTrue(rumble(0.8, 4, aneesh));
+    shiftOne.onTrue(rumble(0.8, 4, aneesh));
+    shiftTwo.onTrue(rumble(0.8, 4, aneesh));
+    shiftThree.onTrue(rumble(0.8, 4, aneesh));
+    shiftFour.onTrue(rumble(0.8, 4, aneesh));
+    endGame.onTrue(rumble(1, 4, aneesh));
+
 
     //Feeder
     aneesh.rightBumper().whileTrue(new StartEndCommand(() -> {feeder.setKickerVoltage(12); feeder.setConveyorVoltage(8);}, () -> {feeder.setKickerVoltage(0); feeder.setConveyorVoltage(0);}));
@@ -102,6 +105,14 @@ public class RobotContainer {
   }
 
   private void configureEllisBindings(){
+
+    transitionShift.onTrue(rumble(0.8, 4, ellis));
+    shiftOne.onTrue(rumble(0.8, 4, ellis));
+    shiftTwo.onTrue(rumble(0.8, 4, ellis));
+    shiftThree.onTrue(rumble(0.8, 4, ellis));
+    shiftFour.onTrue(rumble(0.8, 4, ellis));
+    endGame.onTrue(rumble(1, 4, ellis));
+
     // Swerve
     swerve.setDefaultCommand(new DriveCommand(swerve, () -> -ellis.getLeftY(), () -> -ellis.getLeftX(), () -> -ellis.getRightX(), () -> ellis.getRightTriggerAxis() > 0.1));      
     ellis.leftStick().onTrue(Commands.runOnce(() -> swerve.resetHeading(0), swerve));

@@ -13,58 +13,42 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 /** Add your docs here. */
 public class GameManager {
     public static Optional<Alliance> alliance = DriverStation.getAlliance();
-    Timer timer;
     public GameManager(){
     }
 
+    private static double getTime(){
+        return DriverStation.getMatchTime();
+    }
 
     public static boolean atTransitionShift(){
-        if (Timer.getMatchTime() > 130){
-            return true;
-        } else {
-            return false;
-        }
+        double t = getTime();
+        return t > 130;
     }
 
     public static boolean atShiftOne(){
-        if (130 > Timer.getMatchTime() && Timer.getMatchTime() < 105){
-            return true;
-        } else {
-            return false;
-        }
+        double t = getTime();
+        return (t <= 130 && t > 105);
     }
 
     public static boolean atShiftTwo(){
-        if (105 > Timer.getMatchTime() && Timer.getMatchTime() < 80){
-            return true;
-        } else{
-            return false;
-        }
+        double t = getTime();
+        return (t <= 105 && t > 80);
     }
 
      public static boolean atShiftThree(){
-        if (80 > Timer.getMatchTime() && Timer.getMatchTime() < 55){
-            return true;
-        } else{
-            return false;
-        }
-    }
+        double t = getTime();
+        return (t <= 80 && t > 55);
+     }
 
      public static boolean atShiftFour(){
-        if (55 > Timer.getMatchTime() && Timer.getMatchTime() < 30){
-            return true;
-        } else{
-            return false;
-        }
-    }
-
+        double t = getTime();
+        return (t <= 55 && t > 30);
+     }
+     
      public static boolean atEndGame(){
-        if (30 > Timer.getMatchTime() && Timer.getMatchTime() < 0){
-            return true;
-        } else{
-            return false;
-        }
-    }
+        double t = getTime();
+        return (t <= 30 && t >= 0);
+     }
 
     public static Alliance getAllianceColor(){
         if(alliance.isPresent())
