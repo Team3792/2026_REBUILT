@@ -20,6 +20,7 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -34,7 +35,7 @@ public class Swerve extends SubsystemBase {
   SwerveModule frontRight = new SwerveModule(ModuleConstants.kFrontRight, "front right");
   SwerveModule backLeft = new SwerveModule(ModuleConstants.kBackLeft, "back left");
   SwerveModule backRight = new SwerveModule(ModuleConstants.kBackRight, "back right");
-
+  Field2d field = new Field2d();
   SwerveModule[] modules = {frontLeft, frontRight, backLeft, backRight};
 
   Pigeon2 pigeon = new Pigeon2(HardwareMap.kPigeon);
@@ -48,6 +49,7 @@ public class Swerve extends SubsystemBase {
   public Swerve() {
     antPose = new AntPoseEstimator(SwerveConstants.kDriveKinematics, getPigeonHeading(), getModulePositions(), new Pose2d());
     resetHeading();
+    SmartDashboard.putData("Shooter pose", field);
   }
 
   public void resetHeading(double yawDegrees){
@@ -188,7 +190,14 @@ public class Swerve extends SubsystemBase {
   } 
 
   public Pose2d getShooterPose(){
-    return VisionConstants.kRobotToShooter.transformBy(new Transform2d(getPose().getTranslation(), getPose().getRotation()));
+
+
+    
+    
+
+    Pose2d shooterPose = getPose().transformBy(VisionConstants.kRobotToShooter);
+    field.setRobotPose(shooterPose);
+    return shooterPose;
   }
 
   public ChassisSpeeds getRobotRelativeSpeeds(){

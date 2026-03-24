@@ -13,6 +13,7 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.motorcontrol.Talon;
 
 /** Add your docs here. */
@@ -90,16 +91,16 @@ public class ShooterConstants {
 
     //TODO: figure these out, must be sorted by distance (need not be sorted by other values)
     public static final CalibratedShot[] kCalibratedShots = {
-        new CalibratedShot(0, 0, 0),
-        new CalibratedShot(0, 0, 0),
-        new CalibratedShot(0, 0, 0),
-        new CalibratedShot(0, 0, 0),
-        new CalibratedShot(0, 0, 0),
-        new CalibratedShot(0, 0, 0),
-        new CalibratedShot(0, 0, 0),
-        new CalibratedShot(0, 0, 0),
-        new CalibratedShot(0, 0, 0),
-        new CalibratedShot(0, 0, 0)
+        new CalibratedShot(1.726, 52, 24),
+        new CalibratedShot(2.03, 53.5, 25.5),
+        new CalibratedShot(2.47, 55, 27),
+        new CalibratedShot(3.03, 56, 33),
+        new CalibratedShot(3.43, 57, 34),
+        new CalibratedShot(4.01, 59.5, 37),
+        new CalibratedShot(4.5, 60, 40),
+        new CalibratedShot(5.02, 64, 43),
+        new CalibratedShot(6.1, 70, 43),
+        new CalibratedShot(7.2, 75, 43)
     };
 
     // //distance vs rps 2D array

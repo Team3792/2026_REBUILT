@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.HardwareMap;
+import frc.robot.Managers.FieldManager;
 import frc.robot.Subsystems.SwerveSubsystem.Swerve;
 import edu.wpi.first.util.datalog.DataLog;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
@@ -101,6 +102,8 @@ public double getTargetRPS(double distance){
   }
   return 0; //Out of range
 }
+
+
 
 public boolean isAtTargetRPS(double targetRPS){
   if (Math.abs(getRPS() - targetRPS) < 4){

@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Commands.ShootCommand;
 import frc.robot.Localization.Vision;
 import frc.robot.Managers.FieldManager;
 import frc.robot.Managers.ZoneManager;
@@ -88,10 +89,15 @@ public class RobotContainer {
 
     //Changeable Shot                  
     SmartDashboard.putNumber("Set RPS", 45);
-    SmartDashboard.putNumber("Set Hood Angle", 20);            
-    aneesh.x().whileTrue(Commands.startEnd(() -> shooter.setRPS(SmartDashboard.getNumber("Set RPS", 0)), 
-                                () -> shooter.setVoltage(0)).alongWith(Commands.startEnd(() -> hood.setAngle(SmartDashboard.getNumber("Set Hood Angle", 12)), 
-                                  () -> hood.setAngle(12))));
+    SmartDashboard.putNumber("Set Hood Angle", 20);  
+    aneesh.x().whileTrue(new ShootCommand(hood, shooter, swerve::getShooterPose));          
+    // aneesh.x().whileTrue(Commands.startEnd(() -> shooter.setRPS(SmartDashboard.getNumber("Set RPS", 0)), 
+    //                             () -> shooter.setVoltage(0)).alongWith(Commands.startEnd(() -> hood.setAngle(SmartDashboard.getNumber("Set Hood Angle", 12)), 
+    //                               () -> hood.setAngle(12))));
+
+    // aneesh.x().whileTrue(Commands.startEnd(() -> shooter.setRPS(SmartDashboard.getNumber("Set RPS", 0)), 
+    //                             () -> shooter.setVoltage(0)).alongWith(Commands.startEnd(() -> hood.setAngle(SmartDashboard.getNumber("Set Hood Angle", 12)), 
+    //                               () -> hood.setAngle(12))));
     aneesh.y().onTrue(intake.zeroIntake());                           
   }
 
