@@ -31,6 +31,7 @@ public class Vision extends SubsystemBase {
   }
 
   public List<PhotonPipelineResult> getFrontCamPipelineResults(){
+    System.out.println("Getting front pipeline resutls");
     List<PhotonPipelineResult> pipelineResults = frontCam.getAllUnreadResults();
     return pipelineResults;
   }
@@ -42,7 +43,7 @@ public class Vision extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putBoolean("back cam", hasTarget(backCam));
-    SmartDashboard.putBoolean("front cam", hasTarget(frontCam));
+    // SmartDashboard.putBoolean("back cam", hasTarget(backCam));
+    // SmartDashboard.putBoolean("front cam", hasTarget(frontCam));
   }
 }

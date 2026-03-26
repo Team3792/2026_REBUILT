@@ -27,7 +27,9 @@ public class ShotCalculator {
         new Shot(7.2, 75, 43),
     };
 
-    public static final Shot kBumperShot = new Shot(0,50, 20); //Need to determine
+    public static final Shot kBumperShot = new Shot(0, 45, 20); //Need to determine
+    public static final Shot kFeedShot = new Shot(0, 45, 20);
+    public static final Shot kZeroShot = new Shot(0, 0, 0);
 
     public static Shot getStaticShot(double distance){
         //Linear search until calibrated shots is farther

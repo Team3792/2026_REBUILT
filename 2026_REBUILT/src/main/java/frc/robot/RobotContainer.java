@@ -27,6 +27,7 @@ import frc.robot.Subsystems.FeederSubsystem.Feeder;
 import frc.robot.Subsystems.FeederSubsystem.FeederConstants;
 import frc.robot.Subsystems.IntakeSubsystem.Intake;
 import frc.robot.Subsystems.IntakeSubsystem.IntakeConstants;
+import frc.robot.Subsystems.ShooterSubsystem.ShotCalculator;
 import frc.robot.Subsystems.ShooterSubsystem.Hood.*;
 import frc.robot.Subsystems.ShooterSubsystem.Shooter.*;
 import frc.robot.Subsystems.SwerveSubsystem.DriveCommand;
@@ -114,6 +115,10 @@ public class RobotContainer {
     aneesh.a().whileTrue(Commands.startEnd(() -> shooter.setRPS(50), 
                                 () -> shooter.setVoltage(0)).alongWith(Commands.startEnd(() -> hood.setAngle(15), 
                                   () -> hood.setAngle(12))));
+
+    // aneesh.b().whileTrue(Commands.startEnd(
+    //   () -> shooter.setRPS(ShotCalculator.kBumperShot.omegaRPS())
+    // ));
 
     //Changeable Shot                  
     SmartDashboard.putNumber("Set RPS", 45);
