@@ -143,7 +143,7 @@ public class RobotContainer {
 
     // Swerve
     swerve.setDefaultCommand(new DriveCommand(swerve, () -> -ellis.getLeftY(), () -> -ellis.getLeftX(), () -> -ellis.getRightX(), () -> ellis.getRightTriggerAxis() > 0.1));      
-    ellis.leftStick().onTrue(Commands.runOnce(() -> swerve.resetPose(new Pose2d())));
+    ellis.povUp().onTrue(Commands.runOnce(swerve::resetHeading));
     ellis.leftTrigger().whileTrue(swerve.crossCommand());
    
 

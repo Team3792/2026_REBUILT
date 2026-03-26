@@ -20,6 +20,7 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -28,6 +29,7 @@ import frc.robot.HardwareMap;
 import frc.robot.Localization.AntPoseEstimator;
 import frc.robot.Localization.VisionConstants;
 import frc.robot.Managers.FieldManager;
+import frc.robot.Managers.GameManager;
 
 public class Swerve extends SubsystemBase {
       
@@ -52,13 +54,7 @@ public class Swerve extends SubsystemBase {
     SmartDashboard.putData("Shooter pose", field);
   }
 
-  public void resetHeading(double yawDegrees){
-    pigeon.setYaw(yawDegrees);
-  }
 
-  public void resetHeading(){
-    resetHeading(0);
-  }
 
   public void resetTurnEncoders(){
     for (SwerveModule mod : modules){
@@ -177,6 +173,16 @@ public class Swerve extends SubsystemBase {
 
   public void resetPose(Pose2d pose){
     antPose.resetPose(pose);
+  }
+
+  //Resets pose heading to be straight forward from driver perspective 
+  public void resetHeading(){
+    //Flip if red
+    Rotation2d heading = (GameManager.getAllianceColor() == Alliance.Red) ? Rotation2d.k180deg : Rotation2d.kZero;
+    resetPose(new Pose2d(
+      getPose().getTranslation(),
+      heading
+    ));
   }
 
   public Pose2d getPose(){
