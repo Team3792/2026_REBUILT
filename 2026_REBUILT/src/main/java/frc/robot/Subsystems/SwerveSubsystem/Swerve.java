@@ -38,7 +38,7 @@ public class Swerve extends SubsystemBase {
   Field2d field = new Field2d();
   SwerveModule[] modules = {frontLeft, frontRight, backLeft, backRight};
 
-  Pigeon2 pigeon = new Pigeon2(HardwareMap.kPigeon);
+  Pigeon2 pigeon = new Pigeon2(HardwareMap.kPigeon.id());
   ChassisSpeeds lastRobotRelativeSpeeds;
   double currentTimestamp = 0.0;
   AntPoseEstimator antPose;

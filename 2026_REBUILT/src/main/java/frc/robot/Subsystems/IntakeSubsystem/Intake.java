@@ -20,8 +20,8 @@ import frc.robot.HardwareMap;
 
 
 public class Intake extends SubsystemBase {
-    TalonFX drive = new TalonFX(HardwareMap.intakeDriveID);
-    TalonFX pivot = new TalonFX(HardwareMap.intakePivotID);
+    TalonFX drive = new TalonFX(HardwareMap.intakeDriveID.id());
+    TalonFX pivot = new TalonFX(HardwareMap.intakePivotID.id());
     ProfiledPIDController pid = new ProfiledPIDController(IntakeConstants.kP, IntakeConstants.kI, IntakeConstants.kD, 
     new TrapezoidProfile.Constraints(360, 720));
     MotionMagicVoltage motionMagic = new MotionMagicVoltage(0);

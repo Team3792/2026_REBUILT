@@ -39,8 +39,8 @@ public class Shooter extends SubsystemBase {
   public static double ballsShot = 0;
   double rpsIncriment;
 
-  TalonFX rightMotor = new TalonFX(HardwareMap.shootLeaderID);
-  TalonFX leftMotor = new TalonFX(HardwareMap.shootFollowerID);
+  TalonFX rightMotor = new TalonFX(HardwareMap.shootLeaderID.id());
+  TalonFX leftMotor = new TalonFX(HardwareMap.shootFollowerID.id());
 
   MotionMagicVelocityVoltage mmVelocity = new MotionMagicVelocityVoltage(0);
 
