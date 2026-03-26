@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Localization.Vision;
 import frc.robot.Managers.GameManager;
 import frc.robot.Subsystems.LEDSubsystem.LED;
+import frc.robot.util.CANManager;
 
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
@@ -26,6 +27,8 @@ public class Robot extends TimedRobot {
 
   public Robot() {
     m_robotContainer = new RobotContainer();
+
+    addPeriodic(CANManager::updateConnections, 1); //Update CANManager every second
   }
 
   @Override

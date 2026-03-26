@@ -52,6 +52,5 @@ public class CANManager {
         GameManager.error = !allConnected;
     }
 
-    public record CANConnection(CANAddress address, BooleanSupplier connectedFunction) {
-    }
+    public record CANConnection(CANAddress address, BooleanSupplier connectedFunction) {}
 }
