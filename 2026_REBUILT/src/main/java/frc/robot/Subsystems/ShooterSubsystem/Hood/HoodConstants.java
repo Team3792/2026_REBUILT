@@ -20,12 +20,13 @@ public class HoodConstants {
     public static final double kFrictionFF = 0;
     public static final double kMotorRatio = 25;
     public static final double kHoodRatio = 300.0/26;
-    public static final double kZeroPosition = 12;// degrees
 
     // All in degrees
-    public static final double kMinAngle = 15;
+    public static final double kMinAngle = 12;
     public static final double kMaxAngle = 50;
     public static final double kZeroAngle = 12;
+
+    public static final double kAngleTolerance = 0.25;
 
     //Hood Angle Constants for Zones
     public static final double kZone1Angle = 0;
@@ -41,7 +42,7 @@ public class HoodConstants {
         //config.softLimit.reverseSoftLimit(0);
         config.closedLoop.pid(kP, kI, kD);
 
-        config.closedLoop.feedbackSensor(FeedbackSensor.kNoSensor);
+        config.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder);
         config.closedLoop.maxOutput(0.8);
         config.closedLoop.minOutput(-0.8);
    
@@ -51,15 +52,5 @@ public class HoodConstants {
 
     
 
-    public static final double kEncoderAngleOffset = 0; //need to make accurate
-    public static final double hoodAngleBestFit = 0;//need to set to best fit curve of hood angle vs distance
-    private static final double timePerAngle = 0.1;
-
     public static final double kHubHoodAngle = 20;
-
-        //time to stow hood in seconds
-        public static double timeToStow(double robotVelocity){
-            return robotVelocity * timePerAngle; //need to make accurate
-        }
-
 }

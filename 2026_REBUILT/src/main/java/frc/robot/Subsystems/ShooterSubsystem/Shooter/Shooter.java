@@ -4,7 +4,6 @@
 
 package frc.robot.Subsystems.ShooterSubsystem.Shooter;
 
-import com.ctre.phoenix6.controls.ControlRequest;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 import com.ctre.phoenix6.controls.TorqueCurrentFOC;
@@ -13,11 +12,6 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -25,11 +19,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.HardwareMap;
-import frc.robot.Managers.FieldManager;
-import frc.robot.Subsystems.SwerveSubsystem.Swerve;
-import edu.wpi.first.util.datalog.DataLog;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
-import edu.wpi.first.wpilibj.DataLogManager;
 
 public class Shooter extends SubsystemBase {
   
@@ -43,6 +33,7 @@ public class Shooter extends SubsystemBase {
   TalonFX leftMotor = new TalonFX(HardwareMap.shootFollowerID.id());
 
   MotionMagicVelocityVoltage mmVelocity = new MotionMagicVelocityVoltage(0);
+  double targetRPS = 0;
 
   AnalogInput lightSensor = new AnalogInput(0);
 
@@ -56,8 +47,6 @@ public class Shooter extends SubsystemBase {
   public Shooter() {
     rightMotor.getConfigurator().apply(ShooterConstants.applyRightMotorConfig());
     leftMotor.getConfigurator().apply(ShooterConstants.applyLeftMotorConfig());
-
-    
 
     //left motor follows right motor
     leftMotor.setControl(new Follower(rightMotor.getDeviceID(), MotorAlignmentValue.Opposed));
@@ -82,8 +71,7 @@ public Command applyVoltage(double voltage){
 }
 
 public double getRPS(){
-  int rps = (int) rightMotor.getVelocity().getValueAsDouble();
-  return rps;
+  return rightMotor.getVelocity().getValueAsDouble();
 }
 
 public double getTangentialVelocity(){
@@ -91,28 +79,9 @@ public double getTangentialVelocity(){
   return radiansPerMinute * ShooterConstants.kFlywheelRadius;// tangential velocity (meters / second)
 }
 
-public double getTargetRPS(double distance){
-  //Linear search (assume already sorted calibrated shots) --> could switch to binary search
-  for (int i = 0; i < ShooterConstants.kCalibratedShots.length - 1; i++){
-    double calibratedDistance = ShooterConstants.kCalibratedShots[i].distanceMeters();
-    if (distance > calibratedDistance){
-      //Linear interpolation between two 
-      double t = (distance - calibratedDistance) / (ShooterConstants.kCalibratedShots[i].distanceMeters() - calibratedDistance);
-      return ShooterConstants.kCalibratedShots[i].omegaRPS() * (1 - t)
-                 + ShooterConstants.kCalibratedShots[i].omegaRPS() *(t); 
-    }
-  }
-  return 0; //Out of range
-}
-
-
-
-public boolean isAtTargetRPS(double targetRPS){
-  if (Math.abs(getRPS() - targetRPS) < 4){
-    return true;
-  } else {
-    return false;
-  }
+public boolean readyToShoot(){
+  //use defualt tolerances
+  return Math.abs(getRPS() - targetRPS) < ShooterConstants.kRPSTolerance;
 }
 
 public double getRPSIncriment(){
@@ -137,12 +106,13 @@ public Command decreaseRPS(){
 
 //need to add in piece wise best fit polynomial for RPM target RPM estimation
 public void setRPS(double targetVelocity){
-  // double pidOutput = pidController.calculate(targetVelocity,getRPM()) + ShooterConstants.kFrictionFF;
-  // VoltageOut motorVoltage = new VoltageOut(pidOutput).withEnableFOC(true);
-  // rightMotor.setControl(motorVoltage);
-
-  // mm.withVelocity in rps
+  targetRPS = targetVelocity;
   rightMotor.setControl(mmVelocity.withVelocity(targetVelocity)); 
+}
+
+public void spinDown(){
+  targetRPS = 0;
+  setVoltage(0);
 }
 
 public Command setFlywheelRPS(double targetRPM){
@@ -159,45 +129,18 @@ public Command setFlywheelTorque(double torque){
   return Commands.runOnce(() -> setTorque(torque));
 }
 
-// public double targetFlywheelVelocity(Swerve swerve, Pose2d hubPose){
-
-//   Pose2d currentPos = swerve.getPose();
-//   Translation2d robotToHubPose = hubPose.getTranslation().minus(currentPos.getTranslation());
-
-//     //double robotToHubDistance = Math.hypot((robotToHubPose.getX(),robotToHubPose.getY());
-//     //velocity of robot relative to field; in x direction
-//   double fieldRelativeVelocityX = swerve.getFieldRelativeSpeeds()[0];
-//   double robotToHubDistance = robotToHubPose.getDistance(currentPos.getTranslation());
-
-//   double targetRPM = 0;
-
-//   for(int i = 1; i < ShooterConstants.distanceVSRPM[0].length; i++){
-//       if(robotToHubDistance > ShooterConstants.distanceVSRPM[0][i]){
-//         //return target flywheel RPM
-//         targetRPM = ShooterConstants.distanceVSRPM[1][i-1];
-//         break;
-//       }
-    
-//     }
-
-//     return targetRPM;
-
-// }
-
 public double lightSensorReading(){
   return lightSensor.getVoltage();
 }
 
-public double flywheelStatorCurrent(){
+public double getFlywheelStatorCurrent(){
   return rightMotor.getStatorCurrent().getValueAsDouble();
 }
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
+@Override
+public void periodic() {
     SmartDashboard.putNumber("Shooter RPS", getRPS());
-    SmartDashboard.putNumber("Shooter Tangential Velocity", getTangentialVelocity());
-
-    //rpmLog.append(getRPM());
+    SmartDashboard.putNumber("Target RPS", targetRPS);
+    SmartDashboard.putBoolean("Shooter ready to shoot", readyToShoot());
   }
 }
