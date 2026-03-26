@@ -51,9 +51,13 @@ public class ShootCommand extends Command {
   public void execute() {
     double robotToHubDistance = FieldManager.getRobotToHubDis(shooterPose.get());
     Shot targetShot = ShotCalculator.getStaticShot(robotToHubDistance);
+    //TODO: implmenet increments in respective classes
     hood.setAngle(targetShot.hoodAngleDegrees());
     shooter.setRPS(targetShot.omegaRPS());
-  }
+  
+    // hood.setAngle(targetHoodAngle + hood.getHoodIncrimet());
+    // shooter.setRPS(targetRPS + shooter.getRPSIncriment());
+}
 
   // Called once the command ends or is interrupted.
   @Override

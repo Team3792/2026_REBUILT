@@ -12,6 +12,8 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 
 /** Add your docs here. */
 public class GameManager {
+
+    public static boolean wonAuto;
     public static Optional<Alliance> alliance = DriverStation.getAlliance();
     public GameManager(){
     }
@@ -20,35 +22,97 @@ public class GameManager {
         return DriverStation.getMatchTime();
     }
 
+    public boolean setAutoWinner(){
+        
+        String gameData = DriverStation.getGameSpecificMessage(); 
+        if (getAllianceColor() == Alliance.Red) {
+            if (gameData.charAt(0) == 'R'){
+                wonAuto = true;
+            } else {
+                wonAuto = false;
+            }
+        } else {
+            if (gameData.charAt(0) == 'B'){
+                wonAuto = true;
+            } else {
+                wonAuto = false;
+            }
+        }
+
+        return wonAuto;
+    }
+
+
     public static boolean atTransitionShift(){
         double t = getTime();
         return t > 130;
     }
 
-    public static boolean atShiftOne(){
+    public static boolean transitionShift(){
         double t = getTime();
+        return t > 130;
+    }
+
+    public static boolean atShiftOne(){
+        double t = getTime() - 3 ;
         return (t <= 130 && t > 105);
     }
 
+    public static boolean shiftOne(){
+        double t = getTime();
+        return (t <= 130 && t > 105);
+    }
+    
+
     public static boolean atShiftTwo(){
+        double t = getTime() -5;
+        return (t <= 105 && t > 80);
+    }
+
+    public static boolean shiftTwo(){
         double t = getTime();
         return (t <= 105 && t > 80);
     }
 
      public static boolean atShiftThree(){
+        double t = getTime() -5;
+        return (t <= 80 && t > 55);
+     }
+
+     public static boolean shiftThree(){
         double t = getTime();
         return (t <= 80 && t > 55);
      }
 
      public static boolean atShiftFour(){
+        double t = getTime() -5;
+        return (t <= 55 && t > 30);
+     }
+
+     public static boolean shiftFour(){
         double t = getTime();
         return (t <= 55 && t > 30);
      }
      
      public static boolean atEndGame(){
+        double t = getTime() -5;
+        return (t <= 30 && t >= 0);
+     }
+
+     public static boolean endGame(){
         double t = getTime();
         return (t <= 30 && t >= 0);
      }
+
+     public static boolean activeShifts(){
+        if(wonAuto){
+            return transitionShift() || shiftTwo() || shiftFour() || endGame();
+        }
+        else {
+            return transitionShift() || shiftOne() || shiftThree() || endGame();
+        }
+     }
+
 
     public static Alliance getAllianceColor(){
         if(alliance.isPresent())

@@ -92,7 +92,9 @@ public class Intake extends SubsystemBase {
         else
             driveVoltage = IntakeConstants.kDrivePivotVoltage;
 
-        return this.run(() -> {setPosition(position); setDriveVoltage(driveVoltage);})
+        
+
+        return this.run(() -> {setPosition(position); setDriveVoltage(driveVoltage); System.out.println("running");})
         .onlyWhile(() -> Math.abs(position - getPivotPosition()) > IntakeConstants.kPivotTheshold);
     }
 
@@ -120,5 +122,6 @@ public class Intake extends SubsystemBase {
     public void periodic() {
         SmartDashboard.putNumber("Intake Position", getPosition());
         SmartDashboard.putNumber("Intake Angle", getAngle());
+        SmartDashboard.putBoolean("Intake Deployed", intakeDeployed());
     }
 }
