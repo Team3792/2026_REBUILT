@@ -84,10 +84,16 @@ public class RobotContainer {
       new StartEndCommand(
         () -> {feeder.setKickerVoltage(12); feeder.setConveyorVoltage(8);}, 
         () -> {feeder.setKickerVoltage(0); feeder.setConveyorVoltage(0);}
-      ));
+      )
+    );
     
     
-    aneesh.leftBumper().whileTrue(new StartEndCommand(() -> {feeder.setKickerVoltage(-12); feeder.setConveyorVoltage(-8);}, () -> {feeder.setKickerVoltage(0); feeder.setConveyorVoltage(0);}));
+    aneesh.leftBumper().whileTrue(
+      new StartEndCommand(
+        () -> {feeder.setKickerVoltage(-12); feeder.setConveyorVoltage(-8);}, 
+        () -> {feeder.setKickerVoltage(0); feeder.setConveyorVoltage(0);}
+      )
+    );
 
     //Shooter and Hood
     //Hub Shot
@@ -100,13 +106,6 @@ public class RobotContainer {
     SmartDashboard.putNumber("Set Hood Angle", 20);  
 
     aneesh.x().whileTrue(new ShootCommand(hood, shooter, swerve::getShooterPose));          
-    // aneesh.x().whileTrue(Commands.startEnd(() -> shooter.setRPS(SmartDashboard.getNumber("Set RPS", 0)), 
-    //                             () -> shooter.setVoltage(0)).alongWith(Commands.startEnd(() -> hood.setAngle(SmartDashboard.getNumber("Set Hood Angle", 12)), 
-    //                               () -> hood.setAngle(12))));
-
-    // aneesh.x().whileTrue(Commands.startEnd(() -> shooter.setRPS(SmartDashboard.getNumber("Set RPS", 0)), 
-    //                             () -> shooter.setVoltage(0)).alongWith(Commands.startEnd(() -> hood.setAngle(SmartDashboard.getNumber("Set Hood Angle", 12)), 
-    //                               () -> hood.setAngle(12))));
     aneesh.y().onTrue(intake.zeroIntake());                           
   }
 

@@ -30,7 +30,7 @@ public class FuelManager extends SubsystemBase {
     }
 
     public double flywheelStatorCurrent(){
-        return shooter.flywheelStatorCurrent();
+        return 0;//shooter.flywheelStatorCurrent();
     }
 
     public double getTangentialVelocity(){
