@@ -18,6 +18,10 @@ public class SwerveConstants {
 
     public static final double kTrackWidth = Units.inchesToMeters(22.5); //TODO: verify
     public static final double kWheelBase = Units.inchesToMeters(22.5); //TODO: verify
+    
+    //Not moving thresholds
+    public static final double kZeroTranslationThreshold = 0.05; //Very arbituary
+    public static final double kZeroOmegaThreshold = 0.05; //Very arbituary
 
 
     public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(

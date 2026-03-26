@@ -85,34 +85,9 @@ public class ShooterConstants {
     public static final double coastRPM = 0;
 
     public static final double kHubRPS = 45;
+    public static final double kRPSTolerance = 0.25;
 
-    public record CalibratedShot(double distanceMeters, double omegaRPS, double hoodAngleDegrees){};
-
-
-    //TODO: figure these out, must be sorted by distance (need not be sorted by other values)
-    public static final CalibratedShot[] kCalibratedShots = {
-        new CalibratedShot(1.726, 52, 24),
-        new CalibratedShot(2.03, 53.5, 25.5),
-        new CalibratedShot(2.47, 55, 27),
-        new CalibratedShot(3.03, 56, 33),
-        new CalibratedShot(3.43, 57, 34),
-        new CalibratedShot(4.01, 59.5, 37),
-        new CalibratedShot(4.5, 60, 40),
-        new CalibratedShot(5.02, 64, 43),
-        new CalibratedShot(6.1, 70, 43),
-        new CalibratedShot(7.2, 75, 43)
-    };
-
-    // //distance vs rps 2D array
-    //     //TODO: set good rps values for given distance range
-    // public static final double[][] distanceVSRPS = {{24,48,72,96,120,144,168,192,216,240,264},
-    //                                                 {0,0,0,0,0,0,0,0,0,0,0}};
-    //     //TODO: set good hood angle values for given distance range
-    // public static final double[][] distanceVsHoodAngle = {{24,48,72,96,120,144,168,192,216,240,264},
-    //                                                       {0,0,0,0,0,0,0,0,0,0,0}};
-    // //                                               r:1 2 3 4 5 6 7 8 9 10 11
-    // public static final double[][] hoodAngleRanges = {{0,0,0,0,0,0,0,0,0,0,0}, 
-    //                                                   {0,0,0,0,0,0,0,0,0,0,0}};
+    //For calibrated shots, see separate ShotCalculator class
 
     //TODO: instead of 2, use best fit curve to return correct amount of iterations needed
     public static double targetHubPoseIterations(double robotVelocity){
