@@ -32,14 +32,13 @@ public class Hood extends SubsystemBase {
   /** Creates a new Hood. */
   SparkMax hood = new SparkMax(HardwareMap.hoodID, MotorType.kBrushless);
   SparkClosedLoopController controller;
-  double setPoint = 0;
-  double angleIncriment;
+  double setPoint = 12;
+  double angleIncrement = 0;
   
   public Hood() {
     hood.configure(HoodConstants.configHood(), ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
     controller = hood.getClosedLoopController();
     zeroHood();
-    angleIncriment = 0;
     //setAngle(0);
   }
 
@@ -52,28 +51,15 @@ public class Hood extends SubsystemBase {
   }
 
   public void setAngle(double angle) {
-    setPoint = angle;
+    setPoint = angle + angleIncrement;
     controller.setSetpoint(angle / 360.0 * HoodConstants.kHoodRatio * HoodConstants.kMotorRatio, ControlType.kPosition);
   }
 
-  public double getHoodIncrimet(){
-    return angleIncriment;
-  }
-
-  public void incrimentHoodAngle(){
-    angleIncriment++;
-  }
-
-  public void decrimentHoodAngle(){
-    angleIncriment--;
-  }
-
-  public Command increaseHoodAngle(){
-    return Commands.runOnce(() -> incrimentHoodAngle());
-  }
-
-  public Command decreaseHoodAnlge(){
-    return Commands.runOnce(() -> decrimentHoodAngle());
+  public Command incrementHoodAngle(double increment){
+    return this.runOnce(() -> {
+      angleIncrement += increment;
+      setAngle(setPoint);
+    });
   }
 
   public void zeroHood(){
@@ -91,8 +77,9 @@ public class Hood extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("ShooterSubsystem/Hood New", hood.getEncoder().getPosition());
+    //SmartDashboard.putNumber("ShooterSubsystem/Hood New", hood.getEncoder().getPosition());
     SmartDashboard.putNumber("Hood Angle", getAngleDegrees());
+    SmartDashboard.putNumber("Hood setpoint", setPoint);
     SmartDashboard.putBoolean("Hood ready to shoot", readyToShoot());
   }
 }
