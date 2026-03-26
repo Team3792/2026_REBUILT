@@ -37,6 +37,7 @@ public class Shooter extends SubsystemBase {
   Timer time = new Timer();
   boolean ballShot;
   public static double ballsShot = 0;
+  double rpsIncriment;
 
   TalonFX rightMotor = new TalonFX(HardwareMap.shootLeaderID);
   TalonFX leftMotor = new TalonFX(HardwareMap.shootFollowerID);
@@ -62,6 +63,7 @@ public class Shooter extends SubsystemBase {
     leftMotor.setControl(new Follower(rightMotor.getDeviceID(), MotorAlignmentValue.Opposed));
 
     mmVelocity.Slot = 0;
+    rpsIncriment = 0;
   
          
   // DataLogManager.start();
@@ -111,6 +113,26 @@ public boolean isAtTargetRPS(double targetRPS){
   } else {
     return false;
   }
+}
+
+public double getRPSIncriment(){
+  return rpsIncriment;
+}
+
+public void incrimentRPS(){
+  rpsIncriment += 2;
+}
+
+public void decrimentRPS(){
+  rpsIncriment--;
+}
+
+public Command increaseRPS(){
+  return Commands.runOnce(() -> incrimentRPS());
+}
+
+public Command decreaseRPS(){
+  return Commands.runOnce(() -> decrimentRPS());
 }
 
 //need to add in piece wise best fit polynomial for RPM target RPM estimation

@@ -105,8 +105,8 @@ public class ShootCommand extends Command {
     //   }
     //}
 
-    hood.setAngle(targetHoodAngle);
-    shooter.setRPS(targetRPS);
+    hood.setAngle(targetHoodAngle + hood.getHoodIncrimet());
+    shooter.setRPS(targetRPS + shooter.getRPSIncriment());
     //shooter.setRPS(shooter.getTargetRPS(robotToHubDistance));
   }
 

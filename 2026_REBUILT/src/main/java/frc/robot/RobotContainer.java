@@ -5,7 +5,10 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -59,10 +62,21 @@ public class RobotContainer {
     configureEllisBindings();
 
     //Register Named Commands
-
+    NamedCommands.registerCommand("Deploy Intake", intake.intake(true).alongWith(feeder.runConveyor(FeederConstants.kConveyorVoltage)));
+    NamedCommands.registerCommand("Stow Intake", intake.pivotToAngle(IntakeConstants.kStowedPosition));
+    //intervals of 5 cms
+    for (int i = 1; i < 101; i++){
+      double distance = i * 5;
+      double rps = shooter.getTargetRPS(distance);
+      double angle = hood.targetHoodAngle(distance);
+      String name = distance + " cm shot";
+      NamedCommands.registerCommand(name, shooter.setFlywheelRPS(rps).alongWith(hood.setHoodAngle(angle).alongWith(feeder.runFeeder(12, 8))));
+    }
+    
     boolean isCompetition = false;
-    //autoChooser = AutoBuilder.buildAutoChooserWithOptionsModifier((stream) -> isCompetition 
-                  //? stream.filter(auto -> auto.getName().startsWith("comp")) : stream);
+    // autoChooser = AutoBuilder.buildAutoChooserWithOptionsModifier((stream) -> isCompetition 
+    //               ? stream.filter(auto -> auto.getName().startsWith("comp")) : stream);
+    
 
     //SmartDashboard.putData("Auto Chooser", autoChooser);
     }
@@ -101,11 +115,19 @@ public class RobotContainer {
     // aneesh.x().whileTrue(Commands.startEnd(() -> shooter.setRPS(SmartDashboard.getNumber("Set RPS", 0)), 
     //                             () -> shooter.setVoltage(0)).alongWith(Commands.startEnd(() -> hood.setAngle(SmartDashboard.getNumber("Set Hood Angle", 12)), 
     //                               () -> hood.setAngle(12))));
-    aneesh.y().onTrue(intake.zeroIntake());                           
+
+    //Change Hood Angle
+    aneesh.povUp().onTrue(hood.increaseHoodAngle());
+    aneesh.povDown().onTrue(hood.decreaseHoodAnlge());
+    
+    //Change Shooter RPS
+    aneesh.povRight().onTrue(shooter.increaseRPS()); //Increases by 2 RPS
+    aneesh.povLeft().onTrue(shooter.decreaseRPS()); //Decreases by 1 RPS
+
+    aneesh.y().onTrue(intake.zeroIntake());                          
   }
 
   private void configureEllisBindings(){
-
     transitionShift.onTrue(rumble(0.8, 4, ellis));
     shiftOne.onTrue(rumble(0.8, 4, ellis));
     shiftTwo.onTrue(rumble(0.8, 4, ellis));
@@ -115,7 +137,7 @@ public class RobotContainer {
 
     // Swerve
     swerve.setDefaultCommand(new DriveCommand(swerve, () -> -ellis.getLeftY(), () -> -ellis.getLeftX(), () -> -ellis.getRightX(), () -> ellis.getRightTriggerAxis() > 0.1));      
-    ellis.leftStick().onTrue(Commands.runOnce(() -> swerve.resetHeading(0), swerve));
+    ellis.leftStick().onTrue(Commands.runOnce(() -> swerve.resetPose(new Pose2d())));
     ellis.leftTrigger().whileTrue(swerve.crossCommand());
    // robotNotMoving.whileTrue(Commands.startEnd(() -> rumble(.75), () -> rumble(0)));
     //readyToShoot.whileTrue(rumble(0.7, 4, ellis));
@@ -138,8 +160,10 @@ public class RobotContainer {
     
     //ellis.rightTrigger().whileTrue(Commands.startEnd(() -> intake.setPosition(IntakeConstants.kIntakePosition), 
                         //() -> intake.setPosition(IntakeConstants.kStowedPosition)));
-  }
 
+    //make a boolean that shows if the intake is down
+  }
+ 
 
   // intensity on a scale of 0-1 and duration in seconds
   private Command rumble(double intensity, double duration, CommandXboxController controller){

@@ -4,6 +4,8 @@
 
 package frc.robot.Subsystems.ShooterSubsystem.Hood;
 
+import java.util.function.Supplier;
+
 import com.revrobotics.PersistMode;
 import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkClosedLoopController;
@@ -14,6 +16,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -21,18 +24,23 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.HardwareMap;
+import frc.robot.Managers.FieldManager;
+import frc.robot.Subsystems.ShooterSubsystem.Shooter.Shooter;
+import frc.robot.Subsystems.ShooterSubsystem.Shooter.ShooterConstants;
 
 public class Hood extends SubsystemBase {
   /** Creates a new Hood. */
   SparkMax hood = new SparkMax(HardwareMap.hoodID, MotorType.kBrushless);
   //DutyCycleEncoder encoder = new DutyCycleEncoder(HardwareMap.hoodEncoderPort);
   SparkClosedLoopController controller;
+  double angleIncriment;
   
   public Hood() {
     hood.configure(HoodConstants.configHood(), ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
     controller = hood.getClosedLoopController();
     hood.getEncoder().setPosition(0);
     zeroHood();
+    angleIncriment = 0;
     //setAngle(0);
   }
 
@@ -71,6 +79,26 @@ public class Hood extends SubsystemBase {
     controller.setSetpoint(angle / 360.0 * HoodConstants.kHoodRatio * HoodConstants.kMotorRatio, ControlType.kPosition);
   }
 
+  public double getHoodIncrimet(){
+    return angleIncriment;
+  }
+
+  public void incrimentHoodAngle(){
+    angleIncriment++;
+  }
+
+  public void decrimentHoodAngle(){
+    angleIncriment--;
+  }
+
+  public Command increaseHoodAngle(){
+    return Commands.runOnce(() -> incrimentHoodAngle());
+  }
+
+  public Command decreaseHoodAnlge(){
+    return Commands.runOnce(() -> decrimentHoodAngle());
+  }
+
   public void zeroHood(){
     hood.getEncoder().setPosition(HoodConstants.kZeroAngle / 360.0 * HoodConstants.kHoodRatio * HoodConstants.kMotorRatio);
   }
@@ -86,6 +114,30 @@ public class Hood extends SubsystemBase {
       return false;
     }
   }
+public double targetHoodAngle(double distance){
+  double targeAngle = 12;
+  double robotToHubDistance = distance;
+  for (int i = 0; i < ShooterConstants.kCalibratedShots.length - 1; i++){
+    
+    double calibratedDistance = ShooterConstants.kCalibratedShots[i].distanceMeters();
+    if (robotToHubDistance < calibratedDistance){
+      //Linear interpolation between two 
+      if(i == 0){
+        targeAngle = ShooterConstants.kCalibratedShots[0].hoodAngleDegrees();
+        
+      }else{
+      
+      double t = (calibratedDistance - robotToHubDistance) / (calibratedDistance - ShooterConstants.kCalibratedShots[i-1].distanceMeters());
+      targeAngle = ShooterConstants.kCalibratedShots[i].hoodAngleDegrees() * (1 - t)
+                  + ShooterConstants.kCalibratedShots[i-1].hoodAngleDegrees() * t;
+      
+      }
+    }else{
+      targeAngle = 12;
+    }
+  }
+  return targeAngle;
+}
 
   @Override
   public void periodic() {

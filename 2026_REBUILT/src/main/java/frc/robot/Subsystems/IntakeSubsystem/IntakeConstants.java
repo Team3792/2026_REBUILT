@@ -65,7 +65,7 @@ public class IntakeConstants {
 
         //Motion Magic Configs
         MotionMagicConfigs mm = config.MotionMagic;
-        mm.MotionMagicCruiseVelocity = 80;
+        mm.MotionMagicCruiseVelocity = 30;//80;
         mm.MotionMagicAcceleration = 160;
 
         return config;
