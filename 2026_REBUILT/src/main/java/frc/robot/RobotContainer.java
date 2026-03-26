@@ -37,10 +37,6 @@ public class RobotContainer {
   Swerve swerve = new Swerve();
   Shooter shooter = new Shooter();
   Hood hood = new Hood();
-  Vision vision = new Vision();
-
-  ZoneManager zoneManager = new ZoneManager();
-  FieldManager fieldManager = new FieldManager();
 
   CommandXboxController ellis = new CommandXboxController(0);
   CommandXboxController aneesh = new CommandXboxController(1);
@@ -51,6 +47,8 @@ public class RobotContainer {
   Trigger shiftThree = new Trigger(() -> GameManager.atShiftThree());
   Trigger shiftFour = new Trigger(() -> GameManager.atShiftFour());
   Trigger endGame = new Trigger(() -> GameManager.atEndGame());
+
+  Trigger shotReady = new Trigger(() -> swerve.readyToShoot() && hood.readyToShoot() && shooter.readyToShoot());
 
   private SendableChooser<Command> autoChooser;
 
@@ -81,7 +79,14 @@ public class RobotContainer {
 
 
     //Feeder
-    aneesh.rightBumper().whileTrue(new StartEndCommand(() -> {feeder.setKickerVoltage(12); feeder.setConveyorVoltage(8);}, () -> {feeder.setKickerVoltage(0); feeder.setConveyorVoltage(0);}));
+    aneesh.rightBumper().and(shotReady.or(aneesh.rightTrigger()))
+    .whileTrue(
+      new StartEndCommand(
+        () -> {feeder.setKickerVoltage(12); feeder.setConveyorVoltage(8);}, 
+        () -> {feeder.setKickerVoltage(0); feeder.setConveyorVoltage(0);}
+      ));
+    
+    
     aneesh.leftBumper().whileTrue(new StartEndCommand(() -> {feeder.setKickerVoltage(-12); feeder.setConveyorVoltage(-8);}, () -> {feeder.setKickerVoltage(0); feeder.setConveyorVoltage(0);}));
 
     //Shooter and Hood
@@ -93,6 +98,7 @@ public class RobotContainer {
     //Changeable Shot                  
     SmartDashboard.putNumber("Set RPS", 45);
     SmartDashboard.putNumber("Set Hood Angle", 20);  
+
     aneesh.x().whileTrue(new ShootCommand(hood, shooter, swerve::getShooterPose));          
     // aneesh.x().whileTrue(Commands.startEnd(() -> shooter.setRPS(SmartDashboard.getNumber("Set RPS", 0)), 
     //                             () -> shooter.setVoltage(0)).alongWith(Commands.startEnd(() -> hood.setAngle(SmartDashboard.getNumber("Set Hood Angle", 12)), 
@@ -117,17 +123,13 @@ public class RobotContainer {
     swerve.setDefaultCommand(new DriveCommand(swerve, () -> -ellis.getLeftY(), () -> -ellis.getLeftX(), () -> -ellis.getRightX(), () -> ellis.getRightTriggerAxis() > 0.1));      
     ellis.leftStick().onTrue(Commands.runOnce(() -> swerve.resetHeading(0), swerve));
     ellis.leftTrigger().whileTrue(swerve.crossCommand());
-   // robotNotMoving.whileTrue(Commands.startEnd(() -> rumble(.75), () -> rumble(0)));
-    //readyToShoot.whileTrue(rumble(0.7, 4, ellis));
+   
 
-    // ellis.rightStick().onTrue(new AimWhileMovingCommand(swerve, FieldManager.getHubPose(), () -> -ellis.getLeftY(), () -> -ellis.getLeftX()));
-    // ellis.rightStick().onFalse(new DriveCommand(swerve, () -> -ellis.getLeftY(), () -> -ellis.getLeftX(), () -> -ellis.getRightX()));
-
-
-    // Intake 
+    // Intake backup
     ellis.povUp().whileTrue(intake.movePivot(1));  
     ellis.povDown().whileTrue(intake.movePivot(-1));
-      //intake
+
+    //Intake regular
     ellis.rightBumper().whileTrue(intake.intake(true).alongWith(feeder.runConveyor(FeederConstants.kConveyorVoltage)));
     ellis.leftBumper().whileTrue(intake.intake(false).alongWith(feeder.runConveyor(-FeederConstants.kConveyorVoltage)));
 

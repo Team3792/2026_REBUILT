@@ -12,10 +12,6 @@ import com.revrobotics.spark.SparkBase.ControlType;
 // import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -25,49 +21,25 @@ import frc.robot.HardwareMap;
 public class Hood extends SubsystemBase {
   /** Creates a new Hood. */
   SparkMax hood = new SparkMax(HardwareMap.hoodID, MotorType.kBrushless);
-  //DutyCycleEncoder encoder = new DutyCycleEncoder(HardwareMap.hoodEncoderPort);
   SparkClosedLoopController controller;
+  double setPoint = 0;
   
   public Hood() {
     hood.configure(HoodConstants.configHood(), ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
     controller = hood.getClosedLoopController();
-    hood.getEncoder().setPosition(0);
     zeroHood();
-    //setAngle(0);
   }
-
-  public void setVoltage(double voltage){
-    //hood.setVoltage(voltage);
-  }
-
-  public Command applyVoltage(double voltage){
-    return Commands.runOnce(() -> setVoltage(voltage));
-  }
-
-  public void test(double setPoint){
-    controller.setSetpoint(setPoint, ControlType.kPosition);
-  }
-
-  public double getPosition(){
-    double position = hood.getEncoder().getPosition() / HoodConstants.kHoodRatio / HoodConstants.kMotorRatio;
-    return position;
-  }
-
-  //returns rotations
-  // public double getEncoderRotation() {
-  //   return encoder.get();
-  // }
 
   // //returns hood positions in degrees 
   // //where an angle of 0 is a ball exit angle along the horizontal axis
   // //an angle of 90 is ball exit angle along the vertical axis
-  public double hoodAngle(){
+  public double getAngleDegrees(){
     //return MathUtil.inputModulus((getPosition() - HoodConstants.kHoodOffset) * 360, 0, 360);
-    return (getPosition()) * 360.0;
+    return hood.getEncoder().getPosition() / HoodConstants.kHoodRatio / HoodConstants.kMotorRatio * 360.0;
   }
 
   public void setAngle(double angle) {
-    System.out.println(angle);
+    setPoint = angle;
     controller.setSetpoint(angle / 360.0 * HoodConstants.kHoodRatio * HoodConstants.kMotorRatio, ControlType.kPosition);
   }
 
@@ -79,19 +51,15 @@ public class Hood extends SubsystemBase {
     return Commands.startEnd(() -> setAngle(angle), () -> setAngle(12));
   }
 
-  public boolean isAtTargetAngle(double angle){
-    if (Math.abs(hoodAngle() - angle) < 0.25){
-      return true;
-    } else {
-      return false;
-    }
+  public boolean readyToShoot(){
+    return Math.abs(getAngleDegrees() - setPoint) < HoodConstants.kAngleTolerance;
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("ShooterSubsystem/Hood New", hood.getEncoder().getPosition());
-    SmartDashboard.putNumber("Hood Position", getPosition());
-    SmartDashboard.putNumber("Hood Angle", hoodAngle());
+    SmartDashboard.putNumber("Hood Angle", getAngleDegrees());
+    SmartDashboard.putBoolean("Hood ready to shoot", readyToShoot());
   }
 }
