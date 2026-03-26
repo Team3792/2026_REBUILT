@@ -13,6 +13,8 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 /** Add your docs here. */
 public class GameManager {
 
+    public static boolean error = false;
+
     public static boolean wonAuto;
     public static Optional<Alliance> alliance = DriverStation.getAlliance();
     public GameManager(){
@@ -119,5 +121,12 @@ public class GameManager {
             return alliance.get();
         return Alliance.Blue; //Default is blue
     }  
+
+    public static boolean flipFiledToRed(){
+        if(getAllianceColor().equals(Alliance.Red))
+            return true;
+        else
+            return false;
+    }
 }
 

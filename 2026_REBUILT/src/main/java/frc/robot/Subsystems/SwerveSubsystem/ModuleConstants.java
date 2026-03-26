@@ -9,6 +9,8 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 
 import edu.wpi.first.math.util.Units;
+import frc.robot.HardwareMap.CANAddress;
+
 
 public class ModuleConstants {
 
@@ -22,12 +24,29 @@ public class ModuleConstants {
     public static final double kMetersPerMotorRotation = kMetersPerWheelRotation / kDriveRatio;
     
     //Module Configurations
-    public static record ModuleConfig (int driveAddress, int turnAddress, int encoderAddress, double encoderOffset){}
+        //commented out; replaced by CANManager
+        public static record ModuleConfig (CANAddress driveAddress, CANAddress turnAddress, CANAddress encoderAddress, double encoderOffset){}
+    //public static record ModuleConfig (int driveAddress, int turnAddress, int encoderAddress, double encoderOffset){}
 
-    public static final ModuleConfig kFrontLeft = new ModuleConfig(0, 1, 2, -0.618);
-    public static final ModuleConfig kFrontRight = new ModuleConfig(3, 4, 5, -0.40);
-    public static final ModuleConfig kBackLeft = new ModuleConfig(6, 7, 8, -0.6645);
-    public static final ModuleConfig kBackRight = new ModuleConfig(9, 10, 11, -0.4445);
+    public static final ModuleConfig kFrontLeft = new ModuleConfig(new CANAddress(0, "front left drive", 0),
+                                                                   new CANAddress(1, "front left turn", 0), 
+                                                                   new CANAddress(2, "front left encoder", 0),
+                                                                    -0.618);
+
+    public static final ModuleConfig kFrontRight = new ModuleConfig(new CANAddress(3, "front left drive", 0), 
+                                                                    new CANAddress(4, "front left turn", 0), 
+                                                                    new CANAddress(5, "front left encoder", 0),
+                                                                     -0.40);
+
+    public static final ModuleConfig kBackLeft = new ModuleConfig(new CANAddress(6, "back left drive", 0), 
+                                                                  new CANAddress(7, "back left turn", 0), 
+                                                                  new CANAddress(8, "back left encoder", 0)
+                                                                  , -0.6645);
+
+    public static final ModuleConfig kBackRight = new ModuleConfig(new CANAddress(9, "bacl right drive", 0), 
+                                                                   new CANAddress(10, "back right turn", 0),
+                                                                   new CANAddress(11, "back right encoder", 0), 
+                                                                   -0.4445);
 
     public static MagnetSensorConfigs getEncoderConfig(double offset){
         MagnetSensorConfigs config = new MagnetSensorConfigs();
@@ -62,4 +81,6 @@ public class ModuleConstants {
         config.CurrentLimits.StatorCurrentLimitEnable = true;
         return config;
     }
+
+    
 }
