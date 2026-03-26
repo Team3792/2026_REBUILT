@@ -88,25 +88,9 @@ public double getRPSIncriment(){
   return rpsIncriment;
 }
 
-public void incrimentRPS(){
-  rpsIncriment += 2;
-}
-
-public void decrimentRPS(){
-  rpsIncriment--;
-}
-
-public Command increaseRPS(){
-  return Commands.runOnce(() -> incrimentRPS());
-}
-
-public Command decreaseRPS(){
-  return Commands.runOnce(() -> decrimentRPS());
-}
-
 //need to add in piece wise best fit polynomial for RPM target RPM estimation
 public void setRPS(double targetVelocity){
-  targetRPS = targetVelocity;
+  targetRPS = targetVelocity;// + rpsIncriment;
   rightMotor.setControl(mmVelocity.withVelocity(targetVelocity)); 
 }
 

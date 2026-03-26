@@ -79,6 +79,7 @@ public class ShooterConstants {
     public static final double kFlywheelRadius = kFlywheelDiameter / 2;
 
     public static final double kFallBackHubVoltage = 6.0;
+    public static final double kRPSIncrement = 1;
 
     public static final double maxShooterRPS = 6000;
     //rpm value for flywheel while not shooting; less time to spin up to target rpm

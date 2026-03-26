@@ -125,10 +125,11 @@ public class RobotContainer {
     //Change Hood Angle
     aneesh.povUp().onTrue(hood.incrementHoodAngle(HoodConstants.kAngleIncrement));
     aneesh.povDown().onTrue(hood.incrementHoodAngle(-HoodConstants.kAngleIncrement));
+    aneesh.povRight().or(aneesh.povLeft()).onTrue(hood.resetIncrement());
     
     //Change Shooter RPS
-    aneesh.povRight().onTrue(shooter.increaseRPS()); //Increases by 2 RPS
-    aneesh.povLeft().onTrue(shooter.decreaseRPS()); //Decreases by 1 RPS
+    // aneesh.povRight().onTrue(shooter.increaseRPS()); //Increases by 2 RPS
+    // aneesh.povLeft().onTrue(shooter.decreaseRPS()); //Decreases by 1 RPS
 
     aneesh.y().onTrue(intake.zeroIntake());                          
   }

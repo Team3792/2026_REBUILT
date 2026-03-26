@@ -62,6 +62,10 @@ public class Hood extends SubsystemBase {
     });
   }
 
+  public Command resetIncrement(){
+    return this.runOnce(() -> angleIncrement = 0);
+  }
+
   public void zeroHood(){
     hood.getEncoder().setPosition(HoodConstants.kZeroAngle / 360.0 * HoodConstants.kHoodRatio * HoodConstants.kMotorRatio);
   }
