@@ -179,6 +179,14 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     //return autoChooser.getSelected();
-    return Commands.print("No autonomous command configured");
+    return (new ShootCommand(hood, shooter, swerve::getShooterPose)).alongWith(
+      (new DriveCommand(swerve, () -> 0.0, () -> 0.0, () -> 0.0, () -> true)).onlyWhile(shotReady.negate())
+      .andThen(
+        new StartEndCommand(
+          () -> {feeder.setKickerVoltage(12); feeder.setConveyorVoltage(8);}, 
+          () -> {feeder.setKickerVoltage(0); feeder.setConveyorVoltage(0);}
+        ) 
+      )
+    );
   }
 }
