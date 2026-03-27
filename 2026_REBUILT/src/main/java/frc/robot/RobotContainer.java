@@ -78,26 +78,40 @@ public class RobotContainer {
     }
 
   private void configurAutoChooser(){
-    boolean isCompetition = false;
+
+    
+    
+    NamedCommands.registerCommand("Deploy Intake", intake.intake(true).alongWith(feeder.runConveyor(FeederConstants.kConveyorVoltage)));
+    NamedCommands.registerCommand("Stow Intake", intake.pivotToAngle(IntakeConstants.kStowedPosition));
+    
+    // Used name commands
+    NamedCommands.registerCommand("Tracking spin up", new ShootCommand(hood, shooter, swerve::getShooterPose));
+    NamedCommands.registerCommand("test", new ShootCommand(hood, shooter, swerve::getShooterPose).withTimeout(5));
+    NamedCommands.registerCommand("testing", Commands.run(() -> shooter.setRPS(30)));
+    NamedCommands.registerCommand("Rotate to tag", new DriveCommand(swerve, () -> 0.0, () -> 0.0, () -> 0.0, () -> true));
+    NamedCommands.registerCommand("Feed", new StartEndCommand(
+          () -> {feeder.setKickerVoltage(12); feeder.setConveyorVoltage(8);}, 
+          () -> {feeder.setKickerVoltage(0); feeder
+            .setConveyorVoltage(0);}
+        ));
+    NamedCommands.registerCommand("Feed when ready", Commands.waitUntil(shotReady::getAsBoolean).andThen(new StartEndCommand(
+          () -> {feeder.setKickerVoltage(12); feeder.setConveyorVoltage(8);}, 
+          () -> {feeder.setKickerVoltage(0); feeder.setConveyorVoltage(0);}
+        )));
+
+    System.out.println(NamedCommands.hasCommand("test"));
+    
+        boolean isCompetition = false;
 
     autoChooser = AutoBuilder.buildAutoChooserWithOptionsModifier(
       (stream) -> isCompetition ? 
       stream.filter(auto -> auto.getName().startsWith("comp")) : 
       stream
     );
-    
+
+
     SmartDashboard.putData("Auto Chooser", autoChooser);
     autoChooser.addOption("8B Preload", fallBackAuto());
-
-     NamedCommands.registerCommand("Deploy Intake", intake.intake(true).alongWith(feeder.runConveyor(FeederConstants.kConveyorVoltage)));
-    NamedCommands.registerCommand("Stow Intake", intake.pivotToAngle(IntakeConstants.kStowedPosition));
-    
-    NamedCommands.registerCommand("Tracking spin up", new ShootCommand(hood, shooter, swerve::getPose));
-    NamedCommands.registerCommand("Rotate to tag", new DriveCommand(swerve, () -> 0.0, () -> 0.0, () -> 0.0, () -> true));
-    NamedCommands.registerCommand("Feed", new StartEndCommand(
-          () -> {feeder.setKickerVoltage(12); feeder.setConveyorVoltage(8);}, 
-          () -> {feeder.setKickerVoltage(0); feeder.setConveyorVoltage(0);}
-        ));
 
   }
 
@@ -202,6 +216,7 @@ public class RobotContainer {
     //Intake regular
     ellis.rightBumper().whileTrue(intake.intake(true).alongWith(feeder.runConveyor(FeederConstants.kConveyorVoltage)));
     ellis.leftBumper().whileTrue(intake.intake(false).alongWith(feeder.runConveyor(-FeederConstants.kConveyorVoltage)));
+
 
     ellis.x().onTrue(intake.pivotToAngle(IntakeConstants.kStowedPosition));
     // alongWith(Commands.startEnd(() -> feeder.setConveyorVoltage(FeederConstants.kConveyorVoltage), () -> feeder.setConveyorVoltage(0)))

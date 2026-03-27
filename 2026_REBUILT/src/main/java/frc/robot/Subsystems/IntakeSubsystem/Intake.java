@@ -3,6 +3,7 @@ package frc.robot.Subsystems.IntakeSubsystem;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.PositionVoltage;
+import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.pathplanner.lib.auto.CommandUtil;
 
@@ -25,6 +26,7 @@ public class Intake extends SubsystemBase {
     ProfiledPIDController pid = new ProfiledPIDController(IntakeConstants.kP, IntakeConstants.kI, IntakeConstants.kD, 
     new TrapezoidProfile.Constraints(360, 720));
     MotionMagicVoltage motionMagic = new MotionMagicVoltage(0);
+    VelocityVoltage driveVelocityController = new VelocityVoltage(0).withSlot(0);
 
     public Intake(){
         drive.getConfigurator().apply(IntakeConstants.applyIntakeConfig());
@@ -104,6 +106,12 @@ public class Intake extends SubsystemBase {
             runIntake(IntakeConstants.kIntakeVoltage * ((intake) ? 1 : -1))
             .alongWith(this.runOnce(() -> setPivotVoltage(IntakeConstants.kPivotHoldsVoltage)))
         );
+    }
+
+    public Command runIntakeVelocity(double rps){
+        return Commands.runOnce(() -> {
+            drive.setControl(driveVelocityController.withVelocity(rps));
+        });
     }
 
     public double getPivotPosition(){

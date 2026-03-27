@@ -31,15 +31,22 @@
                       }
                     },
                     {
-                      "type": "named",
+                      "type": "parallel",
                       "data": {
-                        "name": "Rotate to tag"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "Feed when ready"
+                        "commands": [
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "Rotate to tag"
+                            }
+                          },
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "Feed when ready"
+                            }
+                          }
+                        ]
                       }
                     }
                   ]

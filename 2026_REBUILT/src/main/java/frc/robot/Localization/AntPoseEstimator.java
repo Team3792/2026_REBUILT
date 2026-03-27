@@ -105,7 +105,7 @@ public class AntPoseEstimator extends SwerveDrivePoseEstimator {
                 //     visionEst = frontCamPoseEstimator.estimateClosestToCameraHeightPose(result);
 
 
-                System.out.println(targets.size());
+                //System.out.println(targets.size());
                 if (visionEst.isEmpty()){
                     //System.out.println("empty");
 
