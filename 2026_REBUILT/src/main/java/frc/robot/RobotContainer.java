@@ -55,15 +55,14 @@ public class RobotContainer {
 
   Trigger shotReady = new Trigger(() -> swerve.readyToShoot() && hood.readyToShoot() && shooter.readyToShoot());
 
-  private SendableChooser<Command> autoChooser;
+  SendableChooser<Command> autoChooser;
 
   public RobotContainer() {
     configureAneeshBindings();
     configureEllisBindings();
 
     //Register Named Commands
-    NamedCommands.registerCommand("Deploy Intake", intake.intake(true).alongWith(feeder.runConveyor(FeederConstants.kConveyorVoltage)));
-    NamedCommands.registerCommand("Stow Intake", intake.pivotToAngle(IntakeConstants.kStowedPosition));
+   
     //intervals of 5 cms
     // for (int i = 1; i < 101; i++){
     //   double distance = i * 5;
@@ -73,13 +72,48 @@ public class RobotContainer {
     //   NamedCommands.registerCommand(name, shooter.setFlywheelRPS(rps).alongWith(hood.setHoodAngle(angle).alongWith(feeder.runFeeder(12, 8))));
     // }
     
-    boolean isCompetition = false;
-    // autoChooser = AutoBuilder.buildAutoChooserWithOptionsModifier((stream) -> isCompetition 
-    //               ? stream.filter(auto -> auto.getName().startsWith("comp")) : stream);
-    
 
-    //SmartDashboard.putData("Auto Chooser", autoChooser);
+
+      configurAutoChooser();
     }
+
+  private void configurAutoChooser(){
+    boolean isCompetition = false;
+
+    autoChooser = AutoBuilder.buildAutoChooserWithOptionsModifier(
+      (stream) -> isCompetition ? 
+      stream.filter(auto -> auto.getName().startsWith("comp")) : 
+      stream
+    );
+    
+    SmartDashboard.putData("Auto Chooser", autoChooser);
+    autoChooser.addOption("8B Preload", fallBackAuto());
+
+     NamedCommands.registerCommand("Deploy Intake", intake.intake(true).alongWith(feeder.runConveyor(FeederConstants.kConveyorVoltage)));
+    NamedCommands.registerCommand("Stow Intake", intake.pivotToAngle(IntakeConstants.kStowedPosition));
+    
+    NamedCommands.registerCommand("Tracking spin up", new ShootCommand(hood, shooter, swerve::getPose));
+    NamedCommands.registerCommand("Rotate to tag", new DriveCommand(swerve, () -> 0.0, () -> 0.0, () -> 0.0, () -> true));
+    NamedCommands.registerCommand("Feed", new StartEndCommand(
+          () -> {feeder.setKickerVoltage(12); feeder.setConveyorVoltage(8);}, 
+          () -> {feeder.setKickerVoltage(0); feeder.setConveyorVoltage(0);}
+        ));
+
+  }
+
+  private Command fallBackAuto(){
+    return (new ShootCommand(hood, shooter, swerve::getShooterPose)).alongWith(
+      (new DriveCommand(swerve, () -> -1.0, () -> 0.0, () -> 0.0, () -> true)).withTimeout(0.5).andThen(
+      (new DriveCommand(swerve, () -> 0.0, () -> 0.0, () -> 0.0, () -> true)).onlyWhile(shotReady.negate())
+      .andThen(
+        new StartEndCommand(
+          () -> {feeder.setKickerVoltage(12); feeder.setConveyorVoltage(8);}, 
+          () -> {feeder.setKickerVoltage(0); feeder.setConveyorVoltage(0);}
+        ) 
+      )
+      )
+    );
+  }
 
   private void configureAneeshBindings(){
     //nearTrench.whileTrue(rumble(0.7, 5));
@@ -191,20 +225,6 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    //return autoChooser.getSelected();
-    //blue -> negative (-x)
-    //red -> positive (+x)
-    //double direction = (GameManager.getAllianceColor() == Alliance.Red) ? 1 : -1;
-    return (new ShootCommand(hood, shooter, swerve::getShooterPose)).alongWith(
-      (new DriveCommand(swerve, () -> -1.0, () -> 0.0, () -> 0.0, () -> true)).withTimeout(0.5).andThen(
-      (new DriveCommand(swerve, () -> 0.0, () -> 0.0, () -> 0.0, () -> true)).onlyWhile(shotReady.negate())
-      .andThen(
-        new StartEndCommand(
-          () -> {feeder.setKickerVoltage(12); feeder.setConveyorVoltage(8);}, 
-          () -> {feeder.setKickerVoltage(0); feeder.setConveyorVoltage(0);}
-        ) 
-      )
-      )
-    );
+    return autoChooser.getSelected();  
   }
 }

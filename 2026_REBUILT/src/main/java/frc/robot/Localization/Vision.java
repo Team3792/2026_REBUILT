@@ -31,7 +31,6 @@ public class Vision extends SubsystemBase {
   }
 
   public List<PhotonPipelineResult> getFrontCamPipelineResults(){
-    System.out.println("Getting front pipeline resutls");
     List<PhotonPipelineResult> pipelineResults = frontCam.getAllUnreadResults();
     return pipelineResults;
   }

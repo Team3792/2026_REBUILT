@@ -52,6 +52,8 @@ public class Swerve extends SubsystemBase {
     antPose = new AntPoseEstimator(SwerveConstants.kDriveKinematics, getPigeonHeading(), getModulePositions(), new Pose2d());
     resetHeading();
     SmartDashboard.putData("Shooter pose", field);
+
+    configureAutoBuilder();
   }
 
 
@@ -72,29 +74,30 @@ public class Swerve extends SubsystemBase {
 
 
   private void configureAutoBuilder() {
-    // RobotConfig config;
-    // try {
-    //   config = RobotConfig.fromGUISettings();
-    // } catch (Exception e) {
-    //   config = new RobotConfig(0, 0, new ModuleConfig(0, 0, 0, new DCMotor(0, 0, 0, 0, 0, 4), 0, 4));
-    //   e.printStackTrace();
-    // }
+    RobotConfig config;
+    try {
+      config = RobotConfig.fromGUISettings();
+    } catch (Exception e) {
+      config = new RobotConfig(0, 0, new ModuleConfig(0, 0, 0, new DCMotor(0, 0, 0, 0, 0, 4), 0, 4));
+      e.printStackTrace();
+    }
 
-    // AutoBuilder.configure(
-    //   this::getPose,
-    //   this::resetPose,
-    //   this::getRobotRelativeSpeeds,
-    //   (speeds, feedforward) -> drive(speeds),
-    //   new PPHolonomicDriveController(new PIDConstants(5.0, 0.0, 0.0), new PIDConstants(5.0, 0.0, 0.0)),
-    //   config,
-    //   () -> {
-    //   var alliance = DriverStation.getAlliance();
-    //   if (alliance.isPresent()){
-    //     return alliance.get() == DriverStation.Alliance.Red;
-    //   }
-    //   return false;
-    // },
-    // this);
+    AutoBuilder.configure(
+      this::getPose,
+      this::resetPose,
+      this::getRobotRelativeSpeeds,
+      (speeds, feedforward) -> drive(speeds),
+      new PPHolonomicDriveController(new PIDConstants(5.0, 0.0, 0.0), new PIDConstants(5.0, 0.0, 0.0)),
+      config,
+      () -> {
+        var alliance = DriverStation.getAlliance();
+        if (alliance.isPresent()){
+          return alliance.get() == DriverStation.Alliance.Red;
+        }
+        return false;
+      },
+      this
+    );
   }
 
   @Override

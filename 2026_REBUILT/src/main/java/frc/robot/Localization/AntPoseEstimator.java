@@ -94,7 +94,7 @@ public class AntPoseEstimator extends SwerveDrivePoseEstimator {
     }
 
     private void updateVisionMeasurements(List<PhotonPipelineResult> pipelineResults) {
-        System.out.println("vision update");
+        
         Optional<EstimatedRobotPose> visionEst;// = Optional.empty();
         //System.out.println(pipelineResults.size());
             for (var result : pipelineResults){

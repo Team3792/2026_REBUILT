@@ -10,8 +10,9 @@
   ],
   "autoFolders": [
     "BottomTrench + Neutral Zone",
-    "Upper TowerSneak Autos",
-    "Lower TowerSneak Autos"
+    "Lower TowerSneak Autos",
+    "STL Autos",
+    "Upper TowerSneak Autos"
   ],
   "defaultMaxVel": 5.0,
   "defaultMaxAccel": 4.0,
