@@ -1,29 +1,30 @@
 {
-  "robotWidth": 0.75,
-  "robotLength": 0.75,
+  "robotWidth": 0.8382,
+  "robotLength": 0.838,
   "holonomicMode": true,
   "pathFolders": [
     "BottomTrench + Neutral Zone paths",
     "Lower TowerSneak Paths",
+    "Depot",
+    "Outpost",
     "Random Paths",
     "Upper TowerSneak Paths"
   ],
   "autoFolders": [
     "BottomTrench + Neutral Zone",
-    "Lower TowerSneak Autos",
-    "STL Autos",
-    "Upper TowerSneak Autos"
+    "Upper TowerSneak Autos",
+    "Lower TowerSneak Autos"
   ],
   "defaultMaxVel": 5.0,
   "defaultMaxAccel": 4.0,
   "defaultMaxAngVel": 540.0,
   "defaultMaxAngAccel": 720.0,
   "defaultNominalVoltage": 12.0,
-  "robotMass": 60.0,
+  "robotMass": 50.0,
   "robotMOI": 6.883,
   "robotTrackwidth": 0.546,
   "driveWheelRadius": 0.048,
-  "driveGearing": 5.143,
+  "driveGearing": 6.0,
   "maxDriveSpeed": 5.45,
   "driveMotorType": "krakenX60",
   "driveCurrentLimit": 60.0,

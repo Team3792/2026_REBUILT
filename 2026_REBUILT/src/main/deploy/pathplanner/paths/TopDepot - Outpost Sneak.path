@@ -8,11 +8,11 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.489469879512089,
+        "x": 0.48946987951208903,
         "y": 5.881783132524858
       },
       "isLocked": false,
-      "linkedName": "DepotTop"
+      "linkedName": null
     },
     {
       "anchor": {
@@ -41,7 +41,7 @@
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Outpost"
+      "linkedName": null
     }
   ],
   "rotationTargets": [
