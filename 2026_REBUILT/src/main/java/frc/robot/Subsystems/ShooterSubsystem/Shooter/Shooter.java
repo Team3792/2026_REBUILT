@@ -90,6 +90,8 @@ public double getRPSIncriment(){
 
 //need to add in piece wise best fit polynomial for RPM target RPM estimation
 public void setRPS(double targetVelocity){
+  if(targetVelocity > 80)
+    targetVelocity = 80;
   targetRPS = targetVelocity;// + rpsIncriment;
   rightMotor.setControl(mmVelocity.withVelocity(targetVelocity)); 
 }

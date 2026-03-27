@@ -111,7 +111,7 @@ public class Intake extends SubsystemBase {
     }
 
     public Command movePivot(double voltage){
-        return Commands.startEnd(() -> runPivot(voltage), () -> runPivot(0));
+        return this.startEnd(() -> runPivot(voltage), () -> runPivot(0));
     }
 
     public Command runToPosition(double position){

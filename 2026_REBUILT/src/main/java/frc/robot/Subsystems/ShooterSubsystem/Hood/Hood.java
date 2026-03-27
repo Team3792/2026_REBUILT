@@ -51,6 +51,8 @@ public class Hood extends SubsystemBase {
   }
 
   public void setAngle(double angle) {
+    if(angle > 50)
+      angle = 50;
     setPoint = angle + angleIncrement;
     controller.setSetpoint(angle / 360.0 * HoodConstants.kHoodRatio * HoodConstants.kMotorRatio, ControlType.kPosition);
   }

@@ -30,7 +30,7 @@ public class ShooterConstants {
     public static final double kS = 0.23;
     public static final double kMMAccel = 200;
     public static final double kMMJerk = 2100;
-    public static final double kP = 0.1; 
+    public static final double kP = 0.2; 
     public static final double kI = 0;
     public static final double kD = 0;
     public static final double kFrictionFF = 0;
@@ -86,7 +86,7 @@ public class ShooterConstants {
     public static final double coastRPM = 0;
 
     public static final double kHubRPS = 45;
-    public static final double kRPSTolerance = 0.25;
+    public static final double kRPSTolerance = 2;
 
     //For calibrated shots, see separate ShotCalculator class
 

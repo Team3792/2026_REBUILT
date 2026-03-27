@@ -9,6 +9,7 @@ import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -112,20 +113,25 @@ public class RobotContainer {
 
     //Shooter and Hood
     //Hub Shot
-    aneesh.a().whileTrue(Commands.startEnd(() -> shooter.setRPS(50), 
-                                () -> shooter.setVoltage(0)).alongWith(Commands.startEnd(() -> hood.setAngle(15), 
-                                  () -> hood.setAngle(12))));
+    aneesh.b().whileTrue(ShootCommand.fixedShot(ShotCalculator.kBumperShot, hood, shooter));
+    aneesh.a().whileTrue(ShootCommand.fixedShot(ShotCalculator.kFeedShot, hood, shooter));
+    // aneesh.b().whileTrue(Commands.startEnd(() -> shooter.setRPS(50), 
+    //                             () -> shooter.setVoltage(0)).alongWith(Commands.startEnd(() -> hood.setAngle(15), 
+    //                               () -> hood.setAngle(12))));
 
     // aneesh.b().whileTrue(Commands.startEnd(
     //   () -> shooter.setRPS(ShotCalculator.kBumperShot.omegaRPS())
     // ));
+
+    // aneesh.a().whileTrue(Commands.startEnd(() -> shooter.setRPS(50), () -> shooter.setVoltage(0))
+    //       .alongWith(Commands.startEnd(() -> hood.setAngle(15), () -> hood.setAngle(12))));
 
     //Changeable Shot                  
     SmartDashboard.putNumber("Set RPS", 45);
     SmartDashboard.putNumber("Set Hood Angle", 20);  
 
     aneesh.x().whileTrue(new ShootCommand(hood, shooter, swerve::getShooterPose));          
-    aneesh.y().onTrue(intake.zeroIntake());                           
+    //aneesh.y().onTrue(intake.zeroIntake());                           
 
     //Change Hood Angle
     aneesh.povUp().onTrue(hood.incrementHoodAngle(HoodConstants.kAngleIncrement));
@@ -136,7 +142,9 @@ public class RobotContainer {
     // aneesh.povRight().onTrue(shooter.increaseRPS()); //Increases by 2 RPS
     // aneesh.povLeft().onTrue(shooter.decreaseRPS()); //Decreases by 1 RPS
 
-    aneesh.y().onTrue(intake.zeroIntake());                          
+    // Intake backup
+    aneesh.y().whileTrue(intake.movePivot(1));  
+    aneesh.leftTrigger().whileTrue(intake.movePivot(-1));                         
   }
 
   private void configureEllisBindings(){
@@ -184,13 +192,18 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     //return autoChooser.getSelected();
+    //blue -> negative (-x)
+    //red -> positive (+x)
+    //double direction = (GameManager.getAllianceColor() == Alliance.Red) ? 1 : -1;
     return (new ShootCommand(hood, shooter, swerve::getShooterPose)).alongWith(
+      (new DriveCommand(swerve, () -> -1.0, () -> 0.0, () -> 0.0, () -> true)).withTimeout(0.5).andThen(
       (new DriveCommand(swerve, () -> 0.0, () -> 0.0, () -> 0.0, () -> true)).onlyWhile(shotReady.negate())
       .andThen(
         new StartEndCommand(
           () -> {feeder.setKickerVoltage(12); feeder.setConveyorVoltage(8);}, 
           () -> {feeder.setKickerVoltage(0); feeder.setConveyorVoltage(0);}
         ) 
+      )
       )
     );
   }
