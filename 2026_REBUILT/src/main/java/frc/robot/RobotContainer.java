@@ -86,16 +86,16 @@ public class RobotContainer {
     
     // Used name commands
     NamedCommands.registerCommand("Tracking spin up", new ShootCommand(hood, shooter, swerve::getShooterPose));
-    NamedCommands.registerCommand("test", new ShootCommand(hood, shooter, swerve::getShooterPose).withTimeout(5));
-    NamedCommands.registerCommand("testing", Commands.run(() -> shooter.setRPS(30)));
+    //NamedCommands.registerCommand("test", new ShootCommand(hood, shooter, swerve::getShooterPose).withTimeout(5));
+    //NamedCommands.registerCommand("testing", Commands.run(() -> shooter.setRPS(30)));
     NamedCommands.registerCommand("Rotate to tag", new DriveCommand(swerve, () -> 0.0, () -> 0.0, () -> 0.0, () -> true));
     NamedCommands.registerCommand("Feed", new StartEndCommand(
-          () -> {feeder.setKickerVoltage(12); feeder.setConveyorVoltage(8);}, 
+          () -> {feeder.setKickerVoltage(12); feeder.setConveyorVoltage(10);}, 
           () -> {feeder.setKickerVoltage(0); feeder
             .setConveyorVoltage(0);}
         ));
     NamedCommands.registerCommand("Feed when ready", Commands.waitUntil(shotReady::getAsBoolean).andThen(new StartEndCommand(
-          () -> {feeder.setKickerVoltage(12); feeder.setConveyorVoltage(8);}, 
+          () -> {feeder.setKickerVoltage(12); feeder.setConveyorVoltage(10);}, 
           () -> {feeder.setKickerVoltage(0); feeder.setConveyorVoltage(0);}
         )));
 
@@ -121,7 +121,7 @@ public class RobotContainer {
       (new DriveCommand(swerve, () -> 0.0, () -> 0.0, () -> 0.0, () -> true)).onlyWhile(shotReady.negate())
       .andThen(
         new StartEndCommand(
-          () -> {feeder.setKickerVoltage(12); feeder.setConveyorVoltage(8);}, 
+          () -> {feeder.setKickerVoltage(12); feeder.setConveyorVoltage(10);}, 
           () -> {feeder.setKickerVoltage(0); feeder.setConveyorVoltage(0);}
         ) 
       )

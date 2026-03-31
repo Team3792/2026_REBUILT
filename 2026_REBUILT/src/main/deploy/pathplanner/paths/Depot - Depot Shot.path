@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 0.45,
-        "y": 4.701549554074927
+        "y": 5.0
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.9484337349397589,
-        "y": 5.204265060240964
+        "x": 1.1997710843373495,
+        "y": 4.931072289156628
       },
       "isLocked": false,
       "linkedName": "Depot"
@@ -20,8 +20,8 @@
         "y": 5.44467469879518
       },
       "prevControl": {
-        "x": 1.5057469879518073,
-        "y": 4.789012048192771
+        "x": 1.6587349397590363,
+        "y": 5.182409638554216
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,9 +31,21 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "Stow Intake",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": 1.0,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Stow Intake"
+        }
+      }
+    }
+  ],
   "globalConstraints": {
-    "maxVelocity": 2.0,
+    "maxVelocity": 4.0,
     "maxAcceleration": 2.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,

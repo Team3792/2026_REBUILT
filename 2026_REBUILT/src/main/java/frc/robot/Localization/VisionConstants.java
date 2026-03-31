@@ -39,7 +39,8 @@ public class VisionConstants {
     );
 
         
-    public static final Transform3d kRobotToBackCam = new Transform3d(new Translation3d(-0.625,-8,20.875), new Rotation3d(0,12 * Math.PI / 180, Math.PI));
+    public static final Transform3d kRobotToBackCam = new Transform3d(new Translation3d(Units.inchesToMeters(-0.625),
+    Units.inchesToMeters(-8),Units.inchesToMeters(20.875)), new Rotation3d(0,12 * Math.PI / 180, Math.PI));
     // public static final Transform3d kRobotToShooter = new Transform3d(
     //     new Translation3d(
     //         Units.inchesToMeters(8),

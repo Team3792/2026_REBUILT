@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.625722891566265,
-        "y": 5.969204819277109
+        "x": 3.5164457831325304,
+        "y": 5.991060240963854
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.3896426471745107,
-        "y": 6.051461236704138
+        "x": 3.280365538740776,
+        "y": 6.073316658390883
       },
       "isLocked": false,
       "linkedName": null
@@ -33,11 +33,11 @@
     {
       "anchor": {
         "x": 0.45,
-        "y": 4.701549554074927
+        "y": 5.0
       },
       "prevControl": {
         "x": 0.4634598141096763,
-        "y": 4.951186957931267
+        "y": 5.249637403856339
       },
       "nextControl": null,
       "isLocked": false,
@@ -69,7 +69,7 @@
   "eventMarkers": [
     {
       "name": "Deploy Intake",
-      "waypointRelativePos": 0.5459057071960287,
+      "waypointRelativePos": 0.0,
       "endWaypointRelativePos": 1.9950372208436595,
       "command": {
         "type": "named",
@@ -80,7 +80,7 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 2.0,
+    "maxVelocity": 4.0,
     "maxAcceleration": 2.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -95,7 +95,7 @@
   "folder": "Depot",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": -71.56505117707795
   },
   "useDefaultConstraints": true
 }
