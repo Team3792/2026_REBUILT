@@ -19,9 +19,9 @@ public class SwerveModule{
     String name;
 
     public SwerveModule(ModuleConfig config, String name) {
-        drive = new TalonFX(config.driveAddress());
-        turn = new TalonFX(config.turnAddress());
-        encoder = new CANcoder(config.encoderAddress());
+        drive = new TalonFX(config.driveAddress().id());
+        turn = new TalonFX(config.turnAddress().id());
+        encoder = new CANcoder(config.encoderAddress().id());
         this.name = name;
         
         drive.getConfigurator().apply(ModuleConstants.getDriveConfig());

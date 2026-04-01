@@ -3,6 +3,7 @@ package frc.robot.Subsystems.IntakeSubsystem;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.PositionVoltage;
+import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.pathplanner.lib.auto.CommandUtil;
 
@@ -20,11 +21,12 @@ import frc.robot.HardwareMap;
 
 
 public class Intake extends SubsystemBase {
-    TalonFX drive = new TalonFX(HardwareMap.intakeDriveID);
-    TalonFX pivot = new TalonFX(HardwareMap.intakePivotID);
+    TalonFX drive = new TalonFX(HardwareMap.intakeDriveID.id());
+    TalonFX pivot = new TalonFX(HardwareMap.intakePivotID.id());
     ProfiledPIDController pid = new ProfiledPIDController(IntakeConstants.kP, IntakeConstants.kI, IntakeConstants.kD, 
     new TrapezoidProfile.Constraints(360, 720));
     MotionMagicVoltage motionMagic = new MotionMagicVoltage(0);
+    VelocityVoltage driveVelocityController = new VelocityVoltage(0).withSlot(0);
 
     public Intake(){
         drive.getConfigurator().apply(IntakeConstants.applyIntakeConfig());
@@ -106,12 +108,18 @@ public class Intake extends SubsystemBase {
         );
     }
 
+    public Command runIntakeVelocity(double rps){
+        return Commands.runOnce(() -> {
+            drive.setControl(driveVelocityController.withVelocity(rps));
+        });
+    }
+
     public double getPivotPosition(){
         return pivot.getPosition().getValueAsDouble();
     }
 
     public Command movePivot(double voltage){
-        return Commands.startEnd(() -> runPivot(voltage), () -> runPivot(0));
+        return this.startEnd(() -> runPivot(voltage), () -> runPivot(0));
     }
 
     public Command runToPosition(double position){

@@ -10,8 +10,8 @@ import frc.robot.HardwareMap;
 
 //includes conveyor system and serializer
 public class Feeder extends SubsystemBase{
-    TalonFX kicker = new TalonFX(HardwareMap.kickerID);
-    TalonFX Conveyor = new TalonFX(HardwareMap.conveyorID);
+    TalonFX kicker = new TalonFX(HardwareMap.kickerID.id());
+    TalonFX Conveyor = new TalonFX(HardwareMap.conveyorID.id());
 
     double a;
     

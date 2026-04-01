@@ -9,9 +9,9 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 public class IntakeConstants {
     
-    public final static double kIntakeVoltage = 10;
+    public final static double kIntakeVoltage = 12;
     public final static double kDrivePivotVoltage = 3;
-    public final static double kPivotHoldsVoltage = 0.5;
+    public final static double kPivotHoldsVoltage = 0;//0.5;
     public final static double kPivotTheshold = 2;
 
     public final static double kIntakePosition = 12.3; // need to set
@@ -42,8 +42,14 @@ public class IntakeConstants {
         
         TalonFXConfiguration config = new TalonFXConfiguration();
         config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;//TO-DO; make accurate
-        config.MotorOutput.NeutralMode = NeutralModeValue.Coast;
-        config.CurrentLimits.StatorCurrentLimit = 40;
+        config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        config.CurrentLimits.StatorCurrentLimit = 50;
+        config.CurrentLimits.StatorCurrentLimitEnable = true;
+        config.Slot0.kV = 0; //?
+        config.Slot0.kP = 0; //?
+        config.Slot0.kI = 0; //probably don't need 
+        config.Voltage.PeakForwardVoltage = 16;
+
         return config;
     }
 

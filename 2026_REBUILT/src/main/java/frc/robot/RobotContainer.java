@@ -9,6 +9,7 @@ import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -27,6 +28,7 @@ import frc.robot.Subsystems.FeederSubsystem.Feeder;
 import frc.robot.Subsystems.FeederSubsystem.FeederConstants;
 import frc.robot.Subsystems.IntakeSubsystem.Intake;
 import frc.robot.Subsystems.IntakeSubsystem.IntakeConstants;
+import frc.robot.Subsystems.ShooterSubsystem.ShotCalculator;
 import frc.robot.Subsystems.ShooterSubsystem.Hood.*;
 import frc.robot.Subsystems.ShooterSubsystem.Shooter.*;
 import frc.robot.Subsystems.SwerveSubsystem.DriveCommand;
@@ -53,15 +55,14 @@ public class RobotContainer {
 
   Trigger shotReady = new Trigger(() -> swerve.readyToShoot() && hood.readyToShoot() && shooter.readyToShoot());
 
-  private SendableChooser<Command> autoChooser;
+  SendableChooser<Command> autoChooser;
 
   public RobotContainer() {
     configureAneeshBindings();
     configureEllisBindings();
 
     //Register Named Commands
-    NamedCommands.registerCommand("Deploy Intake", intake.intake(true).alongWith(feeder.runConveyor(FeederConstants.kConveyorVoltage)));
-    NamedCommands.registerCommand("Stow Intake", intake.pivotToAngle(IntakeConstants.kStowedPosition));
+   
     //intervals of 5 cms
     // for (int i = 1; i < 101; i++){
     //   double distance = i * 5;
@@ -71,13 +72,62 @@ public class RobotContainer {
     //   NamedCommands.registerCommand(name, shooter.setFlywheelRPS(rps).alongWith(hood.setHoodAngle(angle).alongWith(feeder.runFeeder(12, 8))));
     // }
     
-    boolean isCompetition = false;
-    // autoChooser = AutoBuilder.buildAutoChooserWithOptionsModifier((stream) -> isCompetition 
-    //               ? stream.filter(auto -> auto.getName().startsWith("comp")) : stream);
-    
 
-    //SmartDashboard.putData("Auto Chooser", autoChooser);
+
+      configurAutoChooser();
     }
+
+  private void configurAutoChooser(){
+
+    
+    
+    NamedCommands.registerCommand("Deploy Intake", intake.intake(true).alongWith(feeder.runConveyor(FeederConstants.kConveyorVoltage)));
+    NamedCommands.registerCommand("Stow Intake", intake.pivotToAngle(IntakeConstants.kStowedPosition));
+    
+    // Used name commands
+    NamedCommands.registerCommand("Tracking spin up", new ShootCommand(hood, shooter, swerve::getShooterPose));
+    //NamedCommands.registerCommand("test", new ShootCommand(hood, shooter, swerve::getShooterPose).withTimeout(5));
+    //NamedCommands.registerCommand("testing", Commands.run(() -> shooter.setRPS(30)));
+    NamedCommands.registerCommand("Rotate to tag", new DriveCommand(swerve, () -> 0.0, () -> 0.0, () -> 0.0, () -> true));
+    NamedCommands.registerCommand("Feed", new StartEndCommand(
+          () -> {feeder.setKickerVoltage(12); feeder.setConveyorVoltage(10);}, 
+          () -> {feeder.setKickerVoltage(0); feeder
+            .setConveyorVoltage(0);}
+        ));
+    NamedCommands.registerCommand("Feed when ready", Commands.waitUntil(shotReady::getAsBoolean).andThen(new StartEndCommand(
+          () -> {feeder.setKickerVoltage(12); feeder.setConveyorVoltage(10);}, 
+          () -> {feeder.setKickerVoltage(0); feeder.setConveyorVoltage(0);}
+        )));
+
+    System.out.println(NamedCommands.hasCommand("test"));
+    
+        boolean isCompetition = false;
+
+    autoChooser = AutoBuilder.buildAutoChooserWithOptionsModifier(
+      (stream) -> isCompetition ? 
+      stream.filter(auto -> auto.getName().startsWith("comp")) : 
+      stream
+    );
+
+
+    SmartDashboard.putData("Auto Chooser", autoChooser);
+    autoChooser.addOption("8B Preload", fallBackAuto());
+
+  }
+
+  private Command fallBackAuto(){
+    return (new ShootCommand(hood, shooter, swerve::getShooterPose)).alongWith(
+      (new DriveCommand(swerve, () -> -1.0, () -> 0.0, () -> 0.0, () -> true)).withTimeout(0.5).andThen(
+      (new DriveCommand(swerve, () -> 0.0, () -> 0.0, () -> 0.0, () -> true)).onlyWhile(shotReady.negate())
+      .andThen(
+        new StartEndCommand(
+          () -> {feeder.setKickerVoltage(12); feeder.setConveyorVoltage(10);}, 
+          () -> {feeder.setKickerVoltage(0); feeder.setConveyorVoltage(0);}
+        ) 
+      )
+      )
+    );
+  }
 
   private void configureAneeshBindings(){
     //nearTrench.whileTrue(rumble(0.7, 5));
@@ -111,26 +161,38 @@ public class RobotContainer {
 
     //Shooter and Hood
     //Hub Shot
-    aneesh.a().whileTrue(Commands.startEnd(() -> shooter.setRPS(50), 
-                                () -> shooter.setVoltage(0)).alongWith(Commands.startEnd(() -> hood.setAngle(15), 
-                                  () -> hood.setAngle(12))));
+    aneesh.b().whileTrue(ShootCommand.fixedShot(ShotCalculator.kBumperShot, hood, shooter));
+    aneesh.a().whileTrue(ShootCommand.fixedShot(ShotCalculator.kFeedShot, hood, shooter));
+    // aneesh.b().whileTrue(Commands.startEnd(() -> shooter.setRPS(50), 
+    //                             () -> shooter.setVoltage(0)).alongWith(Commands.startEnd(() -> hood.setAngle(15), 
+    //                               () -> hood.setAngle(12))));
+
+    // aneesh.b().whileTrue(Commands.startEnd(
+    //   () -> shooter.setRPS(ShotCalculator.kBumperShot.omegaRPS())
+    // ));
+
+    // aneesh.a().whileTrue(Commands.startEnd(() -> shooter.setRPS(50), () -> shooter.setVoltage(0))
+    //       .alongWith(Commands.startEnd(() -> hood.setAngle(15), () -> hood.setAngle(12))));
 
     //Changeable Shot                  
     SmartDashboard.putNumber("Set RPS", 45);
     SmartDashboard.putNumber("Set Hood Angle", 20);  
 
     aneesh.x().whileTrue(new ShootCommand(hood, shooter, swerve::getShooterPose));          
-    aneesh.y().onTrue(intake.zeroIntake());                           
+    //aneesh.y().onTrue(intake.zeroIntake());                           
 
     //Change Hood Angle
-    aneesh.povUp().onTrue(hood.increaseHoodAngle());
-    aneesh.povDown().onTrue(hood.decreaseHoodAnlge());
+    aneesh.povUp().onTrue(hood.incrementHoodAngle(HoodConstants.kAngleIncrement));
+    aneesh.povDown().onTrue(hood.incrementHoodAngle(-HoodConstants.kAngleIncrement));
+    aneesh.povRight().or(aneesh.povLeft()).onTrue(hood.resetIncrement());
     
     //Change Shooter RPS
-    aneesh.povRight().onTrue(shooter.increaseRPS()); //Increases by 2 RPS
-    aneesh.povLeft().onTrue(shooter.decreaseRPS()); //Decreases by 1 RPS
+    // aneesh.povRight().onTrue(shooter.increaseRPS()); //Increases by 2 RPS
+    // aneesh.povLeft().onTrue(shooter.decreaseRPS()); //Decreases by 1 RPS
 
-    aneesh.y().onTrue(intake.zeroIntake());                          
+    // Intake backup
+    aneesh.y().whileTrue(intake.movePivot(1));  
+    aneesh.leftTrigger().whileTrue(intake.movePivot(-1));                         
   }
 
   private void configureEllisBindings(){
@@ -143,7 +205,7 @@ public class RobotContainer {
 
     // Swerve
     swerve.setDefaultCommand(new DriveCommand(swerve, () -> -ellis.getLeftY(), () -> -ellis.getLeftX(), () -> -ellis.getRightX(), () -> ellis.getRightTriggerAxis() > 0.1));      
-    ellis.leftStick().onTrue(Commands.runOnce(() -> swerve.resetPose(new Pose2d())));
+    ellis.povUp().onTrue(Commands.runOnce(swerve::resetHeading));
     ellis.leftTrigger().whileTrue(swerve.crossCommand());
    
 
@@ -154,6 +216,7 @@ public class RobotContainer {
     //Intake regular
     ellis.rightBumper().whileTrue(intake.intake(true).alongWith(feeder.runConveyor(FeederConstants.kConveyorVoltage)));
     ellis.leftBumper().whileTrue(intake.intake(false).alongWith(feeder.runConveyor(-FeederConstants.kConveyorVoltage)));
+
 
     ellis.x().onTrue(intake.pivotToAngle(IntakeConstants.kStowedPosition));
     // alongWith(Commands.startEnd(() -> feeder.setConveyorVoltage(FeederConstants.kConveyorVoltage), () -> feeder.setConveyorVoltage(0)))
@@ -177,7 +240,6 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    //return autoChooser.getSelected();
-    return Commands.print("No autonomous command configured");
+    return autoChooser.getSelected();  
   }
 }

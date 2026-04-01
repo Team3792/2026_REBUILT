@@ -29,8 +29,8 @@ public class Shooter extends SubsystemBase {
   public static double ballsShot = 0;
   double rpsIncriment;
 
-  TalonFX rightMotor = new TalonFX(HardwareMap.shootLeaderID);
-  TalonFX leftMotor = new TalonFX(HardwareMap.shootFollowerID);
+  TalonFX rightMotor = new TalonFX(HardwareMap.shootLeaderID.id());
+  TalonFX leftMotor = new TalonFX(HardwareMap.shootFollowerID.id());
 
   MotionMagicVelocityVoltage mmVelocity = new MotionMagicVelocityVoltage(0);
   double targetRPS = 0;
@@ -88,25 +88,11 @@ public double getRPSIncriment(){
   return rpsIncriment;
 }
 
-public void incrimentRPS(){
-  rpsIncriment += 2;
-}
-
-public void decrimentRPS(){
-  rpsIncriment--;
-}
-
-public Command increaseRPS(){
-  return Commands.runOnce(() -> incrimentRPS());
-}
-
-public Command decreaseRPS(){
-  return Commands.runOnce(() -> decrimentRPS());
-}
-
 //need to add in piece wise best fit polynomial for RPM target RPM estimation
 public void setRPS(double targetVelocity){
-  targetRPS = targetVelocity;
+  if(targetVelocity > 80)
+    targetVelocity = 80;
+  targetRPS = targetVelocity;// + rpsIncriment;
   rightMotor.setControl(mmVelocity.withVelocity(targetVelocity)); 
 }
 

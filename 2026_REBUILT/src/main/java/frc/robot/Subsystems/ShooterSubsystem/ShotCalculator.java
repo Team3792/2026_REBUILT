@@ -27,7 +27,9 @@ public class ShotCalculator {
         new Shot(7.2, 75, 43),
     };
 
-    public static final Shot kBumperShot = new Shot(0,50, 20); //Need to determine
+    public static final Shot kBumperShot = new Shot(0, 50, 20); //Need to determine
+    public static final Shot kFeedShot = new Shot(0, 70, 40);
+    public static final Shot kZeroShot = new Shot(0, 0, 0);
 
     public static Shot getStaticShot(double distance){
         //Linear search until calibrated shots is farther
@@ -41,7 +43,7 @@ public class ShotCalculator {
         }
 
         //farther than final shot, use last two shots 
-        return linearInterpolation(distance, kCalibratedShots[calibratedShots], kCalibratedShots[calibratedShots - 1]);
+        return linearInterpolation(distance, kCalibratedShots[calibratedShots - 1], kCalibratedShots[calibratedShots - 2]);
     }
 
     //Returns the intorpolated shot based on distance and two given shots 

@@ -20,6 +20,7 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -28,6 +29,7 @@ import frc.robot.HardwareMap;
 import frc.robot.Localization.AntPoseEstimator;
 import frc.robot.Localization.VisionConstants;
 import frc.robot.Managers.FieldManager;
+import frc.robot.Managers.GameManager;
 
 public class Swerve extends SubsystemBase {
       
@@ -38,7 +40,7 @@ public class Swerve extends SubsystemBase {
   Field2d field = new Field2d();
   SwerveModule[] modules = {frontLeft, frontRight, backLeft, backRight};
 
-  Pigeon2 pigeon = new Pigeon2(HardwareMap.kPigeon);
+  Pigeon2 pigeon = new Pigeon2(HardwareMap.kPigeon.id());
   ChassisSpeeds lastRobotRelativeSpeeds;
   double currentTimestamp = 0.0;
   AntPoseEstimator antPose;
@@ -50,15 +52,11 @@ public class Swerve extends SubsystemBase {
     antPose = new AntPoseEstimator(SwerveConstants.kDriveKinematics, getPigeonHeading(), getModulePositions(), new Pose2d());
     resetHeading();
     SmartDashboard.putData("Shooter pose", field);
+
+    configureAutoBuilder();
   }
 
-  public void resetHeading(double yawDegrees){
-    pigeon.setYaw(yawDegrees);
-  }
 
-  public void resetHeading(){
-    resetHeading(0);
-  }
 
   public void resetTurnEncoders(){
     for (SwerveModule mod : modules){
@@ -76,29 +74,30 @@ public class Swerve extends SubsystemBase {
 
 
   private void configureAutoBuilder() {
-    // RobotConfig config;
-    // try {
-    //   config = RobotConfig.fromGUISettings();
-    // } catch (Exception e) {
-    //   config = new RobotConfig(0, 0, new ModuleConfig(0, 0, 0, new DCMotor(0, 0, 0, 0, 0, 4), 0, 4));
-    //   e.printStackTrace();
-    // }
+    RobotConfig config;
+    try {
+      config = RobotConfig.fromGUISettings();
+    } catch (Exception e) {
+      config = new RobotConfig(0, 0, new ModuleConfig(0, 0, 0, new DCMotor(0, 0, 0, 0, 0, 4), 0, 4));
+      e.printStackTrace();
+    }
 
-    // AutoBuilder.configure(
-    //   this::getPose,
-    //   this::resetPose,
-    //   this::getRobotRelativeSpeeds,
-    //   (speeds, feedforward) -> drive(speeds),
-    //   new PPHolonomicDriveController(new PIDConstants(5.0, 0.0, 0.0), new PIDConstants(5.0, 0.0, 0.0)),
-    //   config,
-    //   () -> {
-    //   var alliance = DriverStation.getAlliance();
-    //   if (alliance.isPresent()){
-    //     return alliance.get() == DriverStation.Alliance.Red;
-    //   }
-    //   return false;
-    // },
-    // this);
+    AutoBuilder.configure(
+      this::getPose,
+      this::resetPose,
+      this::getRobotRelativeSpeeds,
+      (speeds, feedforward) -> drive(speeds),
+      new PPHolonomicDriveController(new PIDConstants(5.0, 0.0, 0.0), new PIDConstants(5.0, 0.0, 0.0)),
+      config,
+      () -> {
+        var alliance = DriverStation.getAlliance();
+        if (alliance.isPresent()){
+          return alliance.get() == DriverStation.Alliance.Red;
+        }
+        return false;
+      },
+      this
+    );
   }
 
   @Override
@@ -177,6 +176,16 @@ public class Swerve extends SubsystemBase {
 
   public void resetPose(Pose2d pose){
     antPose.resetPose(pose);
+  }
+
+  //Resets pose heading to be straight forward from driver perspective 
+  public void resetHeading(){
+    //Flip if red
+    Rotation2d heading = (GameManager.getAllianceColor() == Alliance.Red) ? Rotation2d.k180deg : Rotation2d.kZero;
+    resetPose(new Pose2d(
+      getPose().getTranslation(),
+      heading
+    ));
   }
 
   public Pose2d getPose(){

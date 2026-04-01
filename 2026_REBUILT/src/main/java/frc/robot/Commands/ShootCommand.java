@@ -11,6 +11,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Managers.FieldManager;
 import frc.robot.Subsystems.FeederSubsystem.*;
 import frc.robot.Subsystems.LEDSubsystem.*;
@@ -49,7 +50,7 @@ public class ShootCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double robotToHubDistance = FieldManager.getRobotToHubDis(shooterPose.get());
+    double robotToHubDistance = FieldManager.getRobotToHubDis(shooterPose.get()) - 0.20;
     Shot targetShot = ShotCalculator.getStaticShot(robotToHubDistance);
     //TODO: implmenet increments in respective classes
     hood.setAngle(targetShot.hoodAngleDegrees());
@@ -64,6 +65,19 @@ public class ShootCommand extends Command {
   public void end(boolean interrupted) {
     shooter.spinDown();
     hood.setAngle(12);
+  }
+
+  public static Command fixedShot(Shot shot, Hood hood, Shooter shooter){
+    return Commands.startEnd(
+      () -> {
+        hood.setAngle(shot.hoodAngleDegrees());
+        shooter.setRPS(shot.omegaRPS());
+      },
+      () -> {
+        hood.setAngle(12);
+        shooter.spinDown();;
+      },
+      shooter, hood);
   }
 
   // Returns true when the command should end.
