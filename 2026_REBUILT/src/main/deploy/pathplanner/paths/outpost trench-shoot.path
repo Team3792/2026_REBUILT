@@ -1,0 +1,73 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 4.838698795180722,
+        "y": 0.5599879518072293
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 3.7240722891566262,
+        "y": 0.5709156626506025
+      },
+      "isLocked": false,
+      "linkedName": "outpost trench-neutral-trench"
+    },
+    {
+      "anchor": {
+        "x": 1.855433734939759,
+        "y": 1.5981204819277117
+      },
+      "prevControl": {
+        "x": 2.052132530120482,
+        "y": 0.680192771084337
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "outpost shoot"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.6518962075848298,
+      "rotationDegrees": 164.02719881690177
+    }
+  ],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 1.0,
+      "maxWaypointRelativePos": 0.6431279620853083,
+      "constraints": {
+        "maxVelocity": 3.0,
+        "maxAcceleration": 2.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 4.0,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0.0,
+    "rotation": 43.26429541107163
+  },
+  "reversed": false,
+  "folder": "outpost trench-neutral-shoot",
+  "idealStartingState": {
+    "velocity": 4.0,
+    "rotation": 180.0
+  },
+  "useDefaultConstraints": true
+}

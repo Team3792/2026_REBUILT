@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.855433734939759,
+        "y": 1.5981204819277117
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.4018192771084337,
+        "y": 0.6692650602409639
+      },
+      "isLocked": false,
+      "linkedName": "outpost shoot"
+    },
+    {
+      "anchor": {
+        "x": 4.434373493975903,
+        "y": 0.6036987951807224
+      },
+      "prevControl": {
+        "x": 3.4343734939759027,
+        "y": 0.6036987951807226
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 4.0,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0.0,
+    "rotation": 0.0
+  },
+  "reversed": false,
+  "folder": "outpost trench-neutral-shoot",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 43.26429541107163
+  },
+  "useDefaultConstraints": true
+}

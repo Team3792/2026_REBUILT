@@ -1,0 +1,73 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 4.336024096385542,
+        "y": 7.542795180722893
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 3.2869638554216865,
+        "y": 7.291457831325301
+      },
+      "isLocked": false,
+      "linkedName": "neutral-depot trench"
+    },
+    {
+      "anchor": {
+        "x": 2.751506024096386,
+        "y": 6.231469879518072
+      },
+      "prevControl": {
+        "x": 2.4236746987951805,
+        "y": 6.8543493975903615
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "depot shoot"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.44750499001995714,
+      "rotationDegrees": -50.50551074071013
+    }
+  ],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0.4630331753554514,
+      "maxWaypointRelativePos": 1.0,
+      "constraints": {
+        "maxVelocity": 2.0,
+        "maxAcceleration": 2.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 4.0,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -46.16913932790744
+  },
+  "reversed": false,
+  "folder": "depot trench-neutral-shoot",
+  "idealStartingState": {
+    "velocity": 3.0,
+    "rotation": 180.0
+  },
+  "useDefaultConstraints": true
+}

@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 2.751506024096386,
+        "y": 6.231469879518072
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.685939759036144,
+        "y": 7.204036144578313
+      },
+      "isLocked": false,
+      "linkedName": "depot shoot"
+    },
+    {
+      "anchor": {
+        "x": 4.467156626506024,
+        "y": 7.357024096385541
+      },
+      "prevControl": {
+        "x": 3.101192771084338,
+        "y": 7.728566265060241
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 4.0,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "reversed": false,
+  "folder": "depot trench-neutral-shoot",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -46.16913932790744
+  },
+  "useDefaultConstraints": true
+}
