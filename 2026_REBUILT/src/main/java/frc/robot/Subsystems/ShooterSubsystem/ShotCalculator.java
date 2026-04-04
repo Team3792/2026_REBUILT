@@ -9,6 +9,7 @@ import frc.robot.Subsystems.ShooterSubsystem.Shooter.ShooterConstants;
 
 /** Add your docs here. */
 public class ShotCalculator {
+
     public record Shot(double distanceMeters, double omegaRPS, double hoodAngleDegrees){};
 
 
@@ -27,9 +28,11 @@ public class ShotCalculator {
         new Shot(7.2, 75, 43),
     };
 
+
     public static final Shot kBumperShot = new Shot(0, 50, 20); //Need to determine
     public static final Shot kFeedShot = new Shot(0, 70, 40);
     public static final Shot kZeroShot = new Shot(0, 0, 0);
+
 
     public static Shot getStaticShot(double distance){
         //Linear search until calibrated shots is farther
@@ -46,6 +49,7 @@ public class ShotCalculator {
         return linearInterpolation(distance, kCalibratedShots[calibratedShots - 1], kCalibratedShots[calibratedShots - 2]);
     }
 
+
     //Returns the intorpolated shot based on distance and two given shots 
     //Distance need not be between shot1 and shot2, which is the case on the endpoints
     private static Shot linearInterpolation(double distance, Shot shot1, Shot shot2){
@@ -53,6 +57,6 @@ public class ShotCalculator {
         double weight1 = (shot2.distanceMeters() - distance) / (shot2.distanceMeters() - shot1.distanceMeters());
         double targetRPS = shot1.omegaRPS() * weight1 + shot2.omegaRPS() * (1 - weight1);
         double targetAngle = shot1.hoodAngleDegrees() * weight1 + shot2.hoodAngleDegrees() * (1 - weight1);
-        return new Shot(distance, targetRPS, targetAngle);
+          return new Shot(distance, targetRPS, targetAngle);
     }
 }

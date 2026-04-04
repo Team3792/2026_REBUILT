@@ -208,7 +208,8 @@ public class Swerve extends SubsystemBase {
     double robotRelativeVelocityY = getRobotRelativeSpeeds().vyMetersPerSecond;
     double fieldRelativeVelocityX = robotRelativeVelocityX * getPigeonHeading().getCos() + robotRelativeVelocityY * getPigeonHeading().getSin();
     double fieldRelativeVelocityY = robotRelativeVelocityX * getPigeonHeading().getSin() + robotRelativeVelocityY * getPigeonHeading().getCos();
-    double[] fieldRelativeVelocities = {fieldRelativeVelocityX, fieldRelativeVelocityY};
+    double fieldRelativeVelocityTotal = Math.hypot(fieldRelativeVelocityX, fieldRelativeVelocityY);
+    double[] fieldRelativeVelocities = {fieldRelativeVelocityX, fieldRelativeVelocityY, fieldRelativeVelocityTotal};
     return fieldRelativeVelocities;
   }
 
