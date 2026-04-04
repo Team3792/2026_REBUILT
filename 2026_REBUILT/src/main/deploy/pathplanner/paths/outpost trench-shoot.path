@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.838698795180722,
-        "y": 0.5599879518072293
+        "x": 4.368807228915662,
+        "y": 0.691120481927711
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.7240722891566262,
-        "y": 0.5709156626506025
+        "x": 3.254180722891566,
+        "y": 0.7020481927710842
       },
       "isLocked": false,
-      "linkedName": "outpost trench-neutral-trench"
+      "linkedName": "outpost trench trench"
     },
     {
       "anchor": {
@@ -28,17 +28,12 @@
       "linkedName": "outpost shoot"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.6518962075848298,
-      "rotationDegrees": 164.02719881690177
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 1.0,
-      "maxWaypointRelativePos": 0.6431279620853083,
+      "minWaypointRelativePos": 0.7473933649289162,
+      "maxWaypointRelativePos": 1.0,
       "constraints": {
         "maxVelocity": 3.0,
         "maxAcceleration": 2.0,

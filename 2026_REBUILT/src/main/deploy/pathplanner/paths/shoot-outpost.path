@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 2.6859397590380167,
+        "y": 2.5051204819336057
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.457604051765898,
+        "y": 2.0231158027936758
+      },
+      "isLocked": false,
+      "linkedName": "outpost trench-neutral-bump"
+    },
+    {
+      "anchor": {
+        "x": 0.29277108433734933,
+        "y": 0.6255542168674697
+      },
+      "prevControl": {
+        "x": 2.0435700533115413,
+        "y": 2.0282341887456763
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "outpost ah"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 4.0,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 178.72696997994322
+  },
+  "reversed": false,
+  "folder": "outpost trench-neutral-bump-outpost",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 48.012787504183336
+  },
+  "useDefaultConstraints": true
+}

@@ -1,0 +1,109 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.5820120481927713,
+        "y": 5.9473493975903615
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.9482048192771084,
+        "y": 6.078481927710843
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.014,
+        "y": 7.346096385542169
+      },
+      "prevControl": {
+        "x": 1.5466112659245923,
+        "y": 7.245332091988868
+      },
+      "nextControl": {
+        "x": 0.20534939759036142,
+        "y": 7.499084337349397
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 0.4239036144578311,
+        "y": 5.280759036144579
+      },
+      "prevControl": {
+        "x": 0.2385124446455282,
+        "y": 5.76951757474065
+      },
+      "nextControl": {
+        "x": 0.5441084337349398,
+        "y": 4.9638554216867465
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.66966265060241,
+        "y": 5.280759036144579
+      },
+      "prevControl": {
+        "x": 1.2434819277108435,
+        "y": 5.269831325301206
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "bump depot"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1.4814371257485102,
+      "rotationDegrees": -90.31676389523373
+    },
+    {
+      "waypointRelativePos": 1.888622754490985,
+      "rotationDegrees": -89.88079221066815
+    }
+  ],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 1.3720379146919504,
+      "maxWaypointRelativePos": 3.0,
+      "constraints": {
+        "maxVelocity": 1.5,
+        "maxAcceleration": 2.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 4.0,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0.0,
+    "rotation": -25.201123645474883
+  },
+  "reversed": false,
+  "folder": "bump-depot-bump-under hub",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -91.8476102659947
+  },
+  "useDefaultConstraints": true
+}

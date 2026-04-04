@@ -1,0 +1,142 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 4.368807228915662,
+        "y": 0.691120481927711
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 5.9314698795180725,
+        "y": 0.48349397590361265
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.712686746987952,
+        "y": 1.5216265060240959
+      },
+      "prevControl": {
+        "x": 7.390319277108434,
+        "y": 0.9212853915662649
+      },
+      "nextControl": {
+        "x": 8.03505421686747,
+        "y": 2.1219676204819264
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.712686746987952,
+        "y": 3.510469879518072
+      },
+      "prevControl": {
+        "x": 7.991684864457832,
+        "y": 3.078611869352409
+      },
+      "nextControl": {
+        "x": 7.433688629518072,
+        "y": 3.9423278896837353
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 5.1774578313253015,
+        "y": 2.3958433734939764
+      },
+      "prevControl": {
+        "x": 5.800279435004776,
+        "y": 2.4096838535683287
+      },
+      "nextControl": {
+        "x": 4.6857108433753645,
+        "y": 2.384915662656498
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.6859397590380167,
+        "y": 2.5051204819336057
+      },
+      "prevControl": {
+        "x": 4.598289156628373,
+        "y": 2.5051204819336057
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "outpost trench-neutral-bump"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1.35,
+      "rotationDegrees": 88.6926405392026
+    },
+    {
+      "waypointRelativePos": 2.1,
+      "rotationDegrees": 160.12754621396886
+    },
+    {
+      "waypointRelativePos": 2.8502994011976117,
+      "rotationDegrees": 90.1193634793482
+    }
+  ],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0.9042654028436006,
+      "maxWaypointRelativePos": 2.3905213270142203,
+      "constraints": {
+        "maxVelocity": 1.5,
+        "maxAcceleration": 2.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    },
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 2.731753554502343,
+      "maxWaypointRelativePos": 4.0,
+      "constraints": {
+        "maxVelocity": 2.5,
+        "maxAcceleration": 2.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 4.0,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0.0,
+    "rotation": 48.012787504183336
+  },
+  "reversed": false,
+  "folder": "outpost trench-neutral-bump-outpost",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "useDefaultConstraints": true
+}
