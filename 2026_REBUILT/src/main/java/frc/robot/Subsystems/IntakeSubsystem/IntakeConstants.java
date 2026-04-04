@@ -9,31 +9,36 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 public class IntakeConstants {
     
-    public final static double kIntakeVoltage = 12;
+    public final static double kIntakeVoltage = 5;
     public final static double kDrivePivotVoltage = 3;
     public final static double kPivotHoldsVoltage = 0;//0.5;
     public final static double kPivotTheshold = 2;
 
-    public final static double kIntakePosition = 12.3; // need to set
-    public final static double kHoldPosition = 6.15;
-    public final static double kStowedPosition = 0; //need to set
+    public final static double kIntakePosition = 26.195;
+    public final static double kFramePerimStow = 5.41;
+    public final static double kStowOut = 14.268;
+
+
+    // public final static double kHoldPosition = 6.15;
+    // public final static double kStowedPosition = 0; 
+  
 
     public static final double kEncoderOffset = 0;
+
     //8 to 56
     //16 to 64
     //16 to 34
-
     public static final double kGearRatio = (8/56) * (16/64) * (16/34);
 
 
     public final static double kP = 2;
-    public final static double kI = 0;
+    public final static double kI = 0.1;
     public final static double kD = 0;
     public final static double kVelocityFF = 0;
     public final static double kFrictionFF = 0;
     public final static double kGravityFF = 0;
     
-    //where an angle of 0 degrees is intake vertical stow position
+    //angle of 0 degrees is intake vertical
     public static double GravityFF(double intakeAngle){
         return 9.81 * Math.sin(intakeAngle) * kGravityFF;
     }
