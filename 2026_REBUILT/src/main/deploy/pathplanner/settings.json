@@ -7,7 +7,7 @@
     "Depot",
     "Lower TowerSneak Paths",
     "Neutral Zone",
-    "trench bump depot",
+    "hub shoot-neutral-shoot",
     "Outpost",
     "Random Paths",
     "Upper TowerSneak Paths",
@@ -15,7 +15,8 @@
     "depot trench-neutral-bump-shoot-trench-hub",
     "depot trench-neutral-shoot",
     "outpost trench-neutral-bump-outpost",
-    "outpost trench-neutral-shoot"
+    "outpost trench-neutral-shoot",
+    "trench bump depot"
   ],
   "autoFolders": [],
   "defaultMaxVel": 4.0,
