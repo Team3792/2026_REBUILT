@@ -4,11 +4,18 @@
   "holonomicMode": true,
   "pathFolders": [
     "BottomTrench + Neutral Zone paths",
-    "Lower TowerSneak Paths",
     "Depot",
+    "Lower TowerSneak Paths",
+    "Neutral Zone",
+    "trench bump depot",
     "Outpost",
     "Random Paths",
-    "Upper TowerSneak Paths"
+    "Upper TowerSneak Paths",
+    "bump-depot-bump-under hub",
+    "depot trench-neutral-bump-shoot-trench-hub",
+    "depot trench-neutral-shoot",
+    "outpost trench-neutral-bump-outpost",
+    "outpost trench-neutral-shoot"
   ],
   "autoFolders": [],
   "defaultMaxVel": 4.0,

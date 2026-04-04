@@ -1,0 +1,145 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 4.368807228915662,
+        "y": 0.691120481927711
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 5.9423975903614465,
+        "y": 0.49442168674698794
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.712686746987952,
+        "y": 1.5216265060240959
+      },
+      "prevControl": {
+        "x": 7.620618202167009,
+        "y": 0.8464571773371756
+      },
+      "nextControl": {
+        "x": 7.74646504817128,
+        "y": 1.7693340480351707
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.8219638554216875,
+        "y": 3.4776867469879518
+      },
+      "prevControl": {
+        "x": 7.920313253012047,
+        "y": 2.9313012048192775
+      },
+      "nextControl": {
+        "x": 7.74214561262392,
+        "y": 3.921121429197777
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 6.816614457831325,
+        "y": 2.7127469879518085
+      },
+      "prevControl": {
+        "x": 6.89310843373494,
+        "y": 3.1170722891566265
+      },
+      "nextControl": {
+        "x": 6.679560921487003,
+        "y": 1.9883211529889655
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 5.997036144578313,
+        "y": 0.9315301204819275
+      },
+      "prevControl": {
+        "x": 6.827542168674698,
+        "y": 1.2921445783132537
+      },
+      "nextControl": {
+        "x": 4.922969357101859,
+        "y": 0.4651590153934656
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 4.368807228915662,
+        "y": 0.691120481927711
+      },
+      "prevControl": {
+        "x": 4.740349397590362,
+        "y": 0.6583373493975899
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "outpost trench trench"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1.5828343313373145,
+      "rotationDegrees": 88.6926405392026
+    },
+    {
+      "waypointRelativePos": 2.1,
+      "rotationDegrees": 160.12754621396886
+    },
+    {
+      "waypointRelativePos": 3.15,
+      "rotationDegrees": -101.33741888635195
+    }
+  ],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0.8815165876777206,
+      "maxWaypointRelativePos": 2.54976303317537,
+      "constraints": {
+        "maxVelocity": 1.5,
+        "maxAcceleration": 2.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 4.0,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 4.0,
+    "rotation": 180.0
+  },
+  "reversed": false,
+  "folder": "outpost trench-neutral-shoot",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "useDefaultConstraints": true
+}
