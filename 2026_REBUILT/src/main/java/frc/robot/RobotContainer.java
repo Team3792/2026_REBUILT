@@ -78,11 +78,8 @@ public class RobotContainer {
     }
 
   private void configurAutoChooser(){
-
-    
-    
     NamedCommands.registerCommand("Deploy Intake", intake.intake(true).alongWith(feeder.runConveyor(FeederConstants.kConveyorVoltage)));
-    NamedCommands.registerCommand("Stow Intake", intake.pivotToAngle(IntakeConstants.kStowedPosition));
+    NamedCommands.registerCommand("Stow Intake", intake.pivotToAngle(IntakeConstants.kStowOut));
     
     // Used name commands
     NamedCommands.registerCommand("Tracking spin up", new ShootCommand(hood, shooter, swerve::getShooterPose));
@@ -218,7 +215,8 @@ public class RobotContainer {
     ellis.leftBumper().whileTrue(intake.intake(false).alongWith(feeder.runConveyor(-FeederConstants.kConveyorVoltage)));
 
 
-    ellis.x().onTrue(intake.pivotToAngle(IntakeConstants.kStowedPosition));
+    ellis.x().onTrue(intake.pivotToAngle(IntakeConstants.kFramePerimStow));
+    ellis.y().onTrue(intake.pivotToAngle(IntakeConstants.kStowOut));
     // alongWith(Commands.startEnd(() -> feeder.setConveyorVoltage(FeederConstants.kConveyorVoltage), () -> feeder.setConveyorVoltage(0)))
     // .alongWith(Commands.startEnd(() -> intake.setPosition(IntakeConstants.kIntakePosition), () -> intake.setPosition(IntakeConstants.kStowedPosition))));
     //   //outtake
