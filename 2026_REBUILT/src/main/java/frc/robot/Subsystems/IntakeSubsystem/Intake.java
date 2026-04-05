@@ -104,11 +104,10 @@ public class Intake extends SubsystemBase {
         .onlyWhile(() -> Math.abs(position - getPivotPosition()) > IntakeConstants.kPivotTheshold);
     }
 
-    //pass false to extake
-    public Command intake(boolean intake){
-        return pivotToAngle(IntakeConstants.kIntakePosition).andThen(
-            runIntake(IntakeConstants.kIntakeVoltage * ((intake) ? 1 : -1))
-            .alongWith(this.runOnce(() -> setPivotVoltage(IntakeConstants.kPivotHoldsVoltage)))
+
+    public Command intake(){
+        return pivotToAngle(IntakeConstants.kIntakePosition)
+            .alongWith(this.runOnce(() -> setPivotVoltage(IntakeConstants.kPivotHoldsVoltage))
         );
     }
 

@@ -14,7 +14,7 @@ public class IntakeConstants {
     public final static double kPivotHoldsVoltage = 0;//0.5;
     public final static double kPivotTheshold = 2;
 
-    public final static double kIntakePosition = 26.195;
+    public final static double kIntakePosition = 26.00;
     public final static double kFramePerimStow = 5.41;
     public final static double kStowOut = 14.268;
 
