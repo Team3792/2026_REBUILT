@@ -204,7 +204,29 @@ public class RobotContainer {
     swerve.setDefaultCommand(new DriveCommand(swerve, () -> -ellis.getLeftY(), () -> -ellis.getLeftX(), () -> -ellis.getRightX(), () -> ellis.getRightTriggerAxis() > 0.1));      
     ellis.povUp().onTrue(Commands.runOnce(swerve::resetHeading));
     ellis.leftTrigger().whileTrue(swerve.crossCommand());
-   
+
+    //Shooting
+    ellis.rightTrigger().whileTrue(new ShootCommand(hood, shooter, swerve::getShooterPose))
+      .and(ellis.leftTrigger().whileTrue(
+      new StartEndCommand(
+        () -> {feeder.setKickerVoltage(12); feeder.setConveyorVoltage(8);}, 
+        () -> {feeder.setKickerVoltage(0); feeder.setConveyorVoltage(0);}
+      )
+    ));
+
+    // ellis.rightTrigger().whileTrue(new ShootCommand(hood, shooter, swerve::getShooterPose));
+
+    // ellis.leftTrigger().and(shotReady.or(ellis.a()))
+    // .whileTrue(
+    //   new StartEndCommand(
+    //     () -> {feeder.setKickerVoltage(12); feeder.setConveyorVoltage(8);}, 
+    //     () -> {feeder.setKickerVoltage(0); feeder.setConveyorVoltage(0);}
+    //   )
+    // );
+
+
+    
+    
 
     // Intake backup
     ellis.povUp().whileTrue(intake.movePivot(1));  
@@ -227,7 +249,7 @@ public class RobotContainer {
         .alongWith(feeder.runConveyor(-FeederConstants.kConveyorVoltage)));
 
     ellis.x().onTrue(Commands.runOnce(() -> intake.setPosition(IntakeConstants.kFramePerimStow), intake));
-    ellis.y().onTrue(Commands.runOnce(() -> intake.setPosition(IntakeConstants.kZeroPosition)));
+    ellis.y().onTrue(Commands.runOnce(() -> intake.setPosition(IntakeConstants.kZeroPosition), intake));
 
     // alongWith(Commands.startEnd(() -> feeder.setConveyorVoltage(FeederConstants.kConveyorVoltage), () -> feeder.setConveyorVoltage(0)))
     // .alongWith(Commands.startEnd(() -> intake.setPosition(IntakeConstants.kIntakePosition), () -> intake.setPosition(IntakeConstants.kStowedPosition))));
