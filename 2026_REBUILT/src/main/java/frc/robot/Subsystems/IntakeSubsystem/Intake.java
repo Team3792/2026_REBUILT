@@ -94,8 +94,8 @@ public class Intake extends SubsystemBase {
         else
             driveVoltage = IntakeConstants.kDrivePivotVoltage;
 
-        
 
+            
         return this.run(() -> {setPosition(position); setDriveVoltage(driveVoltage); System.out.println("running");})
         .onlyWhile(() -> Math.abs(position - getPivotPosition()) > IntakeConstants.kPivotTheshold);
     }
