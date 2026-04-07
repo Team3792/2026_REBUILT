@@ -78,11 +78,11 @@ public class RobotContainer {
     }
 
   private void configurAutoChooser(){
-    NamedCommands.registerCommand("Deploy Intake", intake.intake().alongWith(feeder.runConveyor(FeederConstants.kConveyorVoltage)));
-    NamedCommands.registerCommand("Stow Intake", intake.pivotToAngle(IntakeConstants.kStowOut));
+    // NamedCommands.registerCommand("Deploy Intake", intake.intake().alongWith(feeder.runConveyor(FeederConstants.kConveyorVoltage)));
+    // NamedCommands.registerCommand("Stow Intake", intake.pivotToAngle(IntakeConstants.kStowOut));
     
-    // Used name commands
-    NamedCommands.registerCommand("Tracking spin up", new ShootCommand(hood, shooter, swerve::getShooterPose));
+    // // Used name commands
+    // NamedCommands.registerCommand("Tracking spin up", new ShootCommand(hood, shooter, swerve::getShooterPose));
     //NamedCommands.registerCommand("test", new ShootCommand(hood, shooter, swerve::getShooterPose).withTimeout(5));
     //NamedCommands.registerCommand("testing", Commands.run(() -> shooter.setRPS(30)));
     NamedCommands.registerCommand("Rotate to tag", new DriveCommand(swerve, () -> 0.0, () -> 0.0, () -> 0.0, () -> true));
@@ -131,11 +131,11 @@ public class RobotContainer {
 
     aneesh.rightTrigger().whileTrue(rumble(0.75, aneesh));
 
-    transitionShift.onTrue(rumble(0.8, 4, aneesh));
-    shiftOne.onTrue(rumble(0.8, 4, aneesh));
-    shiftTwo.onTrue(rumble(0.8, 4, aneesh));
-    shiftThree.onTrue(rumble(0.8, 4, aneesh));
-    shiftFour.onTrue(rumble(0.8, 4, aneesh));
+    transitionShift.onTrue(rumble(1, 4, aneesh));
+    shiftOne.onTrue(rumble(1, 4, aneesh));
+    shiftTwo.onTrue(rumble(1, 4, aneesh));
+    shiftThree.onTrue(rumble(1, 4, aneesh));
+    shiftFour.onTrue(rumble(1, 4, aneesh));
     endGame.onTrue(rumble(1, 4, aneesh));
 
 
@@ -193,11 +193,11 @@ public class RobotContainer {
   }
 
   private void configureEllisBindings(){
-    transitionShift.onTrue(rumble(0.8, 4, ellis));
-    shiftOne.onTrue(rumble(0.8, 4, ellis));
-    shiftTwo.onTrue(rumble(0.8, 4, ellis));
-    shiftThree.onTrue(rumble(0.8, 4, ellis));
-    shiftFour.onTrue(rumble(0.8, 4, ellis));
+    transitionShift.onTrue(rumble(1, 4, ellis));
+    shiftOne.onTrue(rumble(1, 4, ellis));
+    shiftTwo.onTrue(rumble(1, 4, ellis));
+    shiftThree.onTrue(rumble(1, 4, ellis));
+    shiftFour.onTrue(rumble(1, 4, ellis));
     endGame.onTrue(rumble(1, 4, ellis));
 
     // Swerve
@@ -211,12 +211,24 @@ public class RobotContainer {
     ellis.povDown().whileTrue(intake.movePivot(-1));
 
     //Intake regular
-    ellis.rightBumper().whileTrue(intake.intake().alongWith(feeder.runConveyor(FeederConstants.kConveyorVoltage)));
-    ellis.leftBumper().whileTrue(intake.intake().alongWith(feeder.runConveyor(-FeederConstants.kConveyorVoltage)));
+    ellis.rightBumper().whileTrue(
+      Commands.startEnd(() -> {
+        intake.setPosition(IntakeConstants.kIntakePosition);
+        intake.setDriveVoltage(IntakeConstants.kIntakeVoltage);}, () ->
+          intake.setDriveVoltage(0),intake)
+        .alongWith(feeder.runConveyor(FeederConstants.kConveyorVoltage)));
 
+    ellis.leftBumper().whileTrue(
+      Commands.startEnd(() -> {
+        intake.setPosition(IntakeConstants.kIntakePosition);
+        intake.setDriveVoltage(-IntakeConstants.kIntakeVoltage);}, 
+        () -> intake.setDriveVoltage(0),
+        intake)
+        .alongWith(feeder.runConveyor(-FeederConstants.kConveyorVoltage)));
 
-    ellis.x().onTrue(intake.pivotToAngle(IntakeConstants.kFramePerimStow));
-    ellis.y().onTrue(intake.pivotToAngle(IntakeConstants.kStowOut));
+    ellis.x().onTrue(Commands.runOnce(() -> intake.setPosition(IntakeConstants.kFramePerimStow), intake));
+    ellis.y().onTrue(Commands.runOnce(() -> intake.setPosition(IntakeConstants.kZeroPosition)));
+
     // alongWith(Commands.startEnd(() -> feeder.setConveyorVoltage(FeederConstants.kConveyorVoltage), () -> feeder.setConveyorVoltage(0)))
     // .alongWith(Commands.startEnd(() -> intake.setPosition(IntakeConstants.kIntakePosition), () -> intake.setPosition(IntakeConstants.kStowedPosition))));
     //   //outtake

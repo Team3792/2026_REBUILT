@@ -17,6 +17,7 @@ public class IntakeConstants {
     public final static double kIntakePosition = 26.00;
     public final static double kFramePerimStow = 5.41;
     public final static double kStowOut = 14.268;
+    public final static double kZeroPosition = 0;
 
 
     // public final static double kHoldPosition = 6.15;
