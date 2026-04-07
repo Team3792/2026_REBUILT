@@ -199,8 +199,4 @@ public class AntPoseEstimator extends SwerveDrivePoseEstimator {
         field.setRobotPose(getEstimatedPosition());
         //System.out.println("updating ant pose estimator");
     }
-
-    
-
-
 }

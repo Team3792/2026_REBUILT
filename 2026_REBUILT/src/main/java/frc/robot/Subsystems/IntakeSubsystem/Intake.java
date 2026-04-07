@@ -64,6 +64,10 @@ public class Intake extends SubsystemBase {
         return getPosition() * 360;
     }
 
+    public double getArmAngle(){
+        return getAngle() * IntakeConstants.kGearRatio;
+    }
+
     public void setDriveVoltage(double voltage){
         drive.setVoltage(voltage);
     }
@@ -100,11 +104,10 @@ public class Intake extends SubsystemBase {
         .onlyWhile(() -> Math.abs(position - getPivotPosition()) > IntakeConstants.kPivotTheshold);
     }
 
-    //pass false to extake
-    public Command intake(boolean intake){
-        return pivotToAngle(IntakeConstants.kIntakePosition).andThen(
-            runIntake(IntakeConstants.kIntakeVoltage * ((intake) ? 1 : -1))
-            .alongWith(this.runOnce(() -> setPivotVoltage(IntakeConstants.kPivotHoldsVoltage)))
+
+    public Command intake(){
+        return pivotToAngle(IntakeConstants.kIntakePosition)
+            .alongWith(this.runOnce(() -> setPivotVoltage(IntakeConstants.kPivotHoldsVoltage))
         );
     }
 
@@ -130,6 +133,7 @@ public class Intake extends SubsystemBase {
     public void periodic() {
         SmartDashboard.putNumber("Intake Position", getPosition());
         SmartDashboard.putNumber("Intake Angle", getAngle());
+        SmartDashboard.putNumber("armPosition", getArmAngle());
         SmartDashboard.putBoolean("Intake Deployed", intakeDeployed());
     }
 }

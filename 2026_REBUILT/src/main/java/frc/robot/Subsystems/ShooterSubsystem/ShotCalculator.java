@@ -29,7 +29,7 @@ public class ShotCalculator {
     };
 
 
-    public static final Shot kBumperShot = new Shot(0, 50, 20); //Need to determine
+    public static final Shot kBumperShot = new Shot(0, 45, 20); //Need to determine
     public static final Shot kFeedShot = new Shot(0, 70, 40);
     public static final Shot kZeroShot = new Shot(0, 0, 0);
 
