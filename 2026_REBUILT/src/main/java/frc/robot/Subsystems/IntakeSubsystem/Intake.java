@@ -61,7 +61,7 @@ public class Intake extends SubsystemBase {
     }
 
     public Command manualPivotVoltage(double voltage){
-        return this.startEnd(() -> setPivotVoltage(voltage), () -> setPivotVoltage(0));
+        return Commands.startEnd(() -> setPivotVoltage(voltage), () -> setPivotVoltage(0));
     }
 
     //Commands -------------------
@@ -76,6 +76,24 @@ public class Intake extends SubsystemBase {
             },
             () -> setDriveVoltage(0)
         );
+    }
+
+    public Command setPositionCommand(double position){
+        return this.runOnce(() -> setPosition(position));
+    }
+
+    //period is the time to go up and back down 
+    public Command agitate(double firstPosition, double secondPosition, double periodSeconds){
+        return Commands.repeatingSequence(
+            setPositionCommand(firstPosition),
+            Commands.waitSeconds (periodSeconds/2),
+            setPositionCommand(secondPosition),
+            Commands.waitSeconds(periodSeconds/2)
+        );
+    }
+
+    public Command agitate(double periodSeconds){
+        return agitate(IntakeConstants.kIntakePosition, IntakeConstants.kStowOut, periodSeconds);
     }
 
     public Command intake(){

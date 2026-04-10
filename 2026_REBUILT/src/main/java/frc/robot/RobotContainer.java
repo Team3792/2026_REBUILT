@@ -160,23 +160,14 @@ public class RobotContainer {
     ellis.povDown().whileTrue(intake.manualPivotVoltage(-1));
 
     //Intake regular
-    ellis.rightBumper().whileTrue(
-      Commands.startEnd(() -> {
-        intake.setPosition(IntakeConstants.kIntakePosition);
-        intake.setDriveVoltage(IntakeConstants.kIntakeVoltage);}, () ->
-          intake.setDriveVoltage(0),intake)
+    ellis.rightBumper().whileTrue(intake.intake()
         .alongWith(feeder.feed(FeederConstants.kConveyorVoltage, 0)));
 
-    ellis.leftBumper().whileTrue(
-      Commands.startEnd(() -> {
-        intake.setPosition(IntakeConstants.kIntakePosition);
-        intake.setDriveVoltage(-IntakeConstants.kIntakeVoltage);}, 
-        () -> intake.setDriveVoltage(0),
-        intake)
+    ellis.leftBumper().whileTrue(intake.extake()
         .alongWith(feeder.feed(-FeederConstants.kConveyorVoltage, 0)));
 
-    ellis.x().onTrue(Commands.runOnce(() -> intake.setPosition(IntakeConstants.kFramePerimStow), intake));
-    ellis.y().onTrue(Commands.runOnce(() -> intake.setPosition(IntakeConstants.kZeroPosition), intake));
+    ellis.x().onTrue(intake.setPositionCommand(IntakeConstants.kFramePerimStow));
+    ellis.y().onTrue(intake.setPositionCommand(IntakeConstants.kZeroPosition));
   }
  
   public Command getAutonomousCommand() {
