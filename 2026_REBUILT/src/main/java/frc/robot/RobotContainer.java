@@ -91,10 +91,9 @@ public class RobotContainer {
           () -> {feeder.setKickerVoltage(0); feeder
             .setConveyorVoltage(0);}
         ));
-    NamedCommands.registerCommand("Feed when ready", Commands.waitUntil(shotReady::getAsBoolean).andThen(new StartEndCommand(
-          () -> {feeder.setKickerVoltage(12); feeder.setConveyorVoltage(10);}, 
-          () -> {feeder.setKickerVoltage(0); feeder.setConveyorVoltage(0);}
-        )));
+    NamedCommands.registerCommand("Feed when ready", 
+      Commands.waitUntil(shotReady::getAsBoolean).andThen(feeder.feed())
+    );
     
 
       
@@ -126,10 +125,7 @@ public class RobotContainer {
       (new DriveCommand(swerve, () -> -1.0, () -> 0.0, () -> 0.0, () -> true)).withTimeout(0.5).andThen(
       (new DriveCommand(swerve, () -> 0.0, () -> 0.0, () -> 0.0, () -> true)).onlyWhile(shotReady.negate())
       .andThen(
-        new StartEndCommand(
-          () -> {feeder.setKickerVoltage(12); feeder.setConveyorVoltage(10);}, 
-          () -> {feeder.setKickerVoltage(0); feeder.setConveyorVoltage(0);}
-        ) 
+        feeder.feed() 
       )
       )
     );
@@ -149,21 +145,8 @@ public class RobotContainer {
 
 
     //Feeder
-    aneesh.rightBumper().and(shotReady.or(aneesh.rightTrigger()))
-    .whileTrue(
-      new StartEndCommand(
-        () -> {feeder.setKickerVoltage(12); feeder.setConveyorVoltage(8);}, 
-        () -> {feeder.setKickerVoltage(0); feeder.setConveyorVoltage(0);}
-      )
-    );
-    
-    
-    aneesh.leftBumper().whileTrue(
-      new StartEndCommand(
-        () -> {feeder.setKickerVoltage(-12); feeder.setConveyorVoltage(-8);}, 
-        () -> {feeder.setKickerVoltage(0); feeder.setConveyorVoltage(0);}
-      )
-    );
+    aneesh.rightBumper().and(shotReady.or(aneesh.rightTrigger())).whileTrue(feeder.feed());
+    aneesh.leftBumper().whileTrue(feeder.feed(-8, -12));
 
     //Shooter and Hood
     //Hub Shot
@@ -247,7 +230,7 @@ public class RobotContainer {
         intake.setPosition(IntakeConstants.kIntakePosition);
         intake.setDriveVoltage(IntakeConstants.kIntakeVoltage);}, () ->
           intake.setDriveVoltage(0),intake)
-        .alongWith(feeder.runConveyor(FeederConstants.kConveyorVoltage)));
+        .alongWith(feeder.feed(FeederConstants.kConveyorVoltage, 0)));
 
     ellis.leftBumper().whileTrue(
       Commands.startEnd(() -> {
@@ -255,7 +238,7 @@ public class RobotContainer {
         intake.setDriveVoltage(-IntakeConstants.kIntakeVoltage);}, 
         () -> intake.setDriveVoltage(0),
         intake)
-        .alongWith(feeder.runConveyor(-FeederConstants.kConveyorVoltage)));
+        .alongWith(feeder.feed(-FeederConstants.kConveyorVoltage, 0)));
 
     ellis.x().onTrue(Commands.runOnce(() -> intake.setPosition(IntakeConstants.kFramePerimStow), intake));
     ellis.y().onTrue(Commands.runOnce(() -> intake.setPosition(IntakeConstants.kZeroPosition), intake));

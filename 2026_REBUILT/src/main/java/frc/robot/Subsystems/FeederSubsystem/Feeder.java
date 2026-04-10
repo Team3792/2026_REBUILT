@@ -11,14 +11,14 @@ import frc.robot.HardwareMap;
 //includes conveyor system and serializer
 public class Feeder extends SubsystemBase{
     TalonFX kicker = new TalonFX(HardwareMap.kickerID.id());
-    TalonFX Conveyor = new TalonFX(HardwareMap.conveyorID.id());
+    TalonFX conveyor = new TalonFX(HardwareMap.conveyorID.id());
 
     double a;
     
 
     public Feeder(){
         kicker.getConfigurator().apply(FeederConstants.getKickerConfig());
-        Conveyor.getConfigurator().apply(FeederConstants.getConveyorConfig());
+        conveyor.getConfigurator().apply(FeederConstants.getConveyorConfig());
     }
 
     public void setKickerVoltage(double voltage){
@@ -26,31 +26,22 @@ public class Feeder extends SubsystemBase{
     }
 
     public void setConveyorVoltage(double voltage){
-        Conveyor.setVoltage(voltage);
+        conveyor.setVoltage(voltage);
     }
 
-    public void setSubsystemVoltage(double voltage1, double voltage2){
-        setKickerVoltage(voltage1);
-        setConveyorVoltage(voltage2);
+    public void setVoltage(double conveyor, double kicker){
+        setConveyorVoltage(conveyor);
+        setKickerVoltage(kicker);
     }
 
-    public Command runKicker(double voltage){
-        return Commands.runOnce(()-> setKickerVoltage(voltage));
+    public Command feed(double conveyorVoltage, double kickerVoltage){
+        return this.startEnd(
+            () -> setVoltage(conveyorVoltage, kickerVoltage), 
+            () -> setVoltage(0, 0)
+        );
     }
 
-    public Command runConveyor(double voltage){
-        return Commands.startEnd(() -> setConveyorVoltage(voltage), () -> setConveyorVoltage(0));
+    public Command feed(){
+        return feed(FeederConstants.kConveyorVoltage, FeederConstants.kKickerVoltage);
     }
-
-    public Command runFeeder(double kicker, double belts){
-        return Commands.startEnd(() -> setSubsystemVoltage(kicker, belts), () -> setSubsystemVoltage(0, 0));
-    }
-
-    //run both conveyor, and kicker
-    public Command runFeederSubsystem(){
-        return Commands.parallel( runKicker(FeederConstants.kKickerVoltage),
-                                  runConveyor(FeederConstants.kConveyorVoltage));
-    }
-
-
 }

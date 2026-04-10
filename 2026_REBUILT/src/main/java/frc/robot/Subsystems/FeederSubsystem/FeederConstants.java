@@ -5,9 +5,8 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 public class FeederConstants {
-    //need to tune
-    public static final double kKickerVoltage = 10;
-    public static final double kConveyorVoltage = 8;
+    public static final double kKickerVoltage = 12;
+    public static final double kConveyorVoltage = 10;
 
     public static TalonFXConfiguration getKickerConfig(){
         TalonFXConfiguration config = new TalonFXConfiguration();
