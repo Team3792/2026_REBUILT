@@ -36,7 +36,7 @@ public class ModuleConstants {
     public static final ModuleConfig kFrontRight = new ModuleConfig(new CANAddress(3, "front left drive", 0), 
                                                                     new CANAddress(4, "front left turn", 0), 
                                                                     new CANAddress(5, "front left encoder", 0),
-                                                                     -0.40);
+                                                                     -0.40 - 0.712 - 0.503);
 
     public static final ModuleConfig kBackLeft = new ModuleConfig(new CANAddress(6, "back left drive", 0), 
                                                                   new CANAddress(7, "back left turn", 0), 
