@@ -8,15 +8,24 @@ import java.util.Optional;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 
 /** Add your docs here. */
 public class GameManager {
-
     public static boolean error = false;
-
     public static boolean wonAuto;
     private static Alliance allianceColor;
+
+    //Global triggers for each shift
+    public static Trigger transitionShiftTrigger = new Trigger(() -> GameManager.atTransitionShift());
+    public static Trigger shiftOneTrigger = new Trigger(() -> GameManager.atShiftOne());
+    public static Trigger shiftTwoTrigger = new Trigger(() -> GameManager.atShiftTwo());
+    public static Trigger shiftThreeTrigger = new Trigger(() -> GameManager.atShiftThree());
+    public static Trigger shiftFourTrigger = new Trigger(() -> GameManager.atShiftFour());
+    public static Trigger endGameTrigger = new Trigger(() -> GameManager.atEndGame());
+
+
     public GameManager(){
     }
 

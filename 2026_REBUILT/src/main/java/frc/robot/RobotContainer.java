@@ -33,6 +33,7 @@ import frc.robot.Subsystems.ShooterSubsystem.Hood.*;
 import frc.robot.Subsystems.ShooterSubsystem.Shooter.*;
 import frc.robot.Subsystems.SwerveSubsystem.DriveCommand;
 import frc.robot.Subsystems.SwerveSubsystem.Swerve;
+import frc.robot.util.Rumbler;
 
 public class RobotContainer {
 
@@ -45,13 +46,6 @@ public class RobotContainer {
 
   CommandXboxController ellis = new CommandXboxController(0);
   CommandXboxController aneesh = new CommandXboxController(1);
-
-  Trigger transitionShift = new Trigger(() -> GameManager.atTransitionShift());
-  Trigger shiftOne = new Trigger(() -> GameManager.atShiftOne());
-  Trigger shiftTwo = new Trigger(() -> GameManager.atShiftTwo());
-  Trigger shiftThree = new Trigger(() -> GameManager.atShiftThree());
-  Trigger shiftFour = new Trigger(() -> GameManager.atShiftFour());
-  Trigger endGame = new Trigger(() -> GameManager.atEndGame());
 
   Trigger shotReady = new Trigger(() -> swerve.readyToShoot() && hood.readyToShoot() && shooter.readyToShoot());
 
@@ -132,17 +126,8 @@ public class RobotContainer {
   }
 
   private void configureAneeshBindings(){
-    //nearTrench.whileTrue(rumble(0.7, 5));
-
-    aneesh.rightTrigger().whileTrue(rumble(0.75, aneesh));
-
-    transitionShift.onTrue(rumble(1, 4, aneesh));
-    shiftOne.onTrue(rumble(1, 4, aneesh));
-    shiftTwo.onTrue(rumble(1, 4, aneesh));
-    shiftThree.onTrue(rumble(1, 4, aneesh));
-    shiftFour.onTrue(rumble(1, 4, aneesh));
-    endGame.onTrue(rumble(1, 4, aneesh));
-
+    aneesh.rightTrigger().whileTrue(Rumbler.rumble(0.75, aneesh));
+    Rumbler.bindTransitionRumbles(aneesh);
 
     //Feeder
     aneesh.rightBumper().and(shotReady.or(aneesh.rightTrigger())).whileTrue(feeder.feed());
@@ -152,77 +137,27 @@ public class RobotContainer {
     //Hub Shot
     aneesh.b().whileTrue(ShootCommand.fixedShot(ShotCalculator.kBumperShot, hood, shooter));
     aneesh.a().whileTrue(ShootCommand.fixedShot(ShotCalculator.kFeedShot, hood, shooter));
-    // aneesh.b().whileTrue(Commands.startEnd(() -> shooter.setRPS(50), 
-    //                             () -> shooter.setVoltage(0)).alongWith(Commands.startEnd(() -> hood.setAngle(15), 
-    //                               () -> hood.setAngle(12))));
-
-    // aneesh.b().whileTrue(Commands.startEnd(
-    //   () -> shooter.setRPS(ShotCalculator.kBumperShot.omegaRPS())
-    // ));
-
-    // aneesh.a().whileTrue(Commands.startEnd(() -> shooter.setRPS(50), () -> shooter.setVoltage(0))
-    //       .alongWith(Commands.startEnd(() -> hood.setAngle(15), () -> hood.setAngle(12))));
-
-    //Changeable Shot                  
-    SmartDashboard.putNumber("Set RPS", 45);
-    SmartDashboard.putNumber("Set Hood Angle", 20);  
-
     aneesh.x().whileTrue(new ShootCommand(hood, shooter, swerve::getShooterPose));          
-    //aneesh.y().onTrue(intake.zeroIntake());                           
 
     //Change Hood Angle
     aneesh.povUp().onTrue(hood.incrementHoodAngle(HoodConstants.kAngleIncrement));
     aneesh.povDown().onTrue(hood.incrementHoodAngle(-HoodConstants.kAngleIncrement));
     aneesh.povRight().or(aneesh.povLeft()).onTrue(hood.resetIncrement());
-    
-    //Change Shooter RPS
-    // aneesh.povRight().onTrue(shooter.increaseRPS()); //Increases by 2 RPS
-    // aneesh.povLeft().onTrue(shooter.decreaseRPS()); //Decreases by 1 RPS
 
     // Intake backup
-    aneesh.y().whileTrue(intake.movePivot(1));  
-    aneesh.leftTrigger().whileTrue(intake.movePivot(-1));                         
+    aneesh.y().whileTrue(intake.manualPivotVoltage(1));  
+    aneesh.leftTrigger().whileTrue(intake.manualPivotVoltage(-1));                         
   }
 
   private void configureEllisBindings(){
-    transitionShift.onTrue(rumble(1, 4, ellis));
-    shiftOne.onTrue(rumble(1, 4, ellis));
-    shiftTwo.onTrue(rumble(1, 4, ellis));
-    shiftThree.onTrue(rumble(1, 4, ellis));
-    shiftFour.onTrue(rumble(1, 4, ellis));
-    endGame.onTrue(rumble(1, 4, ellis));
-
     // Swerve
     swerve.setDefaultCommand(new DriveCommand(swerve, () -> -ellis.getLeftY(), () -> -ellis.getLeftX(), () -> -ellis.getRightX(), () -> ellis.getRightTriggerAxis() > 0.1));      
     ellis.povUp().onTrue(Commands.runOnce(swerve::resetHeading));
     ellis.leftTrigger().whileTrue(swerve.crossCommand());
 
-    //Shooting
-    // ellis.rightTrigger().whileTrue(new ShootCommand(hood, shooter, swerve::getShooterPose))
-    //   .and(ellis.leftTrigger().whileTrue(
-    //   new StartEndCommand(
-    //     () -> {feeder.setKickerVoltage(12); feeder.setConveyorVoltage(8);}, 
-    //     () -> {feeder.setKickerVoltage(0); feeder.setConveyorVoltage(0);}
-    //   )
-    // ));
-
-    // ellis.rightTrigger().whileTrue(new ShootCommand(hood, shooter, swerve::getShooterPose));
-
-    // ellis.leftTrigger().and(shotReady.or(ellis.a()))
-    // .whileTrue(
-    //   new StartEndCommand(
-    //     () -> {feeder.setKickerVoltage(12); feeder.setConveyorVoltage(8);}, 
-    //     () -> {feeder.setKickerVoltage(0); feeder.setConveyorVoltage(0);}
-    //   )
-    // );
-
-
-    
-    
-
     // Intake backup
-    ellis.povUp().whileTrue(intake.movePivot(1));  
-    ellis.povDown().whileTrue(intake.movePivot(-1));
+    ellis.povUp().whileTrue(intake.manualPivotVoltage(1));  
+    ellis.povDown().whileTrue(intake.manualPivotVoltage(-1));
 
     //Intake regular
     ellis.rightBumper().whileTrue(
@@ -242,27 +177,8 @@ public class RobotContainer {
 
     ellis.x().onTrue(Commands.runOnce(() -> intake.setPosition(IntakeConstants.kFramePerimStow), intake));
     ellis.y().onTrue(Commands.runOnce(() -> intake.setPosition(IntakeConstants.kZeroPosition), intake));
-
-    // alongWith(Commands.startEnd(() -> feeder.setConveyorVoltage(FeederConstants.kConveyorVoltage), () -> feeder.setConveyorVoltage(0)))
-    // .alongWith(Commands.startEnd(() -> intake.setPosition(IntakeConstants.kIntakePosition), () -> intake.setPosition(IntakeConstants.kStowedPosition))));
-    //   //outtake
-    
-    //ellis.rightTrigger().whileTrue(Commands.startEnd(() -> intake.setPosition(IntakeConstants.kIntakePosition), 
-                        //() -> intake.setPosition(IntakeConstants.kStowedPosition)));
-
-    //make a boolean that shows if the intake is down
   }
  
-
-  // intensity on a scale of 0-1 and duration in seconds
-  private Command rumble(double intensity, double duration, CommandXboxController controller){
-      return Commands.startEnd(() -> controller.setRumble(RumbleType.kBothRumble, intensity), () -> controller.setRumble(RumbleType.kBothRumble, 0)).withTimeout(duration);
-  }
-
-  private Command rumble(double intensity, CommandXboxController controller){
-    return Commands.startEnd(() -> controller.setRumble(RumbleType.kBothRumble, intensity), () -> controller.setRumble(RumbleType.kBothRumble, 0));
-  }
-
   public Command getAutonomousCommand() {
     return autoChooser.getSelected();  
   }

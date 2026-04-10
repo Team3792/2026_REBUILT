@@ -1,21 +1,14 @@
 package frc.robot.Subsystems.IntakeSubsystem;
 
-import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
-import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.pathplanner.lib.auto.CommandUtil;
-
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.HardwareMap;
 
@@ -23,49 +16,27 @@ import frc.robot.HardwareMap;
 public class Intake extends SubsystemBase {
     TalonFX drive = new TalonFX(HardwareMap.intakeDriveID.id());
     TalonFX pivot = new TalonFX(HardwareMap.intakePivotID.id());
-    ProfiledPIDController pid = new ProfiledPIDController(IntakeConstants.kP, IntakeConstants.kI, IntakeConstants.kD, 
-    new TrapezoidProfile.Constraints(360, 720));
-    MotionMagicVoltage motionMagic = new MotionMagicVoltage(0);
-    VelocityVoltage driveVelocityController = new VelocityVoltage(0).withSlot(0);
+
+    MotionMagicVoltage pivotController = new MotionMagicVoltage(0);
 
     public Intake(){
         drive.getConfigurator().apply(IntakeConstants.applyIntakeConfig());
         pivot.getConfigurator().apply(IntakeConstants.applyPivotConfig());
-        motionMagic.Slot = 0;
-        pivot.setPosition(0);
-    }
+        pivotController.Slot = 0;
 
-
-    //returns position in rotations
-    public double getPosition(){
-        double position = pivot.getPosition().getValueAsDouble();
-        return position;                                  
+        pivot.setPosition(0); //Zeroing pivot
     }
 
     public boolean intakeDeployed(){
-        double position = getPosition();
-        if ((position - IntakeConstants.kIntakePosition) < 3){
-            return true;
-        } else {
-            return false;
-        }
+        return Math.abs(getPosition() - IntakeConstants.kIntakePosition) < 3;
     }
 
-    public void setIntakePosition(){
-        pivot.setPosition(0);
+    public Rotation2d getAngle(){
+        return Rotation2d.fromRotations(getPosition() * IntakeConstants.kGearRatio);
     }
 
-    public Command zeroIntake(){
-        return Commands.runOnce(() -> setIntakePosition());
-    }
-
-    //returns angle in degrees
-    public double getAngle(){
-        return getPosition() * 360;
-    }
-
-    public double getArmAngle(){
-        return getAngle() * IntakeConstants.kGearRatio;
+    public double getPosition(){
+        return pivot.getPosition().getValueAsDouble();                                
     }
 
     public void setDriveVoltage(double voltage){
@@ -77,63 +48,47 @@ public class Intake extends SubsystemBase {
     }
 
     public Command runIntake(double voltage){
-        return Commands.startEnd(()-> setDriveVoltage(voltage), () -> setDriveVoltage(0));
+        return this.startEnd(()-> setDriveVoltage(voltage), () -> setDriveVoltage(0));
     }
 
-    // Position in rotations
+    //Position in rotations
     public void setPosition(double position){
-        pivot.setControl(motionMagic.withPosition(position));
-    }
-
-    public void runPivot(double voltage){
-        pivot.setVoltage(voltage);
-    }
-
-    public Command pivotToAngle(double position){
-        double driveVoltage;
-
-        //If going up, reverse voltage
-        if (position > getPivotPosition())
-            driveVoltage = -IntakeConstants.kDrivePivotVoltage;
-        else
-            driveVoltage = IntakeConstants.kDrivePivotVoltage;
-
-
-            
-        return this.run(() -> {setPosition(position); setDriveVoltage(driveVoltage); System.out.println("running");})
-        .onlyWhile(() -> Math.abs(position - getPivotPosition()) > IntakeConstants.kPivotTheshold);
-    }
-
-
-    public Command intake(){
-        return pivotToAngle(IntakeConstants.kIntakePosition)
-            .alongWith(this.runOnce(() -> setPivotVoltage(IntakeConstants.kPivotHoldsVoltage))
-        );
-    }
-
-    public Command runIntakeVelocity(double rps){
-        return Commands.runOnce(() -> {
-            drive.setControl(driveVelocityController.withVelocity(rps));
-        });
-    }
-
-    public double getPivotPosition(){
-        return pivot.getPosition().getValueAsDouble();
-    }
-
-    public Command movePivot(double voltage){
-        return this.startEnd(() -> runPivot(voltage), () -> runPivot(0));
+        pivot.setControl(pivotController.withPosition(position));
     }
 
     public Command runToPosition(double position){
         return Commands.runOnce(() -> setPosition(position));
     }
+
+    public Command manualPivotVoltage(double voltage){
+        return this.startEnd(() -> setPivotVoltage(voltage), () -> setPivotVoltage(0));
+    }
+
+    //Commands -------------------
+
+    //Deploys and runs intake at given velocity
+    //Does NOT return intake to stowing position automatically
+    public Command deployAndIntake(double voltage){
+        return this.startEnd(
+            () -> {
+                setPosition(IntakeConstants.kIntakePosition);
+                setDriveVoltage(voltage);
+            },
+            () -> setDriveVoltage(0)
+        );
+    }
+
+    public Command intake(){
+        return deployAndIntake(IntakeConstants.kIntakeVoltage);
+    }
+
+    public Command extake(){
+        return deployAndIntake(-IntakeConstants.kIntakeVoltage);
+    }
     
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Intake Position", getPosition());
-        SmartDashboard.putNumber("Intake Angle", getAngle());
-        SmartDashboard.putNumber("armPosition", getArmAngle());
         SmartDashboard.putBoolean("Intake Deployed", intakeDeployed());
     }
 }
