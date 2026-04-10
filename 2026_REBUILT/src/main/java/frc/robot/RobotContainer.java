@@ -82,7 +82,7 @@ public class RobotContainer {
     // NamedCommands.registerCommand("Stow Intake", intake.pivotToAngle(IntakeConstants.kStowOut));
     
     // // Used name commands
-    // NamedCommands.registerCommand("Tracking spin up", new ShootCommand(hood, shooter, swerve::getShooterPose));
+    NamedCommands.registerCommand("Tracking spin up", new ShootCommand(hood, shooter, swerve::getShooterPose));
     //NamedCommands.registerCommand("test", new ShootCommand(hood, shooter, swerve::getShooterPose).withTimeout(5));
     //NamedCommands.registerCommand("testing", Commands.run(() -> shooter.setRPS(30)));
     NamedCommands.registerCommand("Rotate to tag", new DriveCommand(swerve, () -> 0.0, () -> 0.0, () -> 0.0, () -> true));
@@ -95,10 +95,19 @@ public class RobotContainer {
           () -> {feeder.setKickerVoltage(12); feeder.setConveyorVoltage(10);}, 
           () -> {feeder.setKickerVoltage(0); feeder.setConveyorVoltage(0);}
         )));
-
-    System.out.println(NamedCommands.hasCommand("test"));
     
-        boolean isCompetition = false;
+
+      
+    NamedCommands.registerCommand("Run intake", Commands.startEnd(() -> 
+    {intake.setDriveVoltage(IntakeConstants.kIntakeVoltage); feeder.setConveyorVoltage(FeederConstants.kConveyorVoltage);}
+    , () -> intake.setDriveVoltage(0)));
+
+    NamedCommands.registerCommand("Deploy intake", Commands.startEnd(() -> intake.setPosition(IntakeConstants.kIntakePosition),
+     () -> intake.setPosition(IntakeConstants.kFramePerimStow)));
+  
+    //System.out.println(NamedCommands.hasCommand("test"));
+    
+    boolean isCompetition = false;
 
     autoChooser = AutoBuilder.buildAutoChooserWithOptionsModifier(
       (stream) -> isCompetition ? 
@@ -206,13 +215,13 @@ public class RobotContainer {
     ellis.leftTrigger().whileTrue(swerve.crossCommand());
 
     //Shooting
-    ellis.rightTrigger().whileTrue(new ShootCommand(hood, shooter, swerve::getShooterPose))
-      .and(ellis.leftTrigger().whileTrue(
-      new StartEndCommand(
-        () -> {feeder.setKickerVoltage(12); feeder.setConveyorVoltage(8);}, 
-        () -> {feeder.setKickerVoltage(0); feeder.setConveyorVoltage(0);}
-      )
-    ));
+    // ellis.rightTrigger().whileTrue(new ShootCommand(hood, shooter, swerve::getShooterPose))
+    //   .and(ellis.leftTrigger().whileTrue(
+    //   new StartEndCommand(
+    //     () -> {feeder.setKickerVoltage(12); feeder.setConveyorVoltage(8);}, 
+    //     () -> {feeder.setKickerVoltage(0); feeder.setConveyorVoltage(0);}
+    //   )
+    // ));
 
     // ellis.rightTrigger().whileTrue(new ShootCommand(hood, shooter, swerve::getShooterPose));
 

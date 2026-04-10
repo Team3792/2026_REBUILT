@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 1.855433734939759,
-        "y": 1.5981204819277117
+        "x": 2.740578313253012,
+        "y": 1.2702891566265067
       },
       "prevControl": {
-        "x": 2.052132530120482,
-        "y": 0.680192771084337
+        "x": 2.8607831325301203,
+        "y": 0.5709156626506026
       },
       "nextControl": null,
       "isLocked": false,
@@ -44,11 +44,22 @@
       }
     }
   ],
-  "pointTowardsZones": [],
+  "pointTowardsZones": [
+    {
+      "fieldPosition": {
+        "x": 4.4,
+        "y": 4.2
+      },
+      "rotationOffset": 0.0,
+      "minWaypointRelativePos": 0.8883374689826302,
+      "maxWaypointRelativePos": 1.0,
+      "name": "Point Towards Zone"
+    }
+  ],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 4.0,
-    "maxAcceleration": 2.0,
+    "maxVelocity": 5.0,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -56,7 +67,7 @@
   },
   "goalEndState": {
     "velocity": 0.0,
-    "rotation": 43.26429541107163
+    "rotation": 52.125016348901774
   },
   "reversed": false,
   "folder": "outpost trench-neutral-shoot",

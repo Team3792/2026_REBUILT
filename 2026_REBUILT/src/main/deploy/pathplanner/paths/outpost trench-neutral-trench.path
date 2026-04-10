@@ -3,12 +3,12 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.368807228915662,
+        "x": 4.3,
         "y": 0.691120481927711
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.9423975903614465,
+        "x": 5.8735903614457845,
         "y": 0.49442168674698794
       },
       "isLocked": false,
@@ -73,7 +73,7 @@
       },
       "nextControl": {
         "x": 4.922969357101859,
-        "y": 0.4651590153934656
+        "y": 0.46515901539346577
       },
       "isLocked": false,
       "linkedName": null
@@ -112,8 +112,8 @@
       "minWaypointRelativePos": 0.8815165876777206,
       "maxWaypointRelativePos": 2.54976303317537,
       "constraints": {
-        "maxVelocity": 1.5,
-        "maxAcceleration": 2.0,
+        "maxVelocity": 1.0,
+        "maxAcceleration": 1.0,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0,
         "nominalVoltage": 12.0,
@@ -122,10 +122,33 @@
     }
   ],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "Deploy Intake",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": 5.0,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Deploy intake"
+        }
+      }
+    },
+    {
+      "name": "Run intake",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": 5.0,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Run intake"
+        }
+      }
+    }
+  ],
   "globalConstraints": {
-    "maxVelocity": 4.0,
-    "maxAcceleration": 2.0,
+    "maxVelocity": 5.0,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,

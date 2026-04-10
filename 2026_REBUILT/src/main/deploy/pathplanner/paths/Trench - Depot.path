@@ -3,12 +3,12 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.0,
+        "x": 3.6,
         "y": 7.488156626506025
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.5820120481927713,
+        "x": 3.1820120481927714,
         "y": 7.2368192771084345
       },
       "isLocked": false,
@@ -68,20 +68,31 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "Deploy Intake",
-      "waypointRelativePos": 0.5459057071960287,
-      "endWaypointRelativePos": 1.9950372208436595,
+      "name": "Deploy intake",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": 2.0,
       "command": {
         "type": "named",
         "data": {
-          "name": "Deploy Intake"
+          "name": "Deploy intake"
+        }
+      }
+    },
+    {
+      "name": "Run intake",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": 2.0,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Run intake"
         }
       }
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 4.0,
-    "maxAcceleration": 2.0,
+    "maxVelocity": 5.0,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,

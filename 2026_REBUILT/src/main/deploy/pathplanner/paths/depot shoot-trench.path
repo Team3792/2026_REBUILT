@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.806144578313253,
-        "y": 6.012915662650602
+        "x": 2.740578313253012,
+        "y": 6.72321686746988
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.7405783132530113,
-        "y": 6.985481927710843
+        "x": 2.6750120481927704,
+        "y": 7.695783132530121
       },
       "isLocked": false,
       "linkedName": "depot shoot"
@@ -33,8 +33,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 4.0,
-    "maxAcceleration": 2.0,
+    "maxVelocity": 5.0,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
