@@ -16,11 +16,11 @@
     },
     {
       "anchor": {
-        "x": 0.2,
+        "x": 0.475,
         "y": 0.84
       },
       "prevControl": {
-        "x": 0.5950339897841654,
+        "x": 0.8700339897841651,
         "y": 1.0796464805114523
       },
       "nextControl": null,
@@ -36,7 +36,19 @@
   ],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "Deploy intake",
+      "waypointRelativePos": 0.14193548387096844,
+      "endWaypointRelativePos": 1.0,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Deploy intake"
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 5.0,
     "maxAcceleration": 3.0,

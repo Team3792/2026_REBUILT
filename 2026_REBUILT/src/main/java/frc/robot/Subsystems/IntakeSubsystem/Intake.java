@@ -93,7 +93,7 @@ public class Intake extends SubsystemBase {
     }
 
     public Command agitate(double periodSeconds){
-        return agitate(IntakeConstants.kIntakePosition, IntakeConstants.kStowOut, periodSeconds);
+        return agitate(IntakeConstants.kIntakePosition, IntakeConstants.kFramePerimStow, periodSeconds);
     }
 
     public Command intake(){

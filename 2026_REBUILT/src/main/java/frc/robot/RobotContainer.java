@@ -54,31 +54,12 @@ public class RobotContainer {
   public RobotContainer() {
     configureAneeshBindings();
     configureEllisBindings();
-
-    //Register Named Commands
-   
-    //intervals of 5 cms
-    // for (int i = 1; i < 101; i++){
-    //   double distance = i * 5;
-    //   double rps = shooter.getTargetRPS(distance);
-    //   double angle = hood.targetHoodAngle(distance);
-    //   String name = distance + " cm shot";
-    //   NamedCommands.registerCommand(name, shooter.setFlywheelRPS(rps).alongWith(hood.setHoodAngle(angle).alongWith(feeder.runFeeder(12, 8))));
-    // }
-    
-
-
-      configurAutoChooser();
-    }
+    configurAutoChooser();
+  }
 
   private void configurAutoChooser(){
-    // NamedCommands.registerCommand("Deploy Intake", intake.intake().alongWith(feeder.runConveyor(FeederConstants.kConveyorVoltage)));
-    // NamedCommands.registerCommand("Stow Intake", intake.pivotToAngle(IntakeConstants.kStowOut));
-    
-    // // Used name commands
+    // Register Named Commands
     NamedCommands.registerCommand("Tracking spin up", new ShootCommand(hood, shooter, swerve::getShooterPose));
-    //NamedCommands.registerCommand("test", new ShootCommand(hood, shooter, swerve::getShooterPose).withTimeout(5));
-    //NamedCommands.registerCommand("testing", Commands.run(() -> shooter.setRPS(30)));
     NamedCommands.registerCommand("Rotate to tag", new DriveCommand(swerve, () -> 0.0, () -> 0.0, () -> 0.0, () -> true));
     NamedCommands.registerCommand("Feed", new StartEndCommand(
           () -> {feeder.setKickerVoltage(12); feeder.setConveyorVoltage(10);}, 
@@ -88,19 +69,16 @@ public class RobotContainer {
     NamedCommands.registerCommand("Feed when ready", 
       Commands.waitUntil(shotReady::getAsBoolean).andThen(feeder.feed())
     );
-    
-
-      
     NamedCommands.registerCommand("Run intake", Commands.startEnd(() -> 
-    {intake.setDriveVoltage(IntakeConstants.kIntakeVoltage); feeder.setConveyorVoltage(FeederConstants.kConveyorVoltage);}
+    {intake.setDriveVoltage(IntakeConstants.kIntakeVoltage); feeder.setConveyorVoltage(FeederConstants.kConveyorVoltage); 
+      feeder.setKickerVoltage(-2);}
     , () -> intake.setDriveVoltage(0)));
-
     NamedCommands.registerCommand("Deploy intake", Commands.startEnd(() -> intake.setPosition(IntakeConstants.kIntakePosition),
      () -> intake.setPosition(IntakeConstants.kFramePerimStow)));
-  
-    //System.out.println(NamedCommands.hasCommand("test"));
+    NamedCommands.registerCommand("Agitate intake", intake.agitate(2));
     
-    boolean isCompetition = false;
+    
+    boolean isCompetition = true;
 
     autoChooser = AutoBuilder.buildAutoChooserWithOptionsModifier(
       (stream) -> isCompetition ? 
@@ -108,10 +86,8 @@ public class RobotContainer {
       stream
     );
 
-
     SmartDashboard.putData("Auto Chooser", autoChooser);
     autoChooser.addOption("8B Preload", fallBackAuto());
-
   }
 
   private Command fallBackAuto(){
@@ -136,8 +112,9 @@ public class RobotContainer {
     //Shooter and Hood
     //Hub Shot
     aneesh.b().whileTrue(ShootCommand.fixedShot(ShotCalculator.kBumperShot, hood, shooter));
-    aneesh.a().whileTrue(ShootCommand.fixedShot(ShotCalculator.kFeedShot, hood, shooter));
-    aneesh.x().whileTrue(new ShootCommand(hood, shooter, swerve::getShooterPose));          
+    aneesh.a().whileTrue(intake.agitate(2));
+    aneesh.x().whileTrue(new ShootCommand(hood, shooter, swerve::getShooterPose));   
+    aneesh.leftStick().whileTrue(ShootCommand.fixedShot(ShotCalculator.kFeedShot, hood, shooter));
 
     //Change Hood Angle
     aneesh.povUp().onTrue(hood.incrementHoodAngle(HoodConstants.kAngleIncrement));
@@ -161,7 +138,7 @@ public class RobotContainer {
 
     //Intake regular
     ellis.rightBumper().whileTrue(intake.intake()
-        .alongWith(feeder.feed(FeederConstants.kConveyorVoltage, 0)));
+        .alongWith(feeder.feed(FeederConstants.kConveyorVoltage, -2)));
 
     ellis.leftBumper().whileTrue(intake.extake()
         .alongWith(feeder.feed(-FeederConstants.kConveyorVoltage, 0)));
