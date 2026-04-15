@@ -70,7 +70,7 @@ public class RobotContainer {
       Commands.waitUntil(shotReady::getAsBoolean).andThen(feeder.feed())
     );
     NamedCommands.registerCommand("Run intake", Commands.startEnd(() -> 
-    {intake.setDriveVoltage(IntakeConstants.kIntakeVoltage); feeder.setConveyorVoltage(FeederConstants.kConveyorVoltage); 
+    {intake.setDriveVoltage(IntakeConstants.kIntakeVoltage + 2.0); feeder.setConveyorVoltage(FeederConstants.kConveyorVoltage); 
       feeder.setKickerVoltage(-2);}
     , () -> intake.setDriveVoltage(0)));
     NamedCommands.registerCommand("Deploy intake", Commands.startEnd(() -> intake.setPosition(IntakeConstants.kIntakePosition),
