@@ -31,6 +31,9 @@ public class Shooter extends SubsystemBase {
 
   TalonFX rightMotor = new TalonFX(HardwareMap.shootLeaderID.id());
   TalonFX leftMotor = new TalonFX(HardwareMap.shootFollowerID.id());
+  //new motor for drum shooter
+  TalonFX motor1 = new TalonFX(0);
+
 
   MotionMagicVelocityVoltage mmVelocity = new MotionMagicVelocityVoltage(0);
   double targetRPS = 0;

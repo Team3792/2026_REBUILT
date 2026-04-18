@@ -42,7 +42,22 @@ public class IntakeConstants {
         return 9.81 * Math.sin(intakeAngle) * kGravityFF;
     }
 
-    public static TalonFXConfiguration applyIntakeConfig(){
+    public static TalonFXConfiguration applyLeftIntakeConfig(){
+        
+        TalonFXConfiguration config = new TalonFXConfiguration();
+        config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;//TO-DO; make accurate
+        config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        config.CurrentLimits.StatorCurrentLimit = 50;
+        config.CurrentLimits.StatorCurrentLimitEnable = true;
+        config.Slot0.kV = 0; //?
+        config.Slot0.kP = 0; //?
+        config.Slot0.kI = 0; //probably don't need 
+        config.Voltage.PeakForwardVoltage = 16;
+
+        return config;
+    }
+
+    public static TalonFXConfiguration applyRightIntakeConfig(){
         
         TalonFXConfiguration config = new TalonFXConfiguration();
         config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;//TO-DO; make accurate

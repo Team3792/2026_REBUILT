@@ -27,21 +27,24 @@ public class HardwareMap {
     //public static final int intakePivotID = 20;
     public static final CANAddress intakePivotID = new CANAddress(20, "intakePivot", 0);
     //public static final int intakeDriveID = 21;
-    public static final CANAddress intakeDriveID = new CANAddress(21, "intakeDrive", 0);
+    //public static final CANAddress intakeDriveID = new CANAddress(21, "intakeDrive", 0);
+    public static final CANAddress intakeDriveLeftID = new CANAddress(21,"intakeDrive", 0);
+    public static final CANAddress intakeDriveRightID = new CANAddress(22, "intakeDrive",0);
     //feeder
 
     //public static final CAN conveyorID = new CAN(21);
 
     //public static final int conveyorID = 22;
-    public static final CANAddress conveyorID = new CANAddress(22, "conveyor", 0);
+    public static final CANAddress conveyorID = new CANAddress(23, "conveyor", 0);
     //public static final int kickerID = 23;
-    public static final CANAddress kickerID = new CANAddress(23, "kicker", 0);
+    public static final CANAddress kickerID = new CANAddress(24, "kicker", 0);
     //shooter
     
     //public static final int shootLeaderID = 30;
     public static final CANAddress shootLeaderID = new CANAddress(30, "shootLeader", 0);
     //public static final int shootFollowerID = 31;
     public static final CANAddress shootFollowerID = new CANAddress(31, "shootFollower", 0);
+
     public static final int hoodID = 32;
    
     public static final int hoodEncoderPort = 1;

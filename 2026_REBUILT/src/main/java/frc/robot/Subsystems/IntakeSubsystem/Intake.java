@@ -1,8 +1,11 @@
 package frc.robot.Subsystems.IntakeSubsystem;
 
+import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.MotorAlignmentValue;
+
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -14,17 +17,24 @@ import frc.robot.HardwareMap;
 
 
 public class Intake extends SubsystemBase {
-    TalonFX drive = new TalonFX(HardwareMap.intakeDriveID.id());
+    //TalonFX drive = new TalonFX(HardwareMap.intakeDriveID.id());
+    TalonFX driveLeader = new TalonFX(HardwareMap.intakeDriveLeftID.id());
+    TalonFX driveFollower = new TalonFX(HardwareMap.intakeDriveRightID.id());
+
     TalonFX pivot = new TalonFX(HardwareMap.intakePivotID.id());
 
     MotionMagicVoltage pivotController = new MotionMagicVoltage(0);
 
     public Intake(){
-        drive.getConfigurator().apply(IntakeConstants.applyIntakeConfig());
+        driveLeader.getConfigurator().apply(IntakeConstants.applyLeftIntakeConfig());
+        driveFollower.getConfigurator().apply(IntakeConstants.applyRightIntakeConfig());
+
         pivot.getConfigurator().apply(IntakeConstants.applyPivotConfig());
-        pivotController.Slot = 0;
+        pivotController.Slot = 0;  
 
         pivot.setPosition(0); //Zeroing pivot
+
+        driveLeader.setControl(new Follower(driveFollower.getDeviceID(), MotorAlignmentValue.Opposed));
     }
 
     public boolean intakeDeployed(){
@@ -40,7 +50,7 @@ public class Intake extends SubsystemBase {
     }
 
     public void setDriveVoltage(double voltage){
-        drive.setVoltage(voltage);
+        driveLeader.setVoltage(voltage);
     }
 
     public void setPivotVoltage(double voltage){
