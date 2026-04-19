@@ -11,9 +11,9 @@ import frc.robot.util.ControlConfig.ProfiledPIDConfig;
 
 public class SwerveConstants {
     
-    public static final double kMaxSpeedMetersPerSecond = 5; //TODO: verfiy
+    //public static final double kMaxSpeedMetersPerSecond = 4.0; //TODO: verfiy
     public static final double kDeadBand = 0.08;
-    public static final double kMaxLinearVelocity = 4.0;
+    public static final double kMaxLinearVelocity = 3.5;
     public static final double kMaxOmega = 4.0;
 
     public static final double kTrackWidth = Units.inchesToMeters(22.5); //TODO: verify
