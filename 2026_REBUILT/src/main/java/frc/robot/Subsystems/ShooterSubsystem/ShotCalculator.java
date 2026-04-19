@@ -32,6 +32,8 @@ public class ShotCalculator {
     public static final Shot kBumperShot = new Shot(0, 45, 20); //Need to determine
     public static final Shot kFeedShot = new Shot(0, 70, 40);
     public static final Shot kZeroShot = new Shot(0, 0, 0);
+    //used on controller 3
+    public static final Shot kTestShot = new Shot(0,20,20);
 
 
     public static Shot getStaticShot(double distance){

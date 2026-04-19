@@ -44,8 +44,14 @@ public class RobotContainer {
   Shooter shooter = new Shooter();
   Hood hood = new Hood();
 
+<<<<<<< HEAD
   CommandXboxController ellis = new CommandXboxController(0);
   CommandXboxController aneesh = new CommandXboxController(1);
+  CommandXboxController test = new CommandXboxController(3);
+=======
+  CommandXboxController smellisEllis = new CommandXboxController(0);
+  CommandXboxController neeshneesh = new CommandXboxController(1);
+>>>>>>> 1736ffb95de2578f1f41ac32501695baa8e85faf
 
   Trigger shotReady = new Trigger(() -> swerve.readyToShoot() && hood.readyToShoot() && shooter.readyToShoot());
 
@@ -54,7 +60,8 @@ public class RobotContainer {
   public RobotContainer() {
     configureAneeshBindings();
     configureEllisBindings();
-    configurAutoChooser();
+    configureTestBindings();
+    configurAutoChooser(); 
   }
 
   private void configurAutoChooser(){
@@ -102,49 +109,56 @@ public class RobotContainer {
   }
 
   private void configureAneeshBindings(){
-    aneesh.rightTrigger().whileTrue(Rumbler.rumble(0.75, aneesh));
-    Rumbler.bindTransitionRumbles(aneesh);
+    neeshneesh.rightTrigger().whileTrue(Rumbler.rumble(0.75, neeshneesh));
+    Rumbler.bindTransitionRumbles(neeshneesh);
 
     //Feeder
-    aneesh.rightBumper().and(shotReady.or(aneesh.rightTrigger())).whileTrue(feeder.feed());
-    aneesh.leftBumper().whileTrue(feeder.feed(-8, -12));
+    neeshneesh.rightBumper().and(shotReady.or(neeshneesh.rightTrigger())).whileTrue(feeder.feed());
+    neeshneesh.leftBumper().whileTrue(feeder.feed(-8, -12));
 
     //Shooter and Hood
     //Hub Shot
-    aneesh.b().whileTrue(ShootCommand.fixedShot(ShotCalculator.kBumperShot, hood, shooter));
-    aneesh.a().whileTrue(intake.agitate(2));
-    aneesh.x().whileTrue(new ShootCommand(hood, shooter, swerve::getShooterPose));   
-    aneesh.leftStick().whileTrue(ShootCommand.fixedShot(ShotCalculator.kFeedShot, hood, shooter));
+    neeshneesh.b().whileTrue(ShootCommand.fixedShot(ShotCalculator.kBumperShot, hood, shooter));
+    neeshneesh.a().whileTrue(intake.agitate(2));
+    neeshneesh.x().whileTrue(new ShootCommand(hood, shooter, swerve::getShooterPose));   
+    neeshneesh.leftStick().whileTrue(ShootCommand.fixedShot(ShotCalculator.kFeedShot, hood, shooter));
 
     //Change Hood Angle
-    aneesh.povUp().onTrue(hood.incrementHoodAngle(HoodConstants.kAngleIncrement));
-    aneesh.povDown().onTrue(hood.incrementHoodAngle(-HoodConstants.kAngleIncrement));
-    aneesh.povRight().or(aneesh.povLeft()).onTrue(hood.resetIncrement());
+    neeshneesh.povUp().onTrue(hood.incrementHoodAngle(HoodConstants.kAngleIncrement));
+    neeshneesh.povDown().onTrue(hood.incrementHoodAngle(-HoodConstants.kAngleIncrement));
+    neeshneesh.povRight().or(neeshneesh.povLeft()).onTrue(hood.resetIncrement());
 
     // Intake backup
-    aneesh.y().whileTrue(intake.manualPivotVoltage(1));  
-    aneesh.leftTrigger().whileTrue(intake.manualPivotVoltage(-1));                         
+    neeshneesh.y().whileTrue(intake.manualPivotVoltage(1));  
+    neeshneesh.leftTrigger().whileTrue(intake.manualPivotVoltage(-1));                         
   }
 
   private void configureEllisBindings(){
     // Swerve
-    swerve.setDefaultCommand(new DriveCommand(swerve, () -> -ellis.getLeftY(), () -> -ellis.getLeftX(), () -> -ellis.getRightX(), () -> ellis.getRightTriggerAxis() > 0.1));      
-    ellis.povUp().onTrue(Commands.runOnce(swerve::resetHeading));
-    ellis.leftTrigger().whileTrue(swerve.crossCommand());
+    swerve.setDefaultCommand(new DriveCommand(swerve, () -> -smellisEllis.getLeftY(), () -> -smellisEllis.getLeftX(), () -> -smellisEllis.getRightX(), () -> smellisEllis.getRightTriggerAxis() > 0.1));      
+    smellisEllis.povUp().onTrue(Commands.runOnce(swerve::resetHeading));
+    smellisEllis.leftTrigger().whileTrue(swerve.crossCommand());
 
     // Intake backup
-    ellis.povUp().whileTrue(intake.manualPivotVoltage(1));  
-    ellis.povDown().whileTrue(intake.manualPivotVoltage(-1));
+    smellisEllis.povUp().whileTrue(intake.manualPivotVoltage(1));  
+    smellisEllis.povDown().whileTrue(intake.manualPivotVoltage(-1));
 
     //Intake regular
-    ellis.rightBumper().whileTrue(intake.intake()
+    smellisEllis.rightBumper().whileTrue(intake.intake()
         .alongWith(feeder.feed(FeederConstants.kConveyorVoltage, -2)));
 
-    ellis.leftBumper().whileTrue(intake.extake()
+    smellisEllis.leftBumper().whileTrue(intake.extake()
         .alongWith(feeder.feed(-FeederConstants.kConveyorVoltage, 0)));
 
-    ellis.x().onTrue(intake.setPositionCommand(IntakeConstants.kFramePerimStow));
-    ellis.y().onTrue(intake.setPositionCommand(IntakeConstants.kZeroPosition));
+    smellisEllis.x().onTrue(intake.setPositionCommand(IntakeConstants.kFramePerimStow));
+    smellisEllis.y().onTrue(intake.setPositionCommand(IntakeConstants.kZeroPosition));
+  }
+
+  private void configureTestBindings(){
+    test.rightBumper().whileTrue(ShootCommand.fixedShot(ShotCalculator.kTestShot, hood, shooter));
+    test.leftBumper().whileTrue(feeder.feed(7, -7));
+    test.x().whileTrue(feeder.applyKickerVoltage(-7));
+    test.b().whileTrue(feeder.applyKickerVoltage(7));
   }
  
   public Command getAutonomousCommand() {

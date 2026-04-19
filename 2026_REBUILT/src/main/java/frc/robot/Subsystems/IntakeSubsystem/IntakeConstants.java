@@ -29,7 +29,7 @@ public class IntakeConstants {
     //8 to 56
     //16 to 64
     //16 to 34
-    public static final double kGearRatio = (8/56) * (16/64) * (16/34); //Multiply motor rotations by this to get output rotations
+    public static final double kGearRatio = (8./56) * (16./64) * (16./34); //Multiply motor rotations by this to get output rotations
     public final static double kP = 2;
     public final static double kI = 0.1;
     public final static double kD = 0;

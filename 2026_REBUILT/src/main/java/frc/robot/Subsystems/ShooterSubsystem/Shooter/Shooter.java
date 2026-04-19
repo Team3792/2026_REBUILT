@@ -31,8 +31,6 @@ public class Shooter extends SubsystemBase {
 
   TalonFX rightMotor = new TalonFX(HardwareMap.shootLeaderID.id());
   TalonFX leftMotor = new TalonFX(HardwareMap.shootFollowerID.id());
-  //new motor for drum shooter
-  TalonFX motor1 = new TalonFX(0);
 
 
   MotionMagicVelocityVoltage mmVelocity = new MotionMagicVelocityVoltage(0);
@@ -46,13 +44,15 @@ public class Shooter extends SubsystemBase {
 
   /** Creates a new Shooter. */
 
-  
+
   public Shooter() {
     rightMotor.getConfigurator().apply(ShooterConstants.applyRightMotorConfig());
     leftMotor.getConfigurator().apply(ShooterConstants.applyLeftMotorConfig());
 
-    //left motor follows right motor
-    leftMotor.setControl(new Follower(rightMotor.getDeviceID(), MotorAlignmentValue.Opposed));
+    
+    //leftMotor.setControl(new Follower(rightMotor.getDeviceID(), MotorAlignmentValue.Opposed));
+    //right motor follows left motor
+    rightMotor.setControl(new Follower(leftMotor.getDeviceID(), MotorAlignmentValue.Opposed));
 
     mmVelocity.Slot = 0;
     rpsIncriment = 0;
@@ -66,7 +66,7 @@ public class Shooter extends SubsystemBase {
 
 public void setVoltage(double voltage){
   VoltageOut output = new VoltageOut(voltage).withEnableFOC(true);
-  rightMotor.setControl(output);
+  leftMotor.setControl(output);
 }
 
 public Command applyVoltage(double voltage){
@@ -74,7 +74,7 @@ public Command applyVoltage(double voltage){
 }
 
 public double getRPS(){
-  return rightMotor.getVelocity().getValueAsDouble();
+  return leftMotor.getVelocity().getValueAsDouble();
 }
 
 public double getTangentialVelocity(){
@@ -91,7 +91,6 @@ public double getRPSIncriment(){
   return rpsIncriment;
 }
 
-//need to add in piece wise best fit polynomial for RPM target RPM estimation
 public void setRPS(double targetVelocity){
   if(targetVelocity > 80)
     targetVelocity = 80;
@@ -109,7 +108,7 @@ public Command setFlywheelRPS(double targetRPM){
 }
 
 public void setTorque(double torque){
-  double pidOutput = pidController.calculate(torque, rightMotor.getStatorCurrent().getValueAsDouble()) + ShooterConstants.kFrictionFF;
+  double pidOutput = pidController.calculate(torque, leftMotor.getStatorCurrent().getValueAsDouble()) + ShooterConstants.kFrictionFF;
   TorqueCurrentFOC motorTorque = new TorqueCurrentFOC(pidOutput);
   rightMotor.setControl(motorTorque);
 }

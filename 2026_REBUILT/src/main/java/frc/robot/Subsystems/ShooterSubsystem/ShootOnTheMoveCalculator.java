@@ -4,10 +4,7 @@
 
 package frc.robot.Subsystems.ShooterSubsystem;
 
-import static edu.wpi.first.units.Units.Rotation;
-
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import frc.robot.Subsystems.ShooterSubsystem.ShotCalculator.Shot;
 import frc.robot.Subsystems.SwerveSubsystem.Swerve;
@@ -23,7 +20,7 @@ public class ShootOnTheMoveCalculator {
 
     public record distanceVsTime(double distanceMeters, double timeOfFlight){};
 
-    private static final distanceVsTime[] kCalibratedTime = {
+    private static final distanceVsTime[] kDistanceVsTime = {
         new distanceVsTime(0, 0),
         new distanceVsTime(0, 0),
         new distanceVsTime(0, 0),
@@ -39,12 +36,12 @@ public class ShootOnTheMoveCalculator {
     //return time of flight to actual hub
     public static double tofToHub (double distance){
         tof = 0;
-        double calibratedTime = kCalibratedTime.length;
+        double calibratedTime = kDistanceVsTime.length;
     
         //calculate time of flight for distance to real hub
         for(int i = 0; i < calibratedTime; i++){
-            if(distance > kCalibratedTime[i].distanceMeters)
-              tof = linearInterpolation(distance, kCalibratedTime[i-1], kCalibratedTime[i]).timeOfFlight();
+            if(distance > kDistanceVsTime[i].distanceMeters)
+              tof = linearInterpolation(distance, kDistanceVsTime[i-1], kDistanceVsTime[i]).timeOfFlight();
         }
         return tof; 
     }

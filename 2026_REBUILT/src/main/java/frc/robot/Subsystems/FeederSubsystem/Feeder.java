@@ -13,7 +13,7 @@ public class Feeder extends SubsystemBase{
     TalonFX kicker = new TalonFX(HardwareMap.kickerID.id());
     TalonFX conveyor = new TalonFX(HardwareMap.conveyorID.id());
 
-    double a;
+    
     
 
     public Feeder(){
@@ -32,6 +32,11 @@ public class Feeder extends SubsystemBase{
     public void setVoltage(double conveyor, double kicker){
         setConveyorVoltage(conveyor);
         setKickerVoltage(kicker);
+    }
+
+    public Command applyKickerVoltage(double voltage){
+        return this.startEnd(() -> setKickerVoltage(voltage), 
+                            () ->setKickerVoltage(0));
     }
 
     public Command feed(double conveyorVoltage, double kickerVoltage){

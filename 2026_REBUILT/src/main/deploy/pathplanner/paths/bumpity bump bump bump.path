@@ -1,0 +1,111 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 6.091822131332931,
+        "y": 2.5795621136158022
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.1247730228437876,
+        "y": 3.3514078992008445
+      },
+      "isLocked": false,
+      "linkedName": "bumpity bump"
+    },
+    {
+      "anchor": {
+        "x": 6.421416522165259,
+        "y": 3.385469975120627
+      },
+      "prevControl": {
+        "x": 6.138108281555858,
+        "y": 3.3123966455893217
+      },
+      "nextControl": {
+        "x": 6.6634938053136015,
+        "y": 3.44790865690938
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.798601383443907,
+        "y": 3.226698818229795
+      },
+      "prevControl": {
+        "x": 7.709164036303583,
+        "y": 3.4601532269191564
+      },
+      "nextControl": {
+        "x": 7.888038730584233,
+        "y": 2.9932444095404303
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.798601383443907,
+        "y": 2.308945972180338
+      },
+      "prevControl": {
+        "x": 7.80082573330574,
+        "y": 2.558936076519874
+      },
+      "nextControl": {
+        "x": 7.796377033582075,
+        "y": 2.058955867840802
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.1611159906513873,
+        "y": 2.1757320566948137
+      },
+      "prevControl": {
+        "x": 3.7129045254071174,
+        "y": 2.239240519451147
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1.4405729166666663,
+      "rotationDegrees": -0.6031334297701295
+    },
+    {
+      "waypointRelativePos": 2.4903125000000026,
+      "rotationDegrees": -90.8915436324684
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 2.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -90.05756439407398
+  },
+  "reversed": false,
+  "folder": "bump bump bumpity",
+  "idealStartingState": {
+    "velocity": 2.0,
+    "rotation": 90.00581801170956
+  },
+  "useDefaultConstraints": false
+}
