@@ -44,6 +44,8 @@ public class RobotContainer {
   Shooter shooter = new Shooter();
   Hood hood = new Hood();
 
+  CommandXboxController smellisEllis = new CommandXboxController(0);
+  CommandXboxController neeshneesh = new CommandXboxController(1);
 <<<<<<< HEAD
   CommandXboxController ellis = new CommandXboxController(0);
   CommandXboxController aneesh = new CommandXboxController(1);
@@ -111,8 +113,12 @@ public class RobotContainer {
   private void configureAneeshBindings(){
     neeshneesh.rightTrigger().whileTrue(Rumbler.rumble(0.75, neeshneesh));
     Rumbler.bindTransitionRumbles(neeshneesh);
+    neeshneesh.rightTrigger().whileTrue(Rumbler.rumble(0.75, neeshneesh));
+    Rumbler.bindTransitionRumbles(neeshneesh);
 
     //Feeder
+    neeshneesh.rightBumper().and(shotReady.or(neeshneesh.rightTrigger())).whileTrue(feeder.feed());
+    neeshneesh.leftBumper().whileTrue(feeder.feed(-8, -12));
     neeshneesh.rightBumper().and(shotReady.or(neeshneesh.rightTrigger())).whileTrue(feeder.feed());
     neeshneesh.leftBumper().whileTrue(feeder.feed(-8, -12));
 
@@ -122,13 +128,22 @@ public class RobotContainer {
     neeshneesh.a().whileTrue(intake.agitate(2));
     neeshneesh.x().whileTrue(new ShootCommand(hood, shooter, swerve::getShooterPose));   
     neeshneesh.leftStick().whileTrue(ShootCommand.fixedShot(ShotCalculator.kFeedShot, hood, shooter));
+    neeshneesh.b().whileTrue(ShootCommand.fixedShot(ShotCalculator.kBumperShot, hood, shooter));
+    neeshneesh.a().whileTrue(intake.agitate(2));
+    neeshneesh.x().whileTrue(new ShootCommand(hood, shooter, swerve::getShooterPose));   
+    neeshneesh.leftStick().whileTrue(ShootCommand.fixedShot(ShotCalculator.kFeedShot, hood, shooter));
 
     //Change Hood Angle
     neeshneesh.povUp().onTrue(hood.incrementHoodAngle(HoodConstants.kAngleIncrement));
     neeshneesh.povDown().onTrue(hood.incrementHoodAngle(-HoodConstants.kAngleIncrement));
     neeshneesh.povRight().or(neeshneesh.povLeft()).onTrue(hood.resetIncrement());
+    neeshneesh.povUp().onTrue(hood.incrementHoodAngle(HoodConstants.kAngleIncrement));
+    neeshneesh.povDown().onTrue(hood.incrementHoodAngle(-HoodConstants.kAngleIncrement));
+    neeshneesh.povRight().or(neeshneesh.povLeft()).onTrue(hood.resetIncrement());
 
     // Intake backup
+    neeshneesh.y().whileTrue(intake.manualPivotVoltage(1));  
+    neeshneesh.leftTrigger().whileTrue(intake.manualPivotVoltage(-1));                         
     neeshneesh.y().whileTrue(intake.manualPivotVoltage(1));  
     neeshneesh.leftTrigger().whileTrue(intake.manualPivotVoltage(-1));                         
   }
@@ -138,15 +153,22 @@ public class RobotContainer {
     swerve.setDefaultCommand(new DriveCommand(swerve, () -> -smellisEllis.getLeftY(), () -> -smellisEllis.getLeftX(), () -> -smellisEllis.getRightX(), () -> smellisEllis.getRightTriggerAxis() > 0.1));      
     smellisEllis.povUp().onTrue(Commands.runOnce(swerve::resetHeading));
     smellisEllis.leftTrigger().whileTrue(swerve.crossCommand());
+    swerve.setDefaultCommand(new DriveCommand(swerve, () -> -smellisEllis.getLeftY(), () -> -smellisEllis.getLeftX(), () -> -smellisEllis.getRightX(), () -> smellisEllis.getRightTriggerAxis() > 0.1));      
+    smellisEllis.povUp().onTrue(Commands.runOnce(swerve::resetHeading));
+    smellisEllis.leftTrigger().whileTrue(swerve.crossCommand());
 
     // Intake backup
+    smellisEllis.povUp().whileTrue(intake.manualPivotVoltage(1));  
+    smellisEllis.povDown().whileTrue(intake.manualPivotVoltage(-1));
     smellisEllis.povUp().whileTrue(intake.manualPivotVoltage(1));  
     smellisEllis.povDown().whileTrue(intake.manualPivotVoltage(-1));
 
     //Intake regular
     smellisEllis.rightBumper().whileTrue(intake.intake()
+    smellisEllis.rightBumper().whileTrue(intake.intake()
         .alongWith(feeder.feed(FeederConstants.kConveyorVoltage, -2)));
 
+    smellisEllis.leftBumper().whileTrue(intake.extake()
     smellisEllis.leftBumper().whileTrue(intake.extake()
         .alongWith(feeder.feed(-FeederConstants.kConveyorVoltage, 0)));
 
@@ -159,6 +181,8 @@ public class RobotContainer {
     test.leftBumper().whileTrue(feeder.feed(7, -7));
     test.x().whileTrue(feeder.applyKickerVoltage(-7));
     test.b().whileTrue(feeder.applyKickerVoltage(7));
+    smellisEllis.x().onTrue(intake.setPositionCommand(IntakeConstants.kFramePerimStow));
+    smellisEllis.y().onTrue(intake.setPositionCommand(IntakeConstants.kZeroPosition));
   }
  
   public Command getAutonomousCommand() {
