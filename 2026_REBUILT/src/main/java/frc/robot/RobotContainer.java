@@ -148,9 +148,11 @@ public class RobotContainer {
 
 
     //Intake regular
+    
     smellisEllis.rightBumper().whileTrue(intake.intake()
         .alongWith(feeder.feed(FeederConstants.kConveyorVoltage, -2)));
 
+   
     smellisEllis.leftBumper().whileTrue(intake.extake()
         .alongWith(feeder.feed(-FeederConstants.kConveyorVoltage, 0)));
 
