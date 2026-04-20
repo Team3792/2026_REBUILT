@@ -95,7 +95,7 @@ public void setRPS(double targetVelocity){
   if(targetVelocity > 80)
     targetVelocity = 80;
   targetRPS = targetVelocity;// + rpsIncriment;
-  rightMotor.setControl(mmVelocity.withVelocity(targetVelocity)); 
+  leftMotor.setControl(mmVelocity.withVelocity(targetVelocity)); 
 }
 
 public void spinDown(){

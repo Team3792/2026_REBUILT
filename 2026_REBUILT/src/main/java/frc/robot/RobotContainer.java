@@ -46,14 +46,7 @@ public class RobotContainer {
 
   CommandXboxController smellisEllis = new CommandXboxController(0);
   CommandXboxController neeshneesh = new CommandXboxController(1);
-<<<<<<< HEAD
-  CommandXboxController ellis = new CommandXboxController(0);
-  CommandXboxController aneesh = new CommandXboxController(1);
   CommandXboxController test = new CommandXboxController(3);
-=======
-  CommandXboxController smellisEllis = new CommandXboxController(0);
-  CommandXboxController neeshneesh = new CommandXboxController(1);
->>>>>>> 1736ffb95de2578f1f41ac32501695baa8e85faf
 
   Trigger shotReady = new Trigger(() -> swerve.readyToShoot() && hood.readyToShoot() && shooter.readyToShoot());
 
@@ -164,11 +157,11 @@ public class RobotContainer {
     smellisEllis.povDown().whileTrue(intake.manualPivotVoltage(-1));
 
     //Intake regular
-    smellisEllis.rightBumper().whileTrue(intake.intake()
+    smellisEllis.rightBumper().whileTrue(intake.intake());
     smellisEllis.rightBumper().whileTrue(intake.intake()
         .alongWith(feeder.feed(FeederConstants.kConveyorVoltage, -2)));
 
-    smellisEllis.leftBumper().whileTrue(intake.extake()
+    smellisEllis.leftBumper().whileTrue(intake.extake());
     smellisEllis.leftBumper().whileTrue(intake.extake()
         .alongWith(feeder.feed(-FeederConstants.kConveyorVoltage, 0)));
 
@@ -181,8 +174,6 @@ public class RobotContainer {
     test.leftBumper().whileTrue(feeder.feed(7, -7));
     test.x().whileTrue(feeder.applyKickerVoltage(-7));
     test.b().whileTrue(feeder.applyKickerVoltage(7));
-    smellisEllis.x().onTrue(intake.setPositionCommand(IntakeConstants.kFramePerimStow));
-    smellisEllis.y().onTrue(intake.setPositionCommand(IntakeConstants.kZeroPosition));
   }
  
   public Command getAutonomousCommand() {
