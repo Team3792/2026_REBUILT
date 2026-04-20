@@ -80,9 +80,7 @@ public class SwerveModule{
 
     public void setState(SwerveModuleState state){
         state.optimize(getTurnPosition());
-
         drive.setControl(driveController.withVelocity(state.speedMetersPerSecond / ModuleConstants.kMetersPerMotorRotation));
-        
         double turnVoltage = turnController.calculate(getTurnPosition().getRadians(), state.angle.getRadians());
         turn.setVoltage(turnVoltage);
     }
