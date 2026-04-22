@@ -35,6 +35,9 @@ public class ShotCalculator {
     //used on controller 3
     public static final Shot kTestShot = new Shot(0,45,20);
 
+    //Tune at 4H event
+    public static final Shot kOutreachShot = new Shot(0, 0, 0);
+
 
     public static Shot getStaticShot(double distance){
         //Linear search until calibrated shots is farther
