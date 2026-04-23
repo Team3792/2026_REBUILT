@@ -4,20 +4,12 @@
 
 package frc.robot;
 
-import java.awt.Color;
-
-import edu.wpi.first.wpilibj.AddressableLED;
-import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.LEDPattern;
-import edu.wpi.first.wpilibj.LEDReader;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.Localization.Vision;
 import frc.robot.Managers.GameManager;
-import frc.robot.Subsystems.LEDSubsystem.LED;
 import frc.robot.util.CANManager;
 
 public class Robot extends TimedRobot {

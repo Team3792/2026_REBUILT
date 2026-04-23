@@ -4,12 +4,7 @@
 
 package frc.robot;
 
-import java.util.concurrent.CancellationException;
 
-import com.ctre.phoenix6.configs.CANdleConfigurator;
-
-import edu.wpi.first.wpilibj.CAN;
-import frc.robot.HardwareMap.CANAddress;
 
 /** Add your docs here. */
 public class HardwareMap {

@@ -4,10 +4,8 @@
 
 package frc.robot.Managers;
 
-import java.util.Optional;
 
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 
@@ -15,7 +13,6 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 public class GameManager {
     public static boolean error = false;
     public static boolean wonAuto;
-    private static Alliance allianceColor;
 
     //Global triggers for each shift
     public static Trigger transitionShiftTrigger = new Trigger(() -> GameManager.atTransitionShift());

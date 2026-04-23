@@ -6,13 +6,10 @@ package frc.robot.Subsystems.SwerveSubsystem;
 
 import java.util.function.Supplier;
 
-import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Managers.FieldManager;
 import frc.robot.Managers.GameManager;
 import frc.robot.util.JoystickInput;
 

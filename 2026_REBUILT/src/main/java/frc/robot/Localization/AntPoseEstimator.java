@@ -9,21 +9,18 @@ import java.util.Optional;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.targeting.PhotonPipelineResult;
-import org.photonvision.targeting.PhotonTrackedTarget;
+//import org.photonvision.targeting.PhotonTrackedTarget;
 
-import com.ctre.phoenix6.swerve.SwerveModule;
-import com.ctre.phoenix6.swerve.jni.SwerveJNI.ModulePosition;
-import com.fasterxml.jackson.databind.deser.std.FromStringDeserializer;
 
-import edu.wpi.first.math.Matrix;
-import edu.wpi.first.math.VecBuilder;
+//import edu.wpi.first.math.Matrix;
+//import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
-import edu.wpi.first.math.numbers.N1;
-import edu.wpi.first.math.numbers.N3;
+//import edu.wpi.first.math.numbers.N1;
+//import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -49,56 +46,56 @@ public class AntPoseEstimator extends SwerveDrivePoseEstimator {
         // return true;
     }
 
-    private Matrix<N3, N1> getVisionStd(Optional<EstimatedRobotPose> robotPose, List<PhotonTrackedTarget> targets){
+    // private Matrix<N3, N1> getVisionStd(Optional<EstimatedRobotPose> robotPose, List<PhotonTrackedTarget> targets){
 
-        Matrix<N3, N1> std = VecBuilder.fill(0.0, 0.0, 0.0); 
+    //     Matrix<N3, N1> std = VecBuilder.fill(0.0, 0.0, 0.0); 
 
-        double baseXY = 0.2;
-        double baseT = 0.3;
+    //     double baseXY = 0.2;
+    //     double baseT = 0.3;
 
-        int numTags = 0;
+    //     int numTags = 0;
 
-        // can change this to be max or to be weighted with combo of avg & max
-        double avgDis = 0.0;
-        double avgYaw = 0.0; 
+    //     // can change this to be max or to be weighted with combo of avg & max
+    //     double avgDis = 0.0;
+    //     double avgYaw = 0.0; 
         
-        for (var target : targets){
-            var targetPose = frontCamPoseEstimator.getFieldTags().getTagPose(target.getFiducialId());
-            if (targetPose.isEmpty()){
-                continue;
-            }
-            numTags++;
-            avgDis += targetPose.get().toPose2d().getTranslation().getDistance(this.getEstimatedPosition().getTranslation());
-            avgYaw += target.getYaw();
-        }
-        avgDis /= numTags;
-        avgYaw /= numTags;
+    //     for (var target : targets){
+    //         var targetPose = frontCamPoseEstimator.getFieldTags().getTagPose(target.getFiducialId());
+    //         if (targetPose.isEmpty()){
+    //             continue;
+    //         }
+    //         numTags++;
+    //         avgDis += targetPose.get().toPose2d().getTranslation().getDistance(this.getEstimatedPosition().getTranslation());
+    //         avgYaw += target.getYaw();
+    //     }
+    //     avgDis /= numTags;
+    //     avgYaw /= numTags;
 
-        if (numTags == 0){
-            std = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
-        } else if (numTags == 1 && avgDis > 4.0){ // from photonvision docs. prob not needed
-            std = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
-        } else if (numTags == 1) { 
-            std = VecBuilder.fill(1.0, 1.0, 2.0); // need to tune
-        }
-        else{
-            double disScale = avgDis / 3.0; //3 meters. can tune to be different
-            double yawScale = avgYaw / 30.0; //30 degreees. can tune to be different
-            double tagScale = 1.0 / Math.sqrt(numTags); //got from team 564, saw vid of local. and it was good
+    //     if (numTags == 0){
+    //         std = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
+    //     } else if (numTags == 1 && avgDis > 4.0){ // from photonvision docs. prob not needed
+    //         std = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
+    //     } else if (numTags == 1) { 
+    //         std = VecBuilder.fill(1.0, 1.0, 2.0); // need to tune
+    //     }
+    //     else{
+    //         double disScale = avgDis / 3.0; //3 meters. can tune to be different
+    //         double yawScale = avgYaw / 30.0; //30 degreees. can tune to be different
+    //         double tagScale = 1.0 / Math.sqrt(numTags); //got from team 564, saw vid of local. and it was good
 
-            double stdXY = baseXY * disScale * tagScale;
-            double stdT = baseT * yawScale * tagScale;
-            std = VecBuilder.fill(stdXY, stdXY, stdT);
-        }
-        return std;
-    }
+    //         double stdXY = baseXY * disScale * tagScale;
+    //         double stdT = baseT * yawScale * tagScale;
+    //         std = VecBuilder.fill(stdXY, stdXY, stdT);
+    //     }
+    //     return std;
+    // }
 
     private void updateVisionMeasurementsFront(List<PhotonPipelineResult> pipelineResults) {
         
         Optional<EstimatedRobotPose> visionEst;// = Optional.empty();
         //System.out.println(pipelineResults.size());
             for (var result : pipelineResults){
-                List<PhotonTrackedTarget> targets = result.getTargets();
+               // List<PhotonTrackedTarget> targets = result.getTargets();
                 //(targets.size() > 1)
                 visionEst = frontCamPoseEstimator.estimateCoprocMultiTagPose(result);
                 // else 
@@ -142,7 +139,7 @@ public class AntPoseEstimator extends SwerveDrivePoseEstimator {
         Optional<EstimatedRobotPose> visionEst;// = Optional.empty();
         //System.out.println(pipelineResults.size());
             for (var result : pipelineResults){
-                List<PhotonTrackedTarget> targets = result.getTargets();
+               // List<PhotonTrackedTarget> targets = result.getTargets();
                 //(targets.size() > 1)
                 visionEst = backCamPoseEstimator.estimateCoprocMultiTagPose(result);
                 // else 
@@ -181,12 +178,12 @@ public class AntPoseEstimator extends SwerveDrivePoseEstimator {
         // }
     }
 
-    private void addVisMeasurement(Optional<EstimatedRobotPose> visionPose, double timestamp, Matrix<N3,N1> visionSTD){
-        if (visionPose.isEmpty()){
-            return;
-        }
-        this.addVisionMeasurement(visionPose.get().estimatedPose.toPose2d(), timestamp, visionSTD);
-    }
+    // private void addVisMeasurement(Optional<EstimatedRobotPose> visionPose, double timestamp, Matrix<N3,N1> visionSTD){
+    //     if (visionPose.isEmpty()){
+    //         return;
+    //     }
+    //     this.addVisionMeasurement(visionPose.get().estimatedPose.toPose2d(), timestamp, visionSTD);
+    // }
 
     public void updateAllVisionMeasurements(){
         updateVisionMeasurementsFront(vision.getFrontCamPipelineResults());//, VisionConstants.kFrontCamName);

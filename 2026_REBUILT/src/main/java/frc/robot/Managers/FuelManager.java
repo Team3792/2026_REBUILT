@@ -4,11 +4,9 @@
 
 package frc.robot.Managers;
 
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Subsystems.ShooterSubsystem.Shooter.ShooterConstants;
-import frc.robot.Subsystems.SwerveSubsystem.Swerve;
 import frc.robot.Subsystems.ShooterSubsystem.Shooter.Shooter;
 
 /** Add your docs here. */

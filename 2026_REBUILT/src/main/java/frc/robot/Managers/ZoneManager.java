@@ -4,8 +4,6 @@
 
 package frc.robot.Managers;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import frc.robot.Subsystems.ShooterSubsystem.Hood.Hood;
 import frc.robot.Subsystems.ShooterSubsystem.Hood.HoodConstants;
 
 /** Add your docs here. */

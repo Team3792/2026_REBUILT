@@ -5,7 +5,6 @@
 
 package frc.robot.Subsystems.LEDSubsystem;
 
-import java.util.regex.Pattern;
 
 import edu.wpi.first.wpilibj.LEDPattern;
 import edu.wpi.first.wpilibj.util.Color;

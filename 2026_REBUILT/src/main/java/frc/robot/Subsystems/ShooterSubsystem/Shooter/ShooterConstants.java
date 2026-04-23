@@ -4,7 +4,6 @@
 
 package frc.robot.Subsystems.ShooterSubsystem.Shooter;
 
-import java.io.ObjectInputFilter.Config;
 
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
@@ -13,8 +12,7 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.units.measure.Distance;
-import edu.wpi.first.wpilibj.motorcontrol.Talon;
+
 
 /** Add your docs here. */
 public class ShooterConstants {

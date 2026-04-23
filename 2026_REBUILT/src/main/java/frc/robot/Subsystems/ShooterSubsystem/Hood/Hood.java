@@ -4,7 +4,6 @@
 
 package frc.robot.Subsystems.ShooterSubsystem.Hood;
 
-import java.util.function.Supplier;
 
 import com.revrobotics.PersistMode;
 import com.revrobotics.ResetMode;
@@ -14,19 +13,12 @@ import com.revrobotics.spark.SparkBase.ControlType;
 // import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.HardwareMap;
-import frc.robot.Managers.FieldManager;
-import frc.robot.Subsystems.ShooterSubsystem.Shooter.Shooter;
-import frc.robot.Subsystems.ShooterSubsystem.Shooter.ShooterConstants;
+
 
 public class Hood extends SubsystemBase {
   /** Creates a new Hood. */

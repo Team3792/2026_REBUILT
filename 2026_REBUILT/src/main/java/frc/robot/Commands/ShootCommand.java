@@ -6,21 +6,14 @@ package frc.robot.Commands;
 
 import java.util.function.Supplier;
 
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Managers.FieldManager;
-import frc.robot.Subsystems.FeederSubsystem.*;
-import frc.robot.Subsystems.LEDSubsystem.*;
 import frc.robot.Subsystems.ShooterSubsystem.ShotCalculator;
 import frc.robot.Subsystems.ShooterSubsystem.Hood.*;
 import frc.robot.Subsystems.ShooterSubsystem.Shooter.Shooter;
-import frc.robot.Subsystems.ShooterSubsystem.Shooter.ShooterConstants;
 import frc.robot.Subsystems.ShooterSubsystem.ShotCalculator.Shot;
-import frc.robot.Subsystems.SwerveSubsystem.Swerve;
 
 
 

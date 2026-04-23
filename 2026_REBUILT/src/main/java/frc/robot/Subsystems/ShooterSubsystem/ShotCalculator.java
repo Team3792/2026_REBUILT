@@ -4,8 +4,6 @@
 
 package frc.robot.Subsystems.ShooterSubsystem;
 
-import frc.robot.Managers.FieldManager;
-import frc.robot.Subsystems.ShooterSubsystem.Shooter.ShooterConstants;
 
 /** Add your docs here. */
 public class ShotCalculator {
