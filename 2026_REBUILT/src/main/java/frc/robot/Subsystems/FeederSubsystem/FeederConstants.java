@@ -10,7 +10,7 @@ public class FeederConstants {
 
     public static TalonFXConfiguration getKickerConfig(){
         TalonFXConfiguration config = new TalonFXConfiguration();
-        config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+        config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
         config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
         return config;
     }

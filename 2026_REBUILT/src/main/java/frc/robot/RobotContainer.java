@@ -165,7 +165,7 @@ public class RobotContainer {
 
     //Intake
     outreach.rightBumper().whileTrue(intake.intake()
-        .alongWith(feeder.feed(-2, -2)));
+        .alongWith(feeder.feed(-5, -5)));
     outreach.leftBumper().whileTrue(intake.extake()
         .alongWith(feeder.feed(-FeederConstants.kConveyorVoltage, -5)));
     outreach.x().onTrue(intake.setPositionCommand(IntakeConstants.kFramePerimStow));
@@ -174,7 +174,7 @@ public class RobotContainer {
     //Shooter and Feeder
     outreach.leftTrigger().whileTrue(ShootCommand.fixedShot(ShotCalculator.kOutreachShot, hood, shooter));
     outreach.rightTrigger().whileTrue(feeder.feed());
-    outreach.povLeft().whileTrue(feeder.feed(-8, -12));
+    outreach.povRight().whileTrue(feeder.feed(-8, -12));
   }
  
   public Command getAutonomousCommand() {

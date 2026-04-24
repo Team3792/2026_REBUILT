@@ -34,7 +34,7 @@ public class ShotCalculator {
     public static final Shot kTestShot = new Shot(0,45,20);
 
     //Tune at 4H event
-    public static final Shot kOutreachShot = new Shot(0, 0, 0);
+    public static final Shot kOutreachShot = new Shot(0, 40, 12);
 
 
     public static Shot getStaticShot(double distance){
