@@ -30,7 +30,8 @@ public class Intake extends SubsystemBase {
 
         pivot.setPosition(0); //Zeroing pivot
 
-        driveLeader.setControl(new Follower(driveFollower.getDeviceID(), MotorAlignmentValue.Opposed));
+        //driveLeader is the leader, leader motor is in the first param of new Follower
+        driveFollower.setControl(new Follower(driveLeader.getDeviceID(), MotorAlignmentValue.Opposed));
     }
 
     public boolean intakeDeployed(){
