@@ -27,14 +27,14 @@ public class ShotCalculator {
     };
 
 
-    public static final Shot kBumperShot = new Shot(0, 45, 20); //Need to determine
+    public static final Shot kBumperShot = new Shot(0, 37, 12); //Need to determine
     public static final Shot kFeedShot = new Shot(0, 70, 40);
     public static final Shot kZeroShot = new Shot(0, 0, 0);
     //used on controller 3
-    public static final Shot kTestShot = new Shot(0,45,20);
+    public static final Shot kTestShot = new Shot(0,40,20);
 
     //Tune at 4H event
-    public static final Shot kOutreachShot = new Shot(0, 40, 12);
+    public static final Shot kOutreachShot = new Shot(0, 20, 12);
 
 
     public static Shot getStaticShot(double distance){

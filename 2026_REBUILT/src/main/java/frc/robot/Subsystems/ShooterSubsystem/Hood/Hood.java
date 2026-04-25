@@ -65,7 +65,7 @@ public class Hood extends SubsystemBase {
   }
 
   public Command setHoodAngle(double angle){
-    return Commands.startEnd(() -> setAngle(angle), () -> setAngle(12));
+    return Commands.startEnd(() -> setAngle(angle), () -> setAngle(HoodConstants.kZeroAngle));
   }
 
   public boolean readyToShoot(){

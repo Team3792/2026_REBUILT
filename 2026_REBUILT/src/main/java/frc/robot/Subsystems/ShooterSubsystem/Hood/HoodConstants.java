@@ -36,7 +36,7 @@ public class HoodConstants {
         SparkMaxConfig config = new SparkMaxConfig();
         config.smartCurrentLimit(40);
         config.idleMode(IdleMode.kBrake);
-        config.inverted(true);
+        config.inverted(false);
         //config.softLimit.forwardSoftLimitEnabled(true);
         //config.softLimit.reverseSoftLimitEnabled(true);
         //config.softLimit.forwardSoftLimit(50);

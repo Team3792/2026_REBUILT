@@ -24,7 +24,6 @@ import frc.robot.Subsystems.ShooterSubsystem.ShotCalculator;
 import frc.robot.Subsystems.ShooterSubsystem.Hood.*;
 import frc.robot.Subsystems.ShooterSubsystem.Shooter.*;
 import frc.robot.Subsystems.SwerveSubsystem.DriveCommand;
-import frc.robot.Subsystems.SwerveSubsystem.OutreachDriveCommand;
 import frc.robot.Subsystems.SwerveSubsystem.Swerve;
 import frc.robot.util.Rumbler;
 
@@ -40,7 +39,6 @@ public class RobotContainer {
   CommandXboxController smellisEllis = new CommandXboxController(0);
   CommandXboxController neeshneesh = new CommandXboxController(1);
   CommandXboxController test = new CommandXboxController(3);
-  CommandXboxController outreach = new CommandXboxController(2);
 
 
   Trigger shotReady = new Trigger(() -> swerve.readyToShoot() && hood.readyToShoot() && shooter.readyToShoot());
@@ -52,7 +50,6 @@ public class RobotContainer {
     configureEllisBindings();
     configureTestBindings();
     configurAutoChooser(); 
-    configureOutreachBindings();
   }
 
   private void configurAutoChooser(){
@@ -141,7 +138,7 @@ public class RobotContainer {
     //Intake regular
     
     smellisEllis.rightBumper().whileTrue(intake.intake()
-        .alongWith(feeder.feed(FeederConstants.kConveyorVoltage, -2)));
+        .alongWith(feeder.feed(-4, -4)));
 
    
     smellisEllis.leftBumper().whileTrue(intake.extake()
@@ -156,25 +153,6 @@ public class RobotContainer {
     test.leftBumper().whileTrue(feeder.feed(7, -7));
     test.x().whileTrue(feeder.applyKickerVoltage(-7));
     test.b().whileTrue(feeder.applyKickerVoltage(7));
-  }
-
-  private void configureOutreachBindings(){
-    //Swerve
-    swerve.setDefaultCommand(new OutreachDriveCommand(swerve, () -> -outreach.getLeftY(), () -> -outreach.getLeftX(), () -> -outreach.getRightX()));      
-    outreach.povUp().onTrue(Commands.runOnce(swerve::resetHeading));
-
-    //Intake
-    outreach.rightBumper().whileTrue(intake.intake()
-        .alongWith(feeder.feed(-5, -5)));
-    outreach.leftBumper().whileTrue(intake.extake()
-        .alongWith(feeder.feed(-FeederConstants.kConveyorVoltage, -5)));
-    outreach.x().onTrue(intake.setPositionCommand(IntakeConstants.kFramePerimStow));
-    outreach.y().onTrue(intake.setPositionCommand(IntakeConstants.kZeroPosition));
-
-    //Shooter and Feeder
-    outreach.leftTrigger().whileTrue(ShootCommand.fixedShot(ShotCalculator.kOutreachShot, hood, shooter));
-    outreach.rightTrigger().whileTrue(feeder.feed());
-    outreach.povRight().whileTrue(feeder.feed(-8, -12));
   }
  
   public Command getAutonomousCommand() {

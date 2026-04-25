@@ -24,7 +24,7 @@ public class ShooterConstants {
     public static final double kFlywheelBallLoadCurrent = 0;//amps
 
     //pid & FF
-    public static final double kV = 0.1163;
+    public static final double kV = 0.13; //0.1163;
     public static final double kS = 0.23;
     public static final double kMMAccel = 200;
     public static final double kMMJerk = 2100;

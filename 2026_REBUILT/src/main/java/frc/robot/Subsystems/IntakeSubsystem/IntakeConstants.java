@@ -8,7 +8,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 public class IntakeConstants {
     
-    public final static double kIntakeVoltage = 5.5;
+    public final static double kIntakeVoltage = 5.0;
     public final static double kDrivePivotVoltage = 3;
     public final static double kPivotHoldsVoltage = 0;//0.5;
     public final static double kPivotTheshold = 2;
