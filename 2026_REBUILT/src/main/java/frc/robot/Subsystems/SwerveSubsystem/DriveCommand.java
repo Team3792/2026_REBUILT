@@ -51,7 +51,7 @@ public class DriveCommand extends Command {
   
     if(headingLockSupplier.get()){
       //Determine setpoint 
-      headingLockController.setGoal(FieldManager.getHubRotation(swerve.getShooterPose()).getRadians());
+      headingLockController.setGoal(FieldManager.getHubRotation(swerve.getPose()).getRadians());
       if(!headingLock){
         headingLockController.reset(swerve.getPoseHeading().getRadians(), omega);
         headingLock = true;
