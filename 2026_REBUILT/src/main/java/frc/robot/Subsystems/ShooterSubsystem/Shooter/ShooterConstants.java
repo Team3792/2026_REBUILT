@@ -24,11 +24,11 @@ public class ShooterConstants {
     public static final double kFlywheelBallLoadCurrent = 0;//amps
 
     //pid & FF
-    public static final double kV = 0.13; //0.1163;
+    public static final double kV = 0.11764705882; //0.1163;
     public static final double kS = 0.23;
     public static final double kMMAccel = 200;
     public static final double kMMJerk = 2100;
-    public static final double kP = 0.2; 
+    public static final double kP = 0.5; 
     public static final double kI = 0;
     public static final double kD = 0;
     public static final double kFrictionFF = 0;
@@ -88,15 +88,4 @@ public class ShooterConstants {
 
     //For calibrated shots, see separate ShotCalculator class
 
-    //TODO: instead of 2, use best fit curve to return correct amount of iterations needed
-    public static double targetHubPoseIterations(double robotVelocity){
-        return robotVelocity * 2;
-    }
-
-    //TODO: make accurate
-    public static final double ktimeVsDistance = 0; //how long it takes fuel to travel one meter
-                                                               //meters
-    public static  double fuelFlightTimeVsDistance(double robotToHubDistance){
-        return robotToHubDistance * ktimeVsDistance;
-    }
 }

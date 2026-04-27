@@ -26,34 +26,23 @@ public class VisionConstants {
     //Robot pose always from center of robot
     public static final Transform3d kRobotToFrontCam = new Transform3d(
         new Translation3d(
-            Units.inchesToMeters(-6.25),
-            Units.inchesToMeters(-0.625),
-            Units.inchesToMeters(20.875)),
+            Units.inchesToMeters(2.75),
+            Units.inchesToMeters(0),
+            Units.inchesToMeters(20.625)),
         new Rotation3d(
             0,
-            12 * Math.PI / 180,
+            11 * Math.PI / 180,
             0)
     );
 
         
-    public static final Transform3d kRobotToBackCam = new Transform3d(new Translation3d(Units.inchesToMeters(-0.625),
-    Units.inchesToMeters(-8),Units.inchesToMeters(20.875)), new Rotation3d(0,12 * Math.PI / 180, Math.PI));
-    // public static final Transform3d kRobotToShooter = new Transform3d(
-    //     new Translation3d(
-    //         Units.inchesToMeters(8),
-    //         Units.inchesToMeters(-8.5),
-    //         Units.inchesToMeters(18)),
-    //     new Rotation3d(
-    //         0,
-    //         0,
-    //         0)
-    // );
+    public static final Transform3d kRobotToBackCam = new Transform3d(new Translation3d(Units.inchesToMeters(-11.5),
+    Units.inchesToMeters(0.5),Units.inchesToMeters(21.25)), new Rotation3d(0,12 * Math.PI / 180, Math.PI));
 
-    //TODO: change for drum shooter
     public static final Transform2d kRobotToShooter = new Transform2d(
         new Translation2d(
-            Units.inchesToMeters(-8.5),
-            Units.inchesToMeters(-8)),
+            Units.inchesToMeters(-5.25),
+            Units.inchesToMeters(-0)),
         new Rotation2d(0)
     );
 

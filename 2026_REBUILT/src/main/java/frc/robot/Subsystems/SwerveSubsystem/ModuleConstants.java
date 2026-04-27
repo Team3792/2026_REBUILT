@@ -45,7 +45,7 @@ public class ModuleConstants {
     public static final ModuleConfig kBackRight = new ModuleConfig(new CANAddress(9, "bacl right drive", 0), 
                                                                    new CANAddress(10, "back right turn", 0),
                                                                    new CANAddress(11, "back right encoder", 0), 
-                                                                   -0.4445);
+                                                                   -0.4445 + 0.06 -0.649);
 
     public static MagnetSensorConfigs getEncoderConfig(double offset){
         MagnetSensorConfigs config = new MagnetSensorConfigs();
@@ -74,7 +74,7 @@ public class ModuleConstants {
 
     public static TalonFXConfiguration getTurnConfig(){
         TalonFXConfiguration config = new TalonFXConfiguration();
-        config.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+        config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
         config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
         config.CurrentLimits.StatorCurrentLimit = 30;
         config.CurrentLimits.StatorCurrentLimitEnable = true;

@@ -76,7 +76,7 @@ public class FieldManager {
     }
 
     public static Rotation2d getHubRotation(Pose2d shooterPose){
-        return getHubPose().getTranslation().minus(shooterPose.getTranslation()).getAngle().plus(Rotation2d.fromDegrees(2));
+        return getHubPose().getTranslation().minus(shooterPose.getTranslation()).getAngle().plus(Rotation2d.fromDegrees(0));
     }
 
  

@@ -50,6 +50,7 @@ public class Shooter extends SubsystemBase {
     leftMotor.getConfigurator().apply(ShooterConstants.applyLeftMotorConfig());
 
     
+    
     //leftMotor.setControl(new Follower(rightMotor.getDeviceID(), MotorAlignmentValue.Opposed));
     //right motor follows left motor
     rightMotor.setControl(new Follower(leftMotor.getDeviceID(), MotorAlignmentValue.Opposed));
