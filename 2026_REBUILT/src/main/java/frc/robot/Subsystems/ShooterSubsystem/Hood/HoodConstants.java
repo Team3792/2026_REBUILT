@@ -19,12 +19,12 @@ public class HoodConstants {
     public static final double kD = 0.005;
     public static final double kFrictionFF = 0;
     public static final double kMotorRatio = 25;
-    public static final double kHoodRatio = 300.0/26;
+    public static final double kHoodRatio = 300.0/36;
 
     // All in degrees
-    public static final double kMinAngle = 12;
+    public static final double kMinAngle = 16;
     public static final double kMaxAngle = 50;
-    public static final double kZeroAngle = 12;
+    public static final double kZeroAngle = 16;
 
     public static final double kAngleTolerance = 0.25;
     public static final double kAngleIncrement = 1;

@@ -7,6 +7,7 @@ package frc.robot.Commands;
 import java.util.function.Supplier;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Managers.FieldManager;
@@ -43,7 +44,7 @@ public class ShootCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {                                                       //fudge factor 
-    double robotToHubDistance = FieldManager.getRobotToHubDis(shooterPose.get()) - 0.20;//need to update
+    double robotToHubDistance = FieldManager.getRobotToHubDis(shooterPose.get()) - 0.20 - Units.inchesToMeters(10);//need to update
     Shot targetShot = ShotCalculator.getStaticShot(robotToHubDistance);
     //TODO: implmenet increments in respective classes
     hood.setAngle(targetShot.hoodAngleDegrees());
@@ -57,7 +58,7 @@ public class ShootCommand extends Command {
   @Override
   public void end(boolean interrupted) {
     shooter.spinDown();
-    hood.setAngle(12);
+    hood.setAngle(HoodConstants.kMinAngle);
   }
 
   public static Command fixedShot(Shot shot, Hood hood, Shooter shooter){
@@ -67,7 +68,7 @@ public class ShootCommand extends Command {
         shooter.setRPS(shot.omegaRPS());
       },
       () -> {
-        hood.setAngle(12);
+        hood.setAngle(HoodConstants.kZeroAngle);
         shooter.spinDown();;
       },
       shooter, hood);
