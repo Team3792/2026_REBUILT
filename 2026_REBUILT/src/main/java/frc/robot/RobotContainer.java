@@ -64,13 +64,20 @@ public class RobotContainer {
     NamedCommands.registerCommand("Feed when ready", 
       Commands.waitUntil(shotReady::getAsBoolean).andThen(feeder.feed())
     );
-    NamedCommands.registerCommand("Run intake", Commands.startEnd(() -> 
-    {intake.setDriveVoltage(IntakeConstants.kIntakeVoltage + 2.0); feeder.setConveyorVoltage(FeederConstants.kConveyorVoltage); 
-      feeder.setKickerVoltage(-2);}
-    , () -> intake.setDriveVoltage(0)));
-    NamedCommands.registerCommand("Deploy intake", Commands.startEnd(() -> intake.setPosition(IntakeConstants.kIntakePosition),
-     () -> intake.setPosition(IntakeConstants.kFramePerimStow)));
+  
+
+    NamedCommands.registerCommand("Intake D&R", intake.intake().alongWith(feeder.feed(0, -2)));
     NamedCommands.registerCommand("Agitate intake", intake.agitate(2));
+
+
+    // NamedCommands.registerCommand("Deploy intake", Commands.startEnd(() -> intake.setPosition(IntakeConstants.kIntakePosition),
+    //  () -> intake.setPosition(IntakeConstants.kFramePerimStow)));
+
+    //   NamedCommands.registerCommand("Run intake", Commands.startEnd(() -> 
+    // {intake.setDriveVoltage(IntakeConstants.kIntakeVoltage + 2.0); feeder.setConveyorVoltage(FeederConstants.kConveyorVoltage); 
+    //   feeder.setKickerVoltage(-2);}
+    // , () -> intake.setDriveVoltage(0)));
+    
     
     
     boolean isCompetition = false;
@@ -136,10 +143,10 @@ public class RobotContainer {
 
 
     //Intake regular
-    
-    smellisEllis.rightBumper().whileTrue(intake.intake()
-        .alongWith(feeder.feed(-4, -4)));
 
+
+    smellisEllis.rightBumper().whileTrue(intake.intake().alongWith(feeder.feed(0, -2)));
+    
    
     smellisEllis.leftBumper().whileTrue(intake.extake()
         .alongWith(feeder.feed(-FeederConstants.kConveyorVoltage, 0)));

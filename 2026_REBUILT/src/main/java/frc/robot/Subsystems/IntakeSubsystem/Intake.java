@@ -63,8 +63,15 @@ public class Intake extends SubsystemBase {
         pivot.setControl(pivotController.withPosition(position));
     }
 
+    public Command runToPosition(double position, double tolerance){
+        return Commands.runOnce(() -> setPosition(position)).
+        andThen(Commands.waitUntil(
+            () -> Math.abs(getPosition() - position) < tolerance)
+        );
+    }
+
     public Command runToPosition(double position){
-        return Commands.runOnce(() -> setPosition(position));
+        return runToPosition(position, 1);
     }
 
     public Command manualPivotVoltage(double voltage){
@@ -76,14 +83,17 @@ public class Intake extends SubsystemBase {
     //Deploys and runs intake at given velocity
     //Does NOT return intake to stowing position automatically
     public Command deployAndIntake(double voltage){
-        return this.startEnd(
-            () -> {
-                setPosition(IntakeConstants.kIntakePosition);
-                setDriveVoltage(voltage);
-            },
-            () -> setDriveVoltage(0)
-        );
+        // return this.startEnd(
+        //     () -> {
+        //         setPosition(IntakeConstants.kIntakePosition);
+        //         setDriveVoltage(voltage);
+        //     },
+        //     () -> setDriveVoltage(0)
+        // );
+        return runToPosition(IntakeConstants.kIntakePosition).andThen(this.startEnd(() -> setDriveVoltage(voltage), () -> setDriveVoltage(0)));
     }
+
+
 
     public Command setPositionCommand(double position){
         return this.runOnce(() -> setPosition(position));
