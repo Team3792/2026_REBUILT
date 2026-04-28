@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Commands.FeedShotCommand;
 import frc.robot.Commands.ShootCommand;
 import frc.robot.Subsystems.ClimbSubsytem.Climb;
 import frc.robot.Subsystems.FeederSubsystem.Feeder;
@@ -55,7 +56,7 @@ public class RobotContainer {
   private void configurAutoChooser(){
     // Register Named Commands
     NamedCommands.registerCommand("Tracking spin up", new ShootCommand(hood, shooter, swerve::getShooterPose));
-    NamedCommands.registerCommand("Rotate to tag", new DriveCommand(swerve, () -> 0.0, () -> 0.0, () -> 0.0, () -> true));
+    NamedCommands.registerCommand("Rotate to tag", new DriveCommand(swerve, () -> 0.0, () -> 0.0, () -> 0.0, () -> true, () -> false));
     NamedCommands.registerCommand("Feed", new StartEndCommand(
           () -> {feeder.setKickerVoltage(12); feeder.setConveyorVoltage(10);}, 
           () -> {feeder.setKickerVoltage(0); feeder
@@ -94,8 +95,8 @@ public class RobotContainer {
 
   private Command fallBackAuto(){
     return (new ShootCommand(hood, shooter, swerve::getShooterPose)).alongWith(
-      (new DriveCommand(swerve, () -> -1.0, () -> 0.0, () -> 0.0, () -> true)).withTimeout(0.5).andThen(
-      (new DriveCommand(swerve, () -> 0.0, () -> 0.0, () -> 0.0, () -> true)).onlyWhile(shotReady.negate())
+      (new DriveCommand(swerve, () -> -1.0, () -> 0.0, () -> 0.0, () -> true, () -> false)).withTimeout(0.5).andThen(
+      (new DriveCommand(swerve, () -> 0.0, () -> 0.0, () -> 0.0, () -> true, () -> false)).onlyWhile(shotReady.negate())
       .andThen(
         feeder.feed() 
       )
@@ -116,14 +117,13 @@ public class RobotContainer {
     neeshneesh.b().whileTrue(ShootCommand.fixedShot(ShotCalculator.kBumperShot, hood, shooter));
     neeshneesh.a().whileTrue(intake.agitate(2));
     neeshneesh.x().whileTrue(new ShootCommand(hood, shooter, swerve::getShooterPose));   
-    neeshneesh.leftStick().whileTrue(ShootCommand.fixedShot(ShotCalculator.kFeedShot, hood, shooter));
+    neeshneesh.leftStick().whileTrue(new FeedShotCommand(hood, shooter, swerve::getShooterPose));
 
 
     //Change Hood Angle
     neeshneesh.povUp().onTrue(hood.incrementHoodAngle(HoodConstants.kAngleIncrement));
     neeshneesh.povDown().onTrue(hood.incrementHoodAngle(-HoodConstants.kAngleIncrement));
     neeshneesh.povRight().or(neeshneesh.povLeft()).onTrue(hood.resetIncrement());
-
 
     // Intake backup
     neeshneesh.y().whileTrue(intake.manualPivotVoltage(1));  
@@ -132,9 +132,10 @@ public class RobotContainer {
 
   private void configureEllisBindings(){
     // Swerve
-    swerve.setDefaultCommand(new DriveCommand(swerve, () -> -smellisEllis.getLeftY(), () -> -smellisEllis.getLeftX(), () -> -smellisEllis.getRightX(), () -> smellisEllis.getRightTriggerAxis() > 0.1));      
+    swerve.setDefaultCommand(new DriveCommand(swerve, () -> -smellisEllis.getLeftY(), () -> -smellisEllis.getLeftX(), () -> -smellisEllis.getRightX(), () -> smellisEllis.getRightTriggerAxis() > 0.1, () -> smellisEllis.getLeftTriggerAxis() > 0.1));      
     smellisEllis.povUp().onTrue(Commands.runOnce(swerve::resetHeading));
-    smellisEllis.leftTrigger().whileTrue(swerve.crossCommand());
+    smellisEllis.a().whileTrue(swerve.crossCommand());
+
 
 
     // Intake backup

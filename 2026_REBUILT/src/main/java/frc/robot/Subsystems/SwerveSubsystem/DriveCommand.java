@@ -20,20 +20,22 @@ public class DriveCommand extends Command {
   /** Creates a new DriveCommand. */
   Swerve swerve;
   Supplier<Double> xSupplier, ySupplier, tSupplier;
-  Supplier<Boolean> headingLockSupplier; 
+  Supplier<Boolean> shotHeadingLockSupplier, feedHeadingLockSupplier; 
   double vx, vy, omega; //stored to access last
   JoystickInput translationJoystick = new JoystickInput(SwerveConstants.kMaxLinearVelocity, 0.05); //used for both x and y
   JoystickInput rotationJoystick = new JoystickInput(SwerveConstants.kMaxOmega, 0.05);
   ProfiledPIDController headingLockController = SwerveConstants.kHeadingLockControllerConfig.getController();
-  boolean headingLock = false;
+  boolean shotHeadingLock = false;
+  boolean feedHeadingLock = false;
 
 
-  public DriveCommand(Swerve swerve, Supplier<Double> x, Supplier<Double> y, Supplier<Double> t, Supplier<Boolean> headingLock) {
+  public DriveCommand(Swerve swerve, Supplier<Double> x, Supplier<Double> y, Supplier<Double> t, Supplier<Boolean> shotHeadingLock, Supplier<Boolean> feedHeadingLock) {
     this.swerve = swerve;
     this.xSupplier = x;
     this.ySupplier = y;
     this.tSupplier = t;
-    this.headingLockSupplier = headingLock;
+    this.shotHeadingLockSupplier = shotHeadingLock;
+    this.feedHeadingLockSupplier = feedHeadingLock;
     headingLockController.enableContinuousInput(-Math.PI, Math.PI);
 
     addRequirements(swerve);
@@ -49,17 +51,26 @@ public class DriveCommand extends Command {
     vx = translationJoystick.get(xSupplier.get());
     vy = translationJoystick.get(ySupplier.get());
   
-    if(headingLockSupplier.get()){
+    if(shotHeadingLockSupplier.get()){
       //Determine setpoint 
       headingLockController.setGoal(FieldManager.getHubRotation(swerve.getPose()).getRadians());
-      if(!headingLock){
+      if(!shotHeadingLock){
         headingLockController.reset(swerve.getPoseHeading().getRadians(), omega);
-        headingLock = true;
+        shotHeadingLock = true;
       }
       omega = headingLockController.getSetpoint().velocity + headingLockController.calculate(swerve.getPoseHeading().getRadians());
-    } else {
+    } else if(feedHeadingLockSupplier.get()){
+      headingLockController.setGoal(FieldManager.getFeedRotation(swerve.getPose()).getRadians());
+      if (!feedHeadingLock){
+        headingLockController.reset(swerve.getPoseHeading().getRadians(), omega);
+        feedHeadingLock = true;
+      }
+      omega = headingLockController.getSetpoint().velocity + headingLockController.calculate(swerve.getPoseHeading().getRadians());
+    }
+    else {
       omega = rotationJoystick.get(tSupplier.get());
-      headingLock = false;
+      shotHeadingLock = false;
+      feedHeadingLock = false;
     }
 
     ChassisSpeeds chassisSpeeds = new ChassisSpeeds(vx, vy, omega);

@@ -25,7 +25,16 @@ public class FieldManager {
     //hub
     public static Pose2d blueHubPos = new Pose2d(new Translation2d(4.626,4.035), new Rotation2d(0));
     public static Pose2d redHubPos = new Pose2d(new Translation2d(11.915, 4.035), new Rotation2d(0));
-    
+
+    //feed poses
+    public static Pose2d blueFeedTopPos = new Pose2d(new Translation2d(0,0), new Rotation2d(0));
+    public static Pose2d redFeedTopPos = new Pose2d(new Translation2d(0, 0), new Rotation2d(0));    
+    public static Pose2d blueFeedBottomPos = new Pose2d(new Translation2d(0,0), new Rotation2d(0));
+    public static Pose2d redFeedBottomPos = new Pose2d(new Translation2d(0, 0), new Rotation2d(0));
+
+    //middle line threshold for determining feed pose
+    public static double yMiddleThreshold = 4.0;
+
     //trench
     Translation2d bottomRedTrench = new Translation2d(0,0);
     Translation2d topRedTrench = new Translation2d(0,0);
@@ -69,9 +78,33 @@ public class FieldManager {
         return hubPos;
     }
 
+    public static Pose2d getFeedPose(Pose2d shooterPose){
+        Pose2d feedPos;
+        if (GameManager.getAllianceColor() == Alliance.Blue){
+            if (shooterPose.getY() > yMiddleThreshold){
+                feedPos = blueFeedTopPos;
+            } else{
+                feedPos = blueFeedBottomPos;
+            }
+        } else {
+            if (shooterPose.getY() > yMiddleThreshold){
+                feedPos = redFeedTopPos;
+            } else {
+                feedPos = redFeedBottomPos;
+            }
+        }
+        return feedPos;
+    }
+
     public static double getRobotToHubDis(Pose2d shooter){
         Pose2d hubPos = getHubPose();
         double distance = shooter.getTranslation().getDistance(hubPos.getTranslation());
+        return distance;
+    }
+
+    public static double getRobotToFeedDis(Pose2d shooter){
+        Pose2d feedPos = getFeedPose(shooter);
+        double distance = shooter.getTranslation().getDistance(feedPos.getTranslation());
         return distance;
     }
 
@@ -79,7 +112,9 @@ public class FieldManager {
         return getHubPose().getTranslation().minus(shooterPose.getTranslation()).getAngle().plus(Rotation2d.fromDegrees(0));
     }
 
- 
+    public static Rotation2d getFeedRotation(Pose2d shooterPose){
+        return getFeedPose(shooterPose).getTranslation().minus(shooterPose.getTranslation()).getAngle().plus(Rotation2d.fromDegrees(0));        
+    }
 }
 
 
