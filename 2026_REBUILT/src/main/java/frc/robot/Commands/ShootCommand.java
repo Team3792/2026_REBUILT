@@ -44,7 +44,7 @@ public class ShootCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {                                                       //fudge factor 
-    double robotToHubDistance = FieldManager.getRobotToHubDis(shooterPose.get()) - 0.20 - Units.inchesToMeters(10);//need to update
+    double robotToHubDistance = FieldManager.getRobotToHubDis(shooterPose.get()) - 0.20 - Units.inchesToMeters(9);//need to update
     Shot targetShot = ShotCalculator.getStaticShot(robotToHubDistance);
     //TODO: implmenet increments in respective classes
     hood.setAngle(targetShot.hoodAngleDegrees());

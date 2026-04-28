@@ -24,7 +24,7 @@ public class Hood extends SubsystemBase {
   /** Creates a new Hood. */
   SparkMax hood = new SparkMax(HardwareMap.hoodID, MotorType.kBrushless);
   SparkClosedLoopController controller;
-  double setPoint = 12;
+  double setPoint = HoodConstants.kZeroAngle;
   double angleIncrement = 0;
   
   public Hood() {

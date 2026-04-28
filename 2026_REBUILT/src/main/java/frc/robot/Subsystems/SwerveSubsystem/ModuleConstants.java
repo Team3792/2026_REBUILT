@@ -18,7 +18,7 @@ public class ModuleConstants {
     //Conversion Factors
     public static final double kTurnRatio = 25.9;
     public static final double kDriveRatio = 6.0; //Equivalent to 1/6 wheel rotations per motor rotation
-    public static final double kMetersPerWheelRotation = Math.PI * Units.inchesToMeters(3.5); //3.5 is wheel diameter 
+    public static final double kMetersPerWheelRotation = Math.PI * Units.inchesToMeters(3.31); //3.5 is wheel diameter 
     public static final double kRadiansPerMotorRotation = Math.PI*2 / kTurnRatio;
     public static final double kMetersPerMotorRotation = kMetersPerWheelRotation / kDriveRatio;
     

@@ -99,6 +99,7 @@ public class SwerveModule{
     public void printEncoders() {
         SmartDashboard.putNumber(name + "Cancoder Position", encoder.getAbsolutePosition().getValueAsDouble());
         SmartDashboard.putNumber(name + "Turn Encoder Position", turn.getPosition().getValueAsDouble());// * ModuleConstants.kRadiansPerRotation);
+        SmartDashboard.putNumber(name + "Drive encoder raw", drive.getPosition().getValueAsDouble());
         SmartDashboard.putNumber(name + "Drive Encoder Position", getDrivePosition());
     }
 }
