@@ -1,0 +1,49 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "bump to front trench"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "move to front hub"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "hub turn"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "over bump traverse"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "mid shot"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Comp Approved",
+  "choreoAuto": false
+}
