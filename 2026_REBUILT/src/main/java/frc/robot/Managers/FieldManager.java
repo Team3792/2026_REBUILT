@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import frc.robot.Commands.SpinUpCommand.ShotType;
 
 /** Add your docs here. */
 public class FieldManager {
@@ -62,11 +63,20 @@ public class FieldManager {
         return  distanceToTrenches;
     }
 
-    // public double calculateDistance(Translation2d[] distances){
-    //     Translation2d closestTrench = robotPos;
-    // }
 
+    public static Pose2d getTargetPose(Pose2d shooterPose, ShotType shotType){
+        if(shotType == ShotType.Feed || Math.abs(shooterPose.getX() - 8.27) < 3.65)
+            return getFeedPose(shooterPose);
+        return getHubPose();
+    }
 
+    public static Rotation2d getTargetRotation(Pose2d shooterPose, ShotType shotType){
+        return getTargetPose(shooterPose, shotType).getTranslation().minus(shooterPose.getTranslation()).getAngle();
+    }
+
+    public static double getTargetDistance(Pose2d shooterPose, ShotType shotType){
+        return getTargetPose(shooterPose, shotType).getTranslation().getDistance(shooterPose.getTranslation());
+    }
 
     public static Pose2d getHubPose(){
         Pose2d hubPos;
@@ -79,42 +89,16 @@ public class FieldManager {
     }
 
     public static Pose2d getFeedPose(Pose2d shooterPose){
-        Pose2d feedPos;
         if (GameManager.getAllianceColor() == Alliance.Blue){
-            if (shooterPose.getY() > yMiddleThreshold){
-                feedPos = blueFeedTopPos;
-            } else{
-                feedPos = blueFeedBottomPos;
-            }
-        } else {
-            if (shooterPose.getY() > yMiddleThreshold){
-                feedPos = redFeedTopPos;
-            } else {
-                feedPos = redFeedBottomPos;
-            }
+            if (shooterPose.getY() > yMiddleThreshold)
+                return blueFeedTopPos;
+            return blueFeedBottomPos;
         }
-        return feedPos;
+        if (shooterPose.getY() > yMiddleThreshold)
+                return redFeedTopPos;
+        return redFeedBottomPos;
     }
 
-    public static double getRobotToHubDis(Pose2d shooter){
-        Pose2d hubPos = getHubPose();
-        double distance = shooter.getTranslation().getDistance(hubPos.getTranslation());
-        return distance;
-    }
 
-    public static double getRobotToFeedDis(Pose2d shooter){
-        Pose2d feedPos = getFeedPose(shooter);
-        double distance = shooter.getTranslation().getDistance(feedPos.getTranslation());
-        return distance;
-    }
-
-    public static Rotation2d getHubRotation(Pose2d shooterPose){
-        return getHubPose().getTranslation().minus(shooterPose.getTranslation()).getAngle().plus(Rotation2d.fromDegrees(0));
-    }
-
-    public static Rotation2d getFeedRotation(Pose2d shooterPose){
-        return getFeedPose(shooterPose).getTranslation().minus(shooterPose.getTranslation()).getAngle().plus(Rotation2d.fromDegrees(0));        
-    }
 }
-
 

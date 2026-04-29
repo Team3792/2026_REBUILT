@@ -10,7 +10,6 @@ public class ShotCalculator {
 
     public record Shot(double distanceMeters, double omegaRPS, double hoodAngleDegrees){};
 
-
     //TODO: must be sorted by distance
     public static final Shot[] kCalibratedShots = {
         //TODO: add a closer shot

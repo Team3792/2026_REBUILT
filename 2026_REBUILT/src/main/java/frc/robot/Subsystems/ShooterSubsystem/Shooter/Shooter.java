@@ -27,7 +27,6 @@ public class Shooter extends SubsystemBase {
   Timer time = new Timer();
   boolean ballShot;
   public static double ballsShot = 0;
-  double rpsIncriment;
 
   TalonFX rightMotor = new TalonFX(HardwareMap.shootLeaderID.id());
   TalonFX leftMotor = new TalonFX(HardwareMap.shootFollowerID.id());
@@ -39,7 +38,6 @@ public class Shooter extends SubsystemBase {
   AnalogInput lightSensor = new AnalogInput(0);
 
   PIDController pidController = new PIDController(ShooterConstants.kP, ShooterConstants.kI, ShooterConstants.kD);
-
   DoubleLogEntry rpmLog;
 
   /** Creates a new Shooter. */
@@ -56,9 +54,6 @@ public class Shooter extends SubsystemBase {
     rightMotor.setControl(new Follower(leftMotor.getDeviceID(), MotorAlignmentValue.Opposed));
 
     mmVelocity.Slot = 0;
-    rpsIncriment = 0;
-  
-         
   // DataLogManager.start();
   // DataLog log = DataLogManager.getLog();
   // rpmLog = new DoubleLogEntry(log, "/my/double");
@@ -86,10 +81,6 @@ public double getTangentialVelocity(){
 public boolean readyToShoot(){
   //use defualt tolerances
   return Math.abs(getRPS() - targetRPS) < ShooterConstants.kRPSTolerance;
-}
-
-public double getRPSIncriment(){
-  return rpsIncriment;
 }
 
 public void setRPS(double targetVelocity){
