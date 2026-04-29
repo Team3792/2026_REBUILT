@@ -68,7 +68,7 @@ public class RobotContainer {
   
 
     NamedCommands.registerCommand("Intake D&R", intake.intake().alongWith(feeder.feed(0, -2)));
-    NamedCommands.registerCommand("Agitate intake", intake.agitate(2));
+    NamedCommands.registerCommand("Agitate intake", intake.agitate(3));
 
 
     // NamedCommands.registerCommand("Deploy intake", Commands.startEnd(() -> intake.setPosition(IntakeConstants.kIntakePosition),

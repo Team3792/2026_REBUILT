@@ -7,19 +7,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "bumpity bump"
+            "pathName": "trench to bump collect "
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "bumpity bump bump bump"
+            "pathName": "Trench reset"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "trench to bump collect 2"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "Comp Approved",
   "choreoAuto": false
 }

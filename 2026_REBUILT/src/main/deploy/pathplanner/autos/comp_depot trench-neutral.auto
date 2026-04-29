@@ -43,6 +43,12 @@
                                   "data": {
                                     "name": "Feed when ready"
                                   }
+                                },
+                                {
+                                  "type": "named",
+                                  "data": {
+                                    "name": "Agitate intake"
+                                  }
                                 }
                               ]
                             }
@@ -62,7 +68,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 15.0
+                  "waitTime": 4.0
                 }
               }
             ]
@@ -71,7 +77,58 @@
         {
           "type": "path",
           "data": {
-            "pathName": "depot shoot-trench"
+            "pathName": "depot shoot- neutral 2"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Depot trench swipe 2 - shoot"
+                      }
+                    },
+                    {
+                      "type": "parallel",
+                      "data": {
+                        "commands": [
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "Rotate to tag"
+                            }
+                          },
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "Feed when ready"
+                            }
+                          },
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "Agitate intake"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Tracking spin up"
+                }
+              }
+            ]
           }
         }
       ]

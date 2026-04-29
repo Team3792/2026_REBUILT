@@ -1,0 +1,143 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 2.740578313253012,
+        "y": 1.2702891566265067
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.6748181981947825,
+        "y": 0.5703291394872578
+      },
+      "isLocked": false,
+      "linkedName": "outpost shoot"
+    },
+    {
+      "anchor": {
+        "x": 3.4292899537317965,
+        "y": 0.6261824939320388
+      },
+      "prevControl": {
+        "x": 3.046743922557646,
+        "y": 0.6072637287621363
+      },
+      "nextControl": {
+        "x": 4.428069300164104,
+        "y": 0.6755769990944763
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 5.820793859981796,
+        "y": 0.7599897603155341
+      },
+      "prevControl": {
+        "x": 5.31183607971784,
+        "y": 0.49293419106492714
+      },
+      "nextControl": {
+        "x": 6.297302527710644,
+        "y": 1.0100189345373705
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 5.923084183479976,
+        "y": 4.297325877958131
+      },
+      "prevControl": {
+        "x": 5.749882684850667,
+        "y": 4.102285584224255
+      },
+      "nextControl": {
+        "x": 6.1106379418234225,
+        "y": 4.508528092763957
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.10567899537318,
+        "y": 3.5835294675364073
+      },
+      "prevControl": {
+        "x": 6.861411938713593,
+        "y": 5.377028405643203
+      },
+      "nextControl": {
+        "x": 7.349946052032767,
+        "y": 1.790030529429612
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 6.086946488167476,
+        "y": 0.7599897603155341
+      },
+      "prevControl": {
+        "x": 6.6286251327366505,
+        "y": 0.8501118780339811
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "outpost trench swipe 2"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1,
+      "rotationDegrees": 88.18619254985529
+    },
+    {
+      "waypointRelativePos": 3,
+      "rotationDegrees": 39.56557879021777
+    },
+    {
+      "waypointRelativePos": 4,
+      "rotationDegrees": -116.37412869673075
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "Intake D&R",
+      "waypointRelativePos": 2.0905935100767703,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Intake D&R"
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 4.0,
+    "maxAcceleration": 3.5,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 2.0,
+    "rotation": 179.694307076041
+  },
+  "reversed": false,
+  "folder": "outpost trench-neutral-shoot",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 52.125016348901774
+  },
+  "useDefaultConstraints": true
+}
