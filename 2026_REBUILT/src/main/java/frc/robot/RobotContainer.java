@@ -29,7 +29,7 @@ import frc.robot.Subsystems.SwerveSubsystem.Swerve;
 import frc.robot.util.Rumbler;
 
 public class RobotContainer {
-
+  //Subsystems
   Feeder feeder = new Feeder();
   Intake intake = new Intake();
   Climb climb = new Climb();
@@ -37,10 +37,13 @@ public class RobotContainer {
   Shooter shooter = new Shooter();
   Hood hood = new Hood();
 
+  //Controllers
   CommandXboxController smellisEllis = new CommandXboxController(0);
   CommandXboxController neeshneesh = new CommandXboxController(1);
   // CommandXboxController test = new CommandXboxController(3);
 
+  //Basic commands
+  // Command intakeCommand = 
 
   Trigger shotReady = new Trigger(() -> swerve.readyToShoot() && hood.readyToShoot() && shooter.readyToShoot());
 
@@ -63,7 +66,11 @@ public class RobotContainer {
             .setConveyorVoltage(0);}
         ));
     NamedCommands.registerCommand("Feed when ready", 
-      Commands.waitUntil(shotReady::getAsBoolean).andThen(feeder.feed())
+      Commands.waitUntil(shotReady::getAsBoolean).andThen(
+        feeder.feed().alongWith(
+        Commands.waitSeconds(3).andThen(intake.agitate(1.5))
+      )
+      )
     );
   
 
@@ -103,7 +110,9 @@ public class RobotContainer {
 
     //Shooter and Hood
     neeshneesh.b().whileTrue(new SpinUpCommand(hood, shooter, swerve::getShooterPose, ShotType.FixedBumper));
-    neeshneesh.a().whileTrue(intake.agitate(2));
+    
+    
+    neeshneesh.a().or(smellisEllis.a()).whileTrue(intake.agitate(1.5));
     neeshneesh.x().whileTrue(new SpinUpCommand(hood, shooter, swerve::getShooterPose, ShotType.Automatic));   
 
     //Change Hood Angle
@@ -120,7 +129,7 @@ public class RobotContainer {
     // Swerve
     swerve.setDefaultCommand(new DriveCommand(swerve, () -> -smellisEllis.getLeftY(), () -> -smellisEllis.getLeftX(), () -> -smellisEllis.getRightX(), () -> smellisEllis.getRightTriggerAxis() > 0.1));      
     smellisEllis.povUp().onTrue(Commands.runOnce(swerve::resetHeading));
-    smellisEllis.a().whileTrue(swerve.crossCommand());
+    smellisEllis.leftTrigger().whileTrue(swerve.crossCommand());
 
 
 
