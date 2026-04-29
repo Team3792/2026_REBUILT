@@ -49,16 +49,6 @@ public class Hood extends SubsystemBase {
     controller.setSetpoint(angle / 360.0 * HoodConstants.kHoodRatio * HoodConstants.kMotorRatio, ControlType.kPosition);
   }
 
-  public Command incrementHoodAngle(double increment){
-    return this.runOnce(() -> {
-      angleIncrement += increment;
-      setAngle(setPoint);
-    });
-  }
-
-  public Command resetIncrement(){
-    return this.runOnce(() -> angleIncrement = 0);
-  }
 
   public void zeroHood(){
     hood.getEncoder().setPosition(HoodConstants.kZeroAngle / 360.0 * HoodConstants.kHoodRatio * HoodConstants.kMotorRatio);
@@ -77,7 +67,7 @@ public class Hood extends SubsystemBase {
     // This method will be called once per scheduler run
     //SmartDashboard.putNumber("ShooterSubsystem/Hood New", hood.getEncoder().getPosition());
     SmartDashboard.putNumber("Hood Angle", getAngleDegrees());
-    SmartDashboard.putNumber("Hood setpoint", setPoint);
+    //SmartDashboard.putNumber("Hood setpoint", hood.getClosedLoopController().getSetpoint());
     SmartDashboard.putBoolean("Hood ready to shoot", readyToShoot());
   }
 }

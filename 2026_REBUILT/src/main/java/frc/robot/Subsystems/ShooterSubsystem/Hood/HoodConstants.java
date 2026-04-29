@@ -27,7 +27,6 @@ public class HoodConstants {
     public static final double kZeroAngle = 16;
 
     public static final double kAngleTolerance = 0.25;
-    public static final double kAngleIncrement = 1;
 
     //Hood Angle Constants for Zones
     public static final double kZone1Angle = 0;
