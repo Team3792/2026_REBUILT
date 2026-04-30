@@ -63,11 +63,16 @@ public class FieldManager {
         return  distanceToTrenches;
     }
 
-
     public static Pose2d getTargetPose(Pose2d shooterPose, ShotType shotType){
-        if(shotType == ShotType.Feed || Math.abs(shooterPose.getX() - 8.27) < 3.65)
-            return getFeedPose(shooterPose);
-        return getHubPose();
+        if (GameManager.getAllianceColor() == Alliance.Blue){
+            if (shotType == ShotType.Feed || shooterPose.getX() > 5.0)
+                return getFeedPose(shooterPose);
+            return getHubPose();
+        } else{
+            if(shotType == ShotType.Feed || shooterPose.getX() < 11.0)
+                return getFeedPose(shooterPose);
+            return getHubPose();
+        }
     }
 
     public static Rotation2d getTargetRotation(Pose2d shooterPose, ShotType shotType){

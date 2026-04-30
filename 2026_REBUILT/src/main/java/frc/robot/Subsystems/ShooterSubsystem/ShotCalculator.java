@@ -13,20 +13,30 @@ public class ShotCalculator {
     //TODO: must be sorted by distance
     public static final Shot[] kCalibratedShots = {
         //TODO: add a closer shot
-        new Shot(1.726, 52, 24),
-        new Shot(2.03, 53.5, 25.5),
-        new Shot(2.47, 55, 27),
-        new Shot(3.03, 56, 33),
-        new Shot(3.43, 57, 34),
-        new Shot(4.01, 59.5, 37),
-        new Shot(4.5, 60, 40),
-        new Shot(5.02, 64, 43),
-        new Shot(6.1, 70, 43),
-        new Shot(7.2, 75, 43),
+        // new Shot(1.726, 52, 24),
+        // new Shot(2.03, 53.5, 25.5),
+        // new Shot(2.47, 55, 27),
+        // new Shot(3.03, 56, 33),
+        // new Shot(3.43, 57, 34),
+        // new Shot(4.01, 59.5, 37),
+        // new Shot(4.5, 60, 40),
+        // new Shot(5.02, 64, 43),
+        // new Shot(6.1, 70, 43),
+        // new Shot(7.2, 75, 43),
+
+        new Shot(1.52, 44, 20),
+        new Shot(2.14, 48.6, 20),
+        new Shot(2.54,50,24),
+        new Shot(3.0, 52,28),
+        new Shot(3.5, 57,28),
+        new Shot(4, 56,32),
+        new Shot(4.5,60, 32),
+        new Shot(5.67,70,43),
+        new Shot(6.77,75,43)
+
     };
 
-
-    public static final Shot kBumperShot = new Shot(0, 0,16); //Need to determine
+    public static final Shot kBumperShot = new Shot(0, 43.5,16); //Need to determine
     public static final Shot kFeedShot = new Shot(0, 70, 40);
     public static final Shot kZeroShot = new Shot(0, 0, 0);
     //used on controller 3

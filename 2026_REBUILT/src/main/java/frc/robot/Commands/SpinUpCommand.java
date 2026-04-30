@@ -29,7 +29,7 @@ public class SpinUpCommand extends Command {
   Supplier<Pose2d> shooterPose;
   ShotType shotType;
 
-  private static double shotDistanceOffsetBase = - 0.20 - Units.inchesToMeters(9);
+  private static double shotDistanceOffsetBase = 0; //- 0.20 - Units.inchesToMeters(22) - 0.4;
   private static double shotDistanceOffsetChange = 0;
 
   public enum ShotType{
