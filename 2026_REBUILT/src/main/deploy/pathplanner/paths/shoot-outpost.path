@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.4721151585254857,
-        "y": 2.505
+        "x": 2.58860882509102,
+        "y": 2.5051204819336057
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.243779451253367,
-        "y": 2.02299532086007
+        "x": 2.3602731178189016,
+        "y": 2.0231158027936758
       },
       "isLocked": false,
       "linkedName": "outpost trench-neutral-bump"

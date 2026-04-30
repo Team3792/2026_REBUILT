@@ -5,7 +5,7 @@
   "pathFolders": [
     "Depot",
     "Langston Paths",
-    "trench-nuetral-bump x2",
+    "Qual 1",
     "Outpost",
     "bump-depot-bump-under hub",
     "depot trench-neutral-bump-shoot-trench-hub",
@@ -13,7 +13,8 @@
     "hub shoot-neutral-shoot",
     "outpost trench-neutral-bump-outpost",
     "outpost trench-neutral-shoot",
-    "trench bump depot"
+    "trench bump depot",
+    "trench-nuetral-bump x2"
   ],
   "autoFolders": [
     "Comp Approved",

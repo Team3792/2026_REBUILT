@@ -1,0 +1,80 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 8.126217384708738,
+        "y": 1.8525914460709951
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 8.254435015928399,
+        "y": 3.0064641326608013
+      },
+      "isLocked": false,
+      "linkedName": "red trench pile"
+    },
+    {
+      "anchor": {
+        "x": 8.904466588288836,
+        "y": 4.0425245088743935
+      },
+      "prevControl": {
+        "x": 7.937803682493932,
+        "y": 4.094207135543083
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "red pile turn"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0,
+      "maxWaypointRelativePos": 1.0,
+      "constraints": {
+        "maxVelocity": 1.0,
+        "maxAcceleration": 1.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "Intake D&R",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Intake D&R"
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 4.0,
+    "maxAcceleration": 3.5,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -14.898999648471241
+  },
+  "reversed": false,
+  "folder": "Qual 1",
+  "idealStartingState": {
+    "velocity": 1.0,
+    "rotation": 90.17409602810325
+  },
+  "useDefaultConstraints": true
+}

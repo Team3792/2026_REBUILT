@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.4721151585254857,
-        "y": 2.505
+        "x": 2.58860882509102,
+        "y": 2.5051204819336057
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.3545178341171122,
-        "y": 1.2861549276537732
+        "x": 2.4710115006826467,
+        "y": 1.2862754095873787
       },
       "isLocked": false,
       "linkedName": "outpost trench-neutral-bump"
     },
     {
       "anchor": {
-        "x": 4.368807228915662,
-        "y": 0.691120481927711
+        "x": 4.372949360967841,
+        "y": 0.5029955343598305
       },
       "prevControl": {
-        "x": 2.828232184845268,
-        "y": 0.48704357554611644
+        "x": 2.600920423921111,
+        "y": 0.40348780273551843
       },
       "nextControl": null,
       "isLocked": false,
@@ -41,7 +41,7 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
+    "velocity": 2.0,
     "rotation": 0.0
   },
   "reversed": false,

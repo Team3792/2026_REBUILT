@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.368807228915662,
-        "y": 0.691120481927711
+        "x": 4.372949360967841,
+        "y": 0.5029955343598305
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.368807228915662,
-        "y": 0.6911204819277108
+        "x": 5.372949360967841,
+        "y": 0.5029955343598302
       },
       "isLocked": false,
       "linkedName": "trench to center bump"
@@ -96,12 +96,12 @@
     },
     {
       "anchor": {
-        "x": 3.4752969508495153,
-        "y": 2.413489836165048
+        "x": 2.6868144152002436,
+        "y": 2.40566434693568
       },
       "prevControl": {
-        "x": 3.511902956650132,
-        "y": 2.660795315965487
+        "x": 2.7234204210008603,
+        "y": 2.652969826736119
       },
       "nextControl": null,
       "isLocked": false,
@@ -160,7 +160,7 @@
   "reversed": false,
   "folder": "trench-nuetral-bump x2",
   "idealStartingState": {
-    "velocity": 0,
+    "velocity": 2.0,
     "rotation": 0.0
   },
   "useDefaultConstraints": true

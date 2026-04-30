@@ -1,0 +1,87 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 9.52246525144114,
+        "y": 1.7983719849817965
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 9.540696061513957,
+        "y": 2.5596802942961165
+      },
+      "isLocked": false,
+      "linkedName": "red pile 2"
+    },
+    {
+      "anchor": {
+        "x": 9.705160326911408,
+        "y": 3.908158278974515
+      },
+      "prevControl": {
+        "x": 9.287858609300857,
+        "y": 3.4294273216975313
+      },
+      "nextControl": {
+        "x": 9.989070796040656,
+        "y": 4.233862020251821
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 10.622032482554612,
+        "y": 3.5883451532160198
+      },
+      "prevControl": {
+        "x": 10.689817558214502,
+        "y": 3.884402329528216
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "red pile through 2"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1,
+      "rotationDegrees": 85.10416641815392
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "Intake D&R",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Intake D&R"
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 4.0,
+    "maxAcceleration": 3.5,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -85.17917989533005
+  },
+  "reversed": false,
+  "folder": "Qual 1",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 90.17409602810325
+  },
+  "useDefaultConstraints": true
+}
