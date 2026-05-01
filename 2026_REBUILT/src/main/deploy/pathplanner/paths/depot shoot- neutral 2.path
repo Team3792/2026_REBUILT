@@ -99,7 +99,7 @@
     },
     {
       "waypointRelativePos": 2.0,
-      "rotationDegrees": -90.64291682500888
+      "rotationDegrees": -90.6429168250089
     },
     {
       "waypointRelativePos": 3,
@@ -129,7 +129,7 @@
   "eventMarkers": [
     {
       "name": "Intake D&R",
-      "waypointRelativePos": 2.020595909309021,
+      "waypointRelativePos": 1.8387865882917462,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
