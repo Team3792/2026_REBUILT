@@ -126,13 +126,15 @@ public class RobotContainer {
     neeshneesh.a().or(smellisEllis.a()).whileTrue(intake.agitate(1.5));
     neeshneesh.x().whileTrue(new SpinUpCommand(hood, shooter, swerve::getShooterPose, ShotType.Automatic));   
 
+    neeshneesh.y().whileTrue(new SpinUpCommand(hood, shooter, swerve::getShooterPose, ShotType.FixedFeed));
+
     //Change Hood Angle
     neeshneesh.povUp().onTrue(Commands.runOnce(() -> SpinUpCommand.incrementOffset(0.1)));
     neeshneesh.povDown().onTrue(Commands.runOnce(() -> SpinUpCommand.incrementOffset(-0.1)));
     neeshneesh.povRight().or(neeshneesh.povLeft()).onTrue(Commands.runOnce(SpinUpCommand::resetOffset));
 
     // Intake backup
-    neeshneesh.y().whileTrue(intake.manualPivotVoltage(1));  
+    //neeshneesh.y().whileTrue(intake.manualPivotVoltage(1));  
     neeshneesh.leftTrigger().whileTrue(intake.manualPivotVoltage(-1));                                           
   }
 

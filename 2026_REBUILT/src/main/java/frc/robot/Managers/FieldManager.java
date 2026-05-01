@@ -28,10 +28,10 @@ public class FieldManager {
     public static Pose2d redHubPos = new Pose2d(new Translation2d(11.915, 4.035), new Rotation2d(0));
 
     //feed poses
-    public static Pose2d blueFeedTopPos = new Pose2d(new Translation2d(2.5,6.5), new Rotation2d(0));
-    public static Pose2d blueFeedBottomPos = new Pose2d(new Translation2d(2.5, 1.5), new Rotation2d(0));    
-    public static Pose2d redFeedTopPos = new Pose2d(new Translation2d(14.5,6.5), new Rotation2d(0));
-    public static Pose2d redFeedBottomPos = new Pose2d(new Translation2d(14.5, 1.5), new Rotation2d(0));
+    public static Pose2d blueFeedTopPos = new Pose2d(new Translation2d(3.5,6), new Rotation2d(0));
+    public static Pose2d blueFeedBottomPos = new Pose2d(new Translation2d(3.5, 2), new Rotation2d(0));    
+    public static Pose2d redFeedTopPos = new Pose2d(new Translation2d(13,6), new Rotation2d(0));
+    public static Pose2d redFeedBottomPos = new Pose2d(new Translation2d(13, 2), new Rotation2d(0));
 
     //middle line threshold for determining feed pose
     public static double yMiddleThreshold = 4.0;
@@ -64,15 +64,22 @@ public class FieldManager {
     }
 
     public static Pose2d getTargetPose(Pose2d shooterPose, ShotType shotType){
+        if(shotType == ShotType.Automatic)
+            shotType = FieldManager.getShotType(shooterPose);
+        if(shotType == ShotType.Feed)
+            return getFeedPose(shooterPose);
+        else    
+            return getHubPose();
+    }
+
+    public static ShotType getShotType(Pose2d shooterPose){
         if (GameManager.getAllianceColor() == Alliance.Blue){
-            if (shotType == ShotType.Feed || shooterPose.getX() > 5.0)
-                return getFeedPose(shooterPose);
-            return getHubPose();
-        } else{
-            if(shotType == ShotType.Feed || shooterPose.getX() < 11.0)
-                return getFeedPose(shooterPose);
-            return getHubPose();
-        }
+            if (shooterPose.getX() > 5.0)
+                return ShotType.Feed;
+            return ShotType.Hub;
+        } else if(shooterPose.getX() < 11.0)
+                return ShotType.Feed;
+            return ShotType.Hub;
     }
 
     public static Rotation2d getTargetRotation(Pose2d shooterPose, ShotType shotType){

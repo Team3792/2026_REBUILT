@@ -36,6 +36,7 @@ public class SpinUpCommand extends Command {
     Hub,
     FixedBumper,
     Feed,
+    FixedFeed,
     Automatic
   }
   
@@ -58,17 +59,25 @@ public class SpinUpCommand extends Command {
     if(shotType == ShotType.FixedBumper){
         hood.setAngle(ShotCalculator.kBumperShot.hoodAngleDegrees());
         shooter.setRPS(ShotCalculator.kBumperShot.omegaRPS());
+    } else if(shotType == ShotType.FixedFeed){
+        hood.setAngle(ShotCalculator.kFeedShot.hoodAngleDegrees());
+        shooter.setRPS(ShotCalculator.kFeedShot.distanceMeters());
     }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() { 
-    if(shotType == ShotType.FixedBumper) //Skip if bumper shot
+    if(shotType == ShotType.FixedBumper || shotType == ShotType.FixedFeed) //Skip if bumper shot
       return;
 
-    double distanceToTarget = FieldManager.getTargetDistance(shooterPose.get(), shotType);
-    Shot targetShot = ShotCalculator.getStaticShot(distanceToTarget + shotDistanceOffsetBase + shotDistanceOffsetChange);
+    ShotType trueShotType = shotType;  
+    if(shotType == ShotType.Automatic){
+      trueShotType = FieldManager.getShotType(shooterPose.get());
+    }
+
+    double distanceToTarget = FieldManager.getTargetDistance(shooterPose.get(), trueShotType);
+    Shot targetShot = ShotCalculator.getStaticShot(distanceToTarget + shotDistanceOffsetBase + shotDistanceOffsetChange, trueShotType);
     hood.setAngle(targetShot.hoodAngleDegrees());
     shooter.setRPS(targetShot.omegaRPS());
 }

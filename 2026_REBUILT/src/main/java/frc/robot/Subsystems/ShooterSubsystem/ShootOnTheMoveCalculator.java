@@ -84,7 +84,7 @@ public class ShootOnTheMoveCalculator {
 
     //return shot for moving robot
     public static Shot getDynamicShot(double distance){
-        return ShotCalculator.getStaticShot(getTargetHubDistance(distance).distanceMeters());
+        return new Shot(0, 0, 0);//ShotCalculator.getStaticShot(getTargetHubDistance(distance).distanceMeters());
     }
 
     //returns the interpolated time of flight based on distance and two given time vs distance points

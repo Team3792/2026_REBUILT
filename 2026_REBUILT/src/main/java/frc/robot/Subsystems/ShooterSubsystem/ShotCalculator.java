@@ -4,6 +4,10 @@
 
 package frc.robot.Subsystems.ShooterSubsystem;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import frc.robot.Commands.SpinUpCommand.ShotType;
+import frc.robot.Managers.GameManager;
 
 /** Add your docs here. */
 public class ShotCalculator {
@@ -36,27 +40,49 @@ public class ShotCalculator {
 
     };
 
+    public static final Shot[] kCalibratedFeedShots = {
+        new Shot(4, 50, 45),
+        new Shot(8, 70, 45)
+    };
+
     public static final Shot kBumperShot = new Shot(0, 43.5,16); //Need to determine
-    public static final Shot kFeedShot = new Shot(0, 70, 40);
+    public static final Shot kFeedShot = new Shot(0, 70, 45);
     public static final Shot kZeroShot = new Shot(0, 0, 0);
     //used on controller 3
     public static final Shot kTestShot = new Shot(0,40,20);
 
   
 
-    public static Shot getStaticShot(double distance){
+    public static Shot getStaticShot(double distance, ShotType shotType){
         //Linear search until calibrated shots is farther
-        int calibratedShots = kCalibratedShots.length;
+        Shot[] lookupTable;
+        if(shotType == ShotType.Hub)
+            lookupTable = kCalibratedShots;
+        else
+            lookupTable = kCalibratedFeedShots;
+        int calibratedShots = lookupTable.length;
         for (int i = 0; i < calibratedShots; i++){ //Could restructure into while with exit if
-            if(distance < kCalibratedShots[i].distanceMeters()){
+            if(distance < lookupTable[i].distanceMeters()){
                 if(i == 0) //Closer than first shot
-                    return linearInterpolation(distance, kCalibratedShots[0], kCalibratedShots[1]);
-                return linearInterpolation(distance, kCalibratedShots[i-1], kCalibratedShots[i]);
+                    return linearInterpolation(distance, lookupTable[0], lookupTable[1]);
+                return linearInterpolation(distance, lookupTable[i-1], lookupTable[i]);
             }
         }
 
         //farther than final shot, use last two shots 
-        return linearInterpolation(distance, kCalibratedShots[calibratedShots - 1], kCalibratedShots[calibratedShots - 2]);
+        return linearInterpolation(distance, lookupTable[calibratedShots - 1], lookupTable[calibratedShots - 2]);
+    }
+
+    public static Shot[] getLookupTable(Pose2d shooterPose, ShotType shotType){
+        if (GameManager.getAllianceColor() == Alliance.Blue){
+            if (shotType == ShotType.Feed || shooterPose.getX() > 5.0)
+                return kCalibratedFeedShots;
+            return kCalibratedShots;
+        } else{
+            if(shotType == ShotType.Feed || shooterPose.getX() < 11.0)
+                return kCalibratedFeedShots;
+            return kCalibratedShots;
+        }
     }
 
 
