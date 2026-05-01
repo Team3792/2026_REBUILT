@@ -68,7 +68,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("Feed when ready", 
       Commands.waitUntil(shotReady::getAsBoolean).andThen(
         feeder.feed().alongWith(
-        Commands.waitSeconds(3).andThen(intake.agitate(1.5))
+        Commands.waitSeconds(1).andThen(intake.agitate(1.5))
       )
       )
     );

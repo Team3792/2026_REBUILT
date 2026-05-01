@@ -29,8 +29,8 @@ public class FieldManager {
 
     //feed poses
     public static Pose2d blueFeedTopPos = new Pose2d(new Translation2d(2.5,6.5), new Rotation2d(0));
-    public static Pose2d redFeedTopPos = new Pose2d(new Translation2d(2.5, 1.5), new Rotation2d(0));    
-    public static Pose2d blueFeedBottomPos = new Pose2d(new Translation2d(14.5,6.5), new Rotation2d(0));
+    public static Pose2d blueFeedBottomPos = new Pose2d(new Translation2d(2.5, 1.5), new Rotation2d(0));    
+    public static Pose2d redFeedTopPos = new Pose2d(new Translation2d(14.5,6.5), new Rotation2d(0));
     public static Pose2d redFeedBottomPos = new Pose2d(new Translation2d(14.5, 1.5), new Rotation2d(0));
 
     //middle line threshold for determining feed pose

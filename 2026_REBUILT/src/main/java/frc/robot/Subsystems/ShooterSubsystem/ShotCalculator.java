@@ -32,7 +32,7 @@ public class ShotCalculator {
         new Shot(4, 56,32),
         new Shot(4.5,60, 32),
         new Shot(5.67,70,43),
-        new Shot(6.77,75,43)
+        new Shot(6.77,75,43),
 
     };
 
