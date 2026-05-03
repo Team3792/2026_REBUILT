@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 5.883225785042477,
+        "y": 0.6303962189016987
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 5.794522574711772,
+        "y": 1.4370665674302188
+      },
+      "isLocked": false,
+      "linkedName": "trench front hub"
+    },
+    {
+      "anchor": {
+        "x": 5.883225785042477,
+        "y": 4.661211127123786
+      },
+      "prevControl": {
+        "x": 5.940756030036408,
+        "y": 3.780241628109829
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "hub front"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 4.0,
+    "maxAcceleration": 3.5,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 89.97271369883732
+  },
+  "reversed": false,
+  "folder": "Langston Paths",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 90.21766186327017
+  },
+  "useDefaultConstraints": true
+}

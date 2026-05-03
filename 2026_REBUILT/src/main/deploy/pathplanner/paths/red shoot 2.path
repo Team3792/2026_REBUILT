@@ -1,0 +1,75 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 10.622032482554612,
+        "y": 3.5883451532160198
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 10.570177867111651,
+        "y": 2.4338705059162624
+      },
+      "isLocked": false,
+      "linkedName": "red pile through 2"
+    },
+    {
+      "anchor": {
+        "x": 11.543752595475578,
+        "y": 2.370809746899651
+      },
+      "prevControl": {
+        "x": 10.703727150333739,
+        "y": 2.2587859337075247
+      },
+      "nextControl": {
+        "x": 12.125650947360766,
+        "y": 2.448410339411924
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 13.69284904998483,
+        "y": 2.6121798676425976
+      },
+      "prevControl": {
+        "x": 12.896627019493323,
+        "y": 2.0276330210861655
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "red trench bump shoot"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1,
+      "rotationDegrees": -6.335893774312401
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 4.0,
+    "maxAcceleration": 3.5,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 132.17703181633735
+  },
+  "reversed": false,
+  "folder": "Qual 1",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -85.17917989533005
+  },
+  "useDefaultConstraints": true
+}

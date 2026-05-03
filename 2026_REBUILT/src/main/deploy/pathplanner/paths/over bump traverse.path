@@ -1,0 +1,59 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 6.896970617794296,
+        "y": 3.096027286862865
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.086387524651093,
+        "y": 2.0173136946298555
+      },
+      "isLocked": false,
+      "linkedName": "hub back start"
+    },
+    {
+      "anchor": {
+        "x": 3.38134808290352,
+        "y": 2.5866825318567965
+      },
+      "prevControl": {
+        "x": 5.408192790503641,
+        "y": 2.5510808555825246
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "over bump"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1,
+      "rotationDegrees": 0.0
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 4.0,
+    "maxAcceleration": 3.5,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 115.15280647100788
+  },
+  "reversed": false,
+  "folder": "Langston Paths",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -108.81298976250889
+  },
+  "useDefaultConstraints": true
+}

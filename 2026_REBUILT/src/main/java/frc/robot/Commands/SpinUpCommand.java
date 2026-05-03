@@ -8,6 +8,7 @@ import java.util.function.Supplier;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Managers.FieldManager;
@@ -20,18 +21,34 @@ import frc.robot.Subsystems.ShooterSubsystem.ShotCalculator.Shot;
 
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class ShootCommand extends Command {
+public class SpinUpCommand extends Command {
   /** Creates a new ShootCommand. */
 
   Shooter shooter;
   Hood hood;
   Supplier<Pose2d> shooterPose;
+  ShotType shotType;
+
+  private static double shotDistanceOffsetBase = 0; //- 0.20 - Units.inchesToMeters(22) - 0.4;
+  private static double shotDistanceOffsetChange = 0;
+
+  public enum ShotType{
+    Hub,
+    FixedBumper,
+    Feed,
+    FixedFeed,
+    Automatic
+  }
   
-  public ShootCommand(Hood hood, Shooter shooter, Supplier<Pose2d> shooterPose) {
+  public SpinUpCommand(Hood hood, Shooter shooter, Supplier<Pose2d> shooterPose, ShotType shotType) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.hood = hood;
     this.shooter = shooter;
     this.shooterPose = shooterPose;
+    this.shotType = shotType;
+
+    SmartDashboard.putNumber("Shot Distance Offset", shotDistanceOffsetChange);
+
     addRequirements(shooter, hood);
   }
 
@@ -39,19 +56,30 @@ public class ShootCommand extends Command {
   @Override
   public void initialize() {
    // led.setLEDColor(LEDConstants.kShootingPattern);
+    if(shotType == ShotType.FixedBumper){
+        hood.setAngle(ShotCalculator.kBumperShot.hoodAngleDegrees());
+        shooter.setRPS(ShotCalculator.kBumperShot.omegaRPS());
+    } else if(shotType == ShotType.FixedFeed){
+        hood.setAngle(ShotCalculator.kFeedShot.hoodAngleDegrees());
+        shooter.setRPS(ShotCalculator.kFeedShot.distanceMeters());
+    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {                                                       //fudge factor 
-    double robotToHubDistance = FieldManager.getRobotToHubDis(shooterPose.get()) - 0.20 - Units.inchesToMeters(9);//need to update
-    Shot targetShot = ShotCalculator.getStaticShot(robotToHubDistance);
-    //TODO: implmenet increments in respective classes
+  public void execute() { 
+    if(shotType == ShotType.FixedBumper || shotType == ShotType.FixedFeed) //Skip if bumper shot
+      return;
+
+    ShotType trueShotType = shotType;  
+    if(shotType == ShotType.Automatic){
+      trueShotType = FieldManager.getShotType(shooterPose.get());
+    }
+
+    double distanceToTarget = FieldManager.getTargetDistance(shooterPose.get(), trueShotType);
+    Shot targetShot = ShotCalculator.getStaticShot(distanceToTarget + shotDistanceOffsetBase + shotDistanceOffsetChange, trueShotType);
     hood.setAngle(targetShot.hoodAngleDegrees());
     shooter.setRPS(targetShot.omegaRPS());
-  
-    // hood.setAngle(targetHoodAngle + hood.getHoodIncrimet());
-    // shooter.setRPS(targetRPS + shooter.getRPSIncriment());
 }
 
   // Called once the command ends or is interrupted.
@@ -61,22 +89,20 @@ public class ShootCommand extends Command {
     hood.setAngle(HoodConstants.kMinAngle);
   }
 
-  public static Command fixedShot(Shot shot, Hood hood, Shooter shooter){
-    return Commands.startEnd(
-      () -> {
-        hood.setAngle(shot.hoodAngleDegrees());
-        shooter.setRPS(shot.omegaRPS());
-      },
-      () -> {
-        hood.setAngle(HoodConstants.kZeroAngle);
-        shooter.spinDown();;
-      },
-      shooter, hood);
-  }
-
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     return false;
+  }
+
+
+  public static void incrementOffset(double increase){
+    shotDistanceOffsetChange += increase;
+    SmartDashboard.putNumber("Shot Distance Offset", shotDistanceOffsetChange);
+  }
+
+  public static void resetOffset(){
+    shotDistanceOffsetChange = 0;
+    SmartDashboard.putNumber("Shot Distance Offset", shotDistanceOffsetChange);
   }
 }

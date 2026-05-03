@@ -84,7 +84,7 @@ public class ShooterConstants {
     public static final double coastRPM = 0;
 
     public static final double kHubRPS = 45;
-    public static final double kRPSTolerance = 2;
+    public static final double kRPSTolerance = 3;
 
     //For calibrated shots, see separate ShotCalculator class
 

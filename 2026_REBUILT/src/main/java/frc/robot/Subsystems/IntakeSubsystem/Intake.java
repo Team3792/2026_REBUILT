@@ -99,14 +99,14 @@ public class Intake extends SubsystemBase {
         return this.runOnce(() -> setPosition(position));
     }
 
-    //period is the time to go up and back down 
+    //period is the time to go up and back down, ending on second position
     public Command agitate(double firstPosition, double secondPosition, double periodSeconds){
         return Commands.repeatingSequence(
             setPositionCommand(firstPosition),
             Commands.waitSeconds (periodSeconds/2),
             setPositionCommand(secondPosition),
             Commands.waitSeconds(periodSeconds/2)
-        );
+        ).finallyDo((boolean b) -> setPositionCommand(secondPosition));
     }
 
     public Command agitate(double periodSeconds){

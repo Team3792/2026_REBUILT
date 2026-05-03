@@ -11,6 +11,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Commands.SpinUpCommand.ShotType;
 import frc.robot.Managers.FieldManager;
 import frc.robot.Managers.GameManager;
 import frc.robot.util.JoystickInput;
@@ -20,22 +21,20 @@ public class DriveCommand extends Command {
   /** Creates a new DriveCommand. */
   Swerve swerve;
   Supplier<Double> xSupplier, ySupplier, tSupplier;
-  Supplier<Boolean> shotHeadingLockSupplier, feedHeadingLockSupplier; 
+  Supplier<Boolean> headingLockSupplier;
   double vx, vy, omega; //stored to access last
   JoystickInput translationJoystick = new JoystickInput(SwerveConstants.kMaxLinearVelocity, 0.05); //used for both x and y
   JoystickInput rotationJoystick = new JoystickInput(SwerveConstants.kMaxOmega, 0.05);
   ProfiledPIDController headingLockController = SwerveConstants.kHeadingLockControllerConfig.getController();
-  boolean shotHeadingLock = false;
-  boolean feedHeadingLock = false;
+  boolean headingLock = false;
 
 
-  public DriveCommand(Swerve swerve, Supplier<Double> x, Supplier<Double> y, Supplier<Double> t, Supplier<Boolean> shotHeadingLock, Supplier<Boolean> feedHeadingLock) {
+  public DriveCommand(Swerve swerve, Supplier<Double> x, Supplier<Double> y, Supplier<Double> t, Supplier<Boolean> headingLock) {
     this.swerve = swerve;
     this.xSupplier = x;
     this.ySupplier = y;
     this.tSupplier = t;
-    this.shotHeadingLockSupplier = shotHeadingLock;
-    this.feedHeadingLockSupplier = feedHeadingLock;
+    this.headingLockSupplier = headingLock;
     headingLockController.enableContinuousInput(-Math.PI, Math.PI);
 
     addRequirements(swerve);
@@ -51,26 +50,17 @@ public class DriveCommand extends Command {
     vx = translationJoystick.get(xSupplier.get());
     vy = translationJoystick.get(ySupplier.get());
   
-    if(shotHeadingLockSupplier.get()){
+    if(headingLockSupplier.get()){
       //Determine setpoint 
-      headingLockController.setGoal(FieldManager.getHubRotation(swerve.getPose()).getRadians());
-      if(!shotHeadingLock){
+      headingLockController.setGoal(FieldManager.getTargetRotation(swerve.getPose(), ShotType.Automatic).getRadians());
+      if(!headingLock){
         headingLockController.reset(swerve.getPoseHeading().getRadians(), omega);
-        shotHeadingLock = true;
+        headingLock = true;
       }
       omega = headingLockController.getSetpoint().velocity + headingLockController.calculate(swerve.getPoseHeading().getRadians());
-    } else if(feedHeadingLockSupplier.get()){
-      headingLockController.setGoal(FieldManager.getFeedRotation(swerve.getPose()).getRadians());
-      if (!feedHeadingLock){
-        headingLockController.reset(swerve.getPoseHeading().getRadians(), omega);
-        feedHeadingLock = true;
-      }
-      omega = headingLockController.getSetpoint().velocity + headingLockController.calculate(swerve.getPoseHeading().getRadians());
-    }
-    else {
+    } else {
       omega = rotationJoystick.get(tSupplier.get());
-      shotHeadingLock = false;
-      feedHeadingLock = false;
+      headingLock = false;
     }
 
     ChassisSpeeds chassisSpeeds = new ChassisSpeeds(vx, vy, omega);

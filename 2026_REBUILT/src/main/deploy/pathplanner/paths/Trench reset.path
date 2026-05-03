@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 2.58860882509102,
+        "y": 2.5051204819336057
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.4710115006826467,
+        "y": 1.2862754095873787
+      },
+      "isLocked": false,
+      "linkedName": "outpost trench-neutral-bump"
+    },
+    {
+      "anchor": {
+        "x": 4.372949360967841,
+        "y": 0.5029955343598305
+      },
+      "prevControl": {
+        "x": 2.600920423921111,
+        "y": 0.4034878027355184
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "trench to center bump"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 4.0,
+    "maxAcceleration": 3.5,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 2.0,
+    "rotation": 0.0
+  },
+  "reversed": false,
+  "folder": "trench-nuetral-bump x2",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 48.012787504183336
+  },
+  "useDefaultConstraints": true
+}

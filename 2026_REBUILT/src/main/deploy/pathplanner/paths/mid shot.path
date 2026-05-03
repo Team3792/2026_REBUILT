@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.5971703954312417,
-        "y": 2.73247818342883
+        "x": 3.38134808290352,
+        "y": 2.5866825318567965
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.597170395431245,
-        "y": 2.73247818342883
+        "x": 2.151370363698423,
+        "y": 3.016654467536408
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "over bump"
     },
     {
       "anchor": {
-        "x": 5.915955829689384,
-        "y": 2.73247818342883
+        "x": 2.1328815704641992,
+        "y": 4.097130944705704
       },
       "prevControl": {
-        "x": 4.915955829689384,
-        "y": 2.73247818342883
+        "x": 2.201075119462986,
+        "y": 3.7046095646237873
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "bumpppp"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -33,22 +33,22 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 2.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 4.0,
+    "maxAcceleration": 3.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 2.0,
-    "rotation": 0.0
-  },
-  "reversed": false,
-  "folder": "bumpity bump bump bump bump",
-  "idealStartingState": {
     "velocity": 0,
     "rotation": 0.0
   },
-  "useDefaultConstraints": false
+  "reversed": false,
+  "folder": "Langston Paths",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 115.15280647100788
+  },
+  "useDefaultConstraints": true
 }

@@ -1,0 +1,66 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 12.10866045016687,
+        "y": 0.597417371435073
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 11.175449360967841,
+        "y": 0.5061343294902918
+      },
+      "isLocked": false,
+      "linkedName": "red trench under start"
+    },
+    {
+      "anchor": {
+        "x": 8.126217384708738,
+        "y": 1.8525914460709951
+      },
+      "prevControl": {
+        "x": 8.06249554384102,
+        "y": 0.9619475785042482
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "red trench pile"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "Intake D&R",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Intake D&R"
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 4.0,
+    "maxAcceleration": 3.5,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": true
+  },
+  "goalEndState": {
+    "velocity": 1.0,
+    "rotation": 90.17409602810325
+  },
+  "reversed": false,
+  "folder": "Qual 1",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 90.61041345794995
+  },
+  "useDefaultConstraints": false
+}

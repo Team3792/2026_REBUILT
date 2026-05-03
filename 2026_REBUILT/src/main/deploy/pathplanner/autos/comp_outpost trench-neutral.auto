@@ -35,13 +35,13 @@
                                 {
                                   "type": "named",
                                   "data": {
-                                    "name": "Feed when ready"
+                                    "name": "Rotate to tag"
                                   }
                                 },
                                 {
                                   "type": "named",
                                   "data": {
-                                    "name": "Rotate to tag"
+                                    "name": "Feed when ready"
                                   }
                                 }
                               ]
@@ -62,7 +62,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 15.0
+                  "waitTime": 4.75
                 }
               }
             ]
@@ -71,7 +71,52 @@
         {
           "type": "path",
           "data": {
-            "pathName": "outpost shoot-trench"
+            "pathName": "outpost shoot - trench swipe 2"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "outpost trench swipe 2 - shoot"
+                      }
+                    },
+                    {
+                      "type": "parallel",
+                      "data": {
+                        "commands": [
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "Rotate to tag"
+                            }
+                          },
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "Feed when ready"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Tracking spin up"
+                }
+              }
+            ]
           }
         }
       ]

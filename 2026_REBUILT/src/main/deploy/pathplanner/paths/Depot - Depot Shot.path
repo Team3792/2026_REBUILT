@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.45,
-        "y": 5.0
+        "x": 0.435180379626821,
+        "y": 4.784398086695996
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.1997710843373495,
-        "y": 4.931072289156628
+        "x": 1.1849514639641705,
+        "y": 4.7154703758526235
       },
       "isLocked": false,
       "linkedName": "Depot"
@@ -31,19 +31,7 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "Stow Intake",
-      "waypointRelativePos": 0,
-      "endWaypointRelativePos": 1.0,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "Stow Intake"
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 4.0,
     "maxAcceleration": 3.5,
@@ -60,7 +48,7 @@
   "folder": "Depot",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": -89.39612928833662
   },
   "useDefaultConstraints": true
 }

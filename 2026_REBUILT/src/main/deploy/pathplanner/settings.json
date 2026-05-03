@@ -1,19 +1,20 @@
 {
-  "robotWidth": 0.8382,
+  "robotWidth": 0.838,
   "robotLength": 0.838,
   "holonomicMode": true,
   "pathFolders": [
     "Depot",
+    "Langston Paths",
+    "Qual 1",
     "Outpost",
-    "bump bump bumpity",
     "bump-depot-bump-under hub",
-    "bumpity bump bump bump bump",
     "depot trench-neutral-bump-shoot-trench-hub",
     "depot trench-neutral-shoot",
     "hub shoot-neutral-shoot",
     "outpost trench-neutral-bump-outpost",
     "outpost trench-neutral-shoot",
-    "trench bump depot"
+    "trench bump depot",
+    "trench-nuetral-bump x2"
   ],
   "autoFolders": [
     "Comp Approved",
