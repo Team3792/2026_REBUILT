@@ -28,10 +28,10 @@ public class FieldManager {
     public static Pose2d redHubPos = new Pose2d(new Translation2d(11.915, 4.035), new Rotation2d(0));
 
     //feed poses
-    public static Pose2d blueFeedTopPos = new Pose2d(new Translation2d(3.5,6), new Rotation2d(0));
-    public static Pose2d blueFeedBottomPos = new Pose2d(new Translation2d(3.5, 2), new Rotation2d(0));    
-    public static Pose2d redFeedTopPos = new Pose2d(new Translation2d(13,6), new Rotation2d(0));
-    public static Pose2d redFeedBottomPos = new Pose2d(new Translation2d(13, 2), new Rotation2d(0));
+    public static Pose2d blueFeedTopPos = new Pose2d(new Translation2d(2.5,6), new Rotation2d(0));
+    public static Pose2d blueFeedBottomPos = new Pose2d(new Translation2d(2.5, 2), new Rotation2d(0));    
+    public static Pose2d redFeedTopPos = new Pose2d(new Translation2d(14,6), new Rotation2d(0));
+    public static Pose2d redFeedBottomPos = new Pose2d(new Translation2d(14, 2), new Rotation2d(0));
 
     //middle line threshold for determining feed pose
     public static double yMiddleThreshold = 4.0;

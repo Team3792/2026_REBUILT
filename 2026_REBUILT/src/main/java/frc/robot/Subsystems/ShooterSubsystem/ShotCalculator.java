@@ -41,6 +41,7 @@ public class ShotCalculator {
     };
 
     public static final Shot[] kCalibratedFeedShots = {
+        new Shot(2, 35, 45),
         new Shot(4, 50, 45),
         new Shot(8, 70, 45)
     };
@@ -71,18 +72,6 @@ public class ShotCalculator {
 
         //farther than final shot, use last two shots 
         return linearInterpolation(distance, lookupTable[calibratedShots - 1], lookupTable[calibratedShots - 2]);
-    }
-
-    public static Shot[] getLookupTable(Pose2d shooterPose, ShotType shotType){
-        if (GameManager.getAllianceColor() == Alliance.Blue){
-            if (shotType == ShotType.Feed || shooterPose.getX() > 5.0)
-                return kCalibratedFeedShots;
-            return kCalibratedShots;
-        } else{
-            if(shotType == ShotType.Feed || shooterPose.getX() < 11.0)
-                return kCalibratedFeedShots;
-            return kCalibratedShots;
-        }
     }
 
 
