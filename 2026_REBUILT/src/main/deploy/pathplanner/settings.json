@@ -4,8 +4,6 @@
   "holonomicMode": true,
   "pathFolders": [
     "Depot",
-    "Langston Paths",
-    "Qual 1",
     "Outpost",
     "bump-depot-bump-under hub",
     "depot trench-neutral-bump-shoot-trench-hub",
@@ -17,8 +15,7 @@
     "trench-nuetral-bump x2"
   ],
   "autoFolders": [
-    "Comp Approved",
-    "Not Approved"
+    "Comp Autos"
   ],
   "defaultMaxVel": 4.0,
   "defaultMaxAccel": 3.5,

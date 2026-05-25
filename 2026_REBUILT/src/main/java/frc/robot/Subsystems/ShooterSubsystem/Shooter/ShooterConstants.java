@@ -1,7 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.Subsystems.ShooterSubsystem.Shooter;
 
 
@@ -13,18 +9,16 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.util.Units;
 
-
-/** Add your docs here. */
 public class ShooterConstants {
 
-    //TODO make accurate
+    //ball tracking (not utilized on 2026 robot)
     public static final double kLightSensorThreshold = 0.5;
-    public static final double lightSensorDetectionRange = 0.01;//meters
+    public static final double lightSensorDetectionRange = 0.01; //meters
     public static final double kballSeperationTime = 0.1;
-    public static final double kFlywheelBallLoadCurrent = 0;//amps
+    public static final double kFlywheelBallLoadCurrent = 0; //amps
 
     //pid & FF
-    public static final double kV = 0.11764705882; //0.1163;
+    public static final double kV = 0.11764705882;
     public static final double kS = 0.23;
     public static final double kMMAccel = 200;
     public static final double kMMJerk = 2100;
@@ -72,20 +66,14 @@ public class ShooterConstants {
         return config;
     }
 
-    private static final double kFlywheelDiameterInches = 4; //diameter in inches
-    public static final double kFlywheelDiameter =  Units.inchesToMeters(kFlywheelDiameterInches); //kFlywheelDiameterInches * 0.0254; //convert inches to meters
-    public static final double kFlywheelRadius = kFlywheelDiameter / 2;
+    private static final double kFlywheelDiameterInches = 4; //Flywheel Diameter in Inches
+    public static final double kFlywheelDiameter =  Units.inchesToMeters(kFlywheelDiameterInches); //Flywheel Diameter in Meters
+    public static final double kFlywheelRadius = kFlywheelDiameter / 2; //Flywheel Radius in Meters
 
-    public static final double kFallBackHubVoltage = 6.0;
     public static final double kRPSIncrement = 1;
-
     public static final double maxShooterRPS = 6000;
-    //rpm value for flywheel while not shooting; less time to spin up to target rpm
-    public static final double coastRPM = 0;
-
     public static final double kHubRPS = 45;
     public static final double kRPSTolerance = 3;
 
     //For calibrated shots, see separate ShotCalculator class
-
 }

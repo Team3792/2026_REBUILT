@@ -10,11 +10,8 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Managers.GameManager;
 
-/** Add your docs here. */
 public class Rumbler {
-
-
-      // intensity on a scale of 0-1 and duration in seconds
+  // intensity on a scale of 0-1 and duration in seconds
   public static Command rumble(double intensity, double duration, CommandXboxController controller){
       return Commands.startEnd(() -> controller.setRumble(RumbleType.kBothRumble, intensity), () -> controller.setRumble(RumbleType.kBothRumble, 0)).withTimeout(duration);
   }

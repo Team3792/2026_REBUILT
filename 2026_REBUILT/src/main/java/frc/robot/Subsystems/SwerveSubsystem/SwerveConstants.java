@@ -7,20 +7,16 @@ import frc.robot.util.ControlConfig.PIDConfig;
 import frc.robot.util.ControlConfig.ProfiledPIDConfig;
 
 public class SwerveConstants {
-    
-    //public static final double kMaxSpeedMetersPerSecond = 4.0; //TODO: verfiy
     public static final double kDeadBand = 0.08;
     public static final double kMaxLinearVelocity = 3.5;
     public static final double kMaxOmega = 4.0;
 
-    public static final double kTrackWidth = Units.inchesToMeters(22.5); //TODO: verify
-    public static final double kWheelBase = Units.inchesToMeters(22.5); //TODO: verify
+    public static final double kTrackWidth = Units.inchesToMeters(22.5);
+    public static final double kWheelBase = Units.inchesToMeters(22.5); 
     
     //Not moving thresholds
-    public static final double kZeroTranslationThreshold = 0.05; //Very arbituary
-    public static final double kZeroOmegaThreshold = 0.05; //Very arbituary
-
-
+    public static final double kZeroTranslationThreshold = 0.05;
+    public static final double kZeroOmegaThreshold = 0.05;
 
     public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
         new Translation2d(kWheelBase / 2, kTrackWidth / 2),

@@ -1,7 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.Subsystems.SwerveSubsystem;
 
 import java.util.function.Supplier;
@@ -16,9 +12,7 @@ import frc.robot.Managers.FieldManager;
 import frc.robot.Managers.GameManager;
 import frc.robot.util.JoystickInput;
 
-/* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class DriveCommand extends Command {
-  /** Creates a new DriveCommand. */
   Swerve swerve;
   Supplier<Double> xSupplier, ySupplier, tSupplier;
   Supplier<Boolean> headingLockSupplier;
@@ -67,14 +61,10 @@ public class DriveCommand extends Command {
 
     //Field relative transformation
     Rotation2d heading = swerve.getPoseHeading();
-    //System.out.println(GameManager.getAllianceColor());
     if(GameManager.getAllianceColor() == Alliance.Red)
       heading = heading.plus(new Rotation2d(Math.PI)); //Rotate heading for red alliance
-    //System.out.println(heading.getDegrees());
     
     chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(chassisSpeeds, heading);
-    //TODO: check signs on vx and vy for different alliance colors 
-
     swerve.drive(chassisSpeeds);
   }
 

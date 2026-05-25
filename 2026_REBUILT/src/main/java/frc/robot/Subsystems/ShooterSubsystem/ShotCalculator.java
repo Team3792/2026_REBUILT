@@ -1,22 +1,13 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.Subsystems.ShooterSubsystem;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.Commands.SpinUpCommand.ShotType;
-import frc.robot.Managers.GameManager;
 
-/** Add your docs here. */
 public class ShotCalculator {
 
     public record Shot(double distanceMeters, double omegaRPS, double hoodAngleDegrees){};
 
-    //TODO: must be sorted by distance
     public static final Shot[] kCalibratedShots = {
-        //TODO: add a closer shot
+        //Previous single shooter look up table
         // new Shot(1.726, 52, 24),
         // new Shot(2.03, 53.5, 25.5),
         // new Shot(2.47, 55, 27),
@@ -49,10 +40,6 @@ public class ShotCalculator {
     public static final Shot kBumperShot = new Shot(0, 43.5,16); //Need to determine
     public static final Shot kFeedShot = new Shot(0, 70, 45);
     public static final Shot kZeroShot = new Shot(0, 0, 0);
-    //used on controller 3
-    public static final Shot kTestShot = new Shot(0,40,20);
-
-  
 
     public static Shot getStaticShot(double distance, ShotType shotType){
         //Linear search until calibrated shots is farther
@@ -62,7 +49,7 @@ public class ShotCalculator {
         else
             lookupTable = kCalibratedFeedShots;
         int calibratedShots = lookupTable.length;
-        for (int i = 0; i < calibratedShots; i++){ //Could restructure into while with exit if
+        for (int i = 0; i < calibratedShots; i++){
             if(distance < lookupTable[i].distanceMeters()){
                 if(i == 0) //Closer than first shot
                     return linearInterpolation(distance, lookupTable[0], lookupTable[1]);
@@ -70,10 +57,9 @@ public class ShotCalculator {
             }
         }
 
-        //farther than final shot, use last two shots 
+        //if farther than final shot, use last two shots for interpolation
         return linearInterpolation(distance, lookupTable[calibratedShots - 1], lookupTable[calibratedShots - 2]);
     }
-
 
     //Returns the intorpolated shot based on distance and two given shots 
     //Distance need not be between shot1 and shot2, which is the case on the endpoints

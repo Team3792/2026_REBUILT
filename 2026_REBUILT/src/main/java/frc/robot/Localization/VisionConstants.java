@@ -1,9 +1,4 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.Localization;
-
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
@@ -15,15 +10,12 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 
-
-/** Add your docs here. */
 public class VisionConstants {
-
     public static final String kFrontCamName = "front";
     public static final String kBackCamName = "back";
+    public static final AprilTagFieldLayout kFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltWelded);
 
-
-    //Robot pose always from center of robot
+    //Robot pose from center of robot
     public static final Transform3d kRobotToFrontCam = new Transform3d(
         new Translation3d(
             Units.inchesToMeters(2.75),
@@ -35,7 +27,6 @@ public class VisionConstants {
             0)
     );
 
-        
     public static final Transform3d kRobotToBackCam = new Transform3d(new Translation3d(Units.inchesToMeters(-11.5),
     Units.inchesToMeters(0.5),Units.inchesToMeters(21.25)), new Rotation3d(0,12 * Math.PI / 180, Math.PI));
 
@@ -45,7 +36,5 @@ public class VisionConstants {
             Units.inchesToMeters(-0)),
         new Rotation2d(0)
     );
-
-    public static final AprilTagFieldLayout kFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltWelded);
 }
 

@@ -1,7 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.Localization;
 
 import java.util.List;
@@ -9,23 +5,21 @@ import java.util.Optional;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.targeting.PhotonPipelineResult;
-//import org.photonvision.targeting.PhotonTrackedTarget;
+import org.photonvision.targeting.PhotonTrackedTarget;
 
-
-//import edu.wpi.first.math.Matrix;
-//import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
-//import edu.wpi.first.math.numbers.N1;
-//import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
+
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-
-/** Add your docs here. */
 public class AntPoseEstimator extends SwerveDrivePoseEstimator {
     Vision vision = new Vision();
     PhotonPoseEstimator frontCamPoseEstimator = new PhotonPoseEstimator(VisionConstants.kFieldLayout, VisionConstants.kRobotToFrontCam);
@@ -38,162 +32,91 @@ public class AntPoseEstimator extends SwerveDrivePoseEstimator {
     }
 
     private boolean isVisionDataValid(EstimatedRobotPose pose){
+        double distance = pose.estimatedPose.toPose2d().getTranslation().getDistance(this.getEstimatedPosition().getTranslation());
+        if (distance > 6.0) 
+            return false;
+        
         return true;
-        // double distance = pose.estimatedPose.toPose2d().getTranslation().getDistance(this.getEstimatedPosition().getTranslation());
-        // if (distance > 6.0) { //TODO: find good distance threshold
-        //     return false;
-        // }
-        // return true;
     }
 
-    // private Matrix<N3, N1> getVisionStd(Optional<EstimatedRobotPose> robotPose, List<PhotonTrackedTarget> targets){
+    //Returns standard deviations for kalman filter (determines how much to trust an estimated vision pose)
+    private Matrix<N3, N1> getVisionStd(Optional<EstimatedRobotPose> robotPose, List<PhotonTrackedTarget> targets){
+        Matrix<N3, N1> std = VecBuilder.fill(0.0, 0.0, 0.0); 
+        double baseXY = 0.2;
+        double baseT = 0.3;
+        int numTags = 0;
+        double avgDis = 0.0;        
 
-    //     Matrix<N3, N1> std = VecBuilder.fill(0.0, 0.0, 0.0); 
+        for (var target : targets){
+            var targetPose = frontCamPoseEstimator.getFieldTags().getTagPose(target.getFiducialId());
+            if (targetPose.isEmpty()){
+                continue;
+            }
+            numTags++;
+            avgDis += targetPose.get().toPose2d().getTranslation().getDistance(this.getEstimatedPosition().getTranslation());
+        }
+        avgDis /= numTags;
 
-    //     double baseXY = 0.2;
-    //     double baseT = 0.3;
-
-    //     int numTags = 0;
-
-    //     // can change this to be max or to be weighted with combo of avg & max
-    //     double avgDis = 0.0;
-    //     double avgYaw = 0.0; 
-        
-    //     for (var target : targets){
-    //         var targetPose = frontCamPoseEstimator.getFieldTags().getTagPose(target.getFiducialId());
-    //         if (targetPose.isEmpty()){
-    //             continue;
-    //         }
-    //         numTags++;
-    //         avgDis += targetPose.get().toPose2d().getTranslation().getDistance(this.getEstimatedPosition().getTranslation());
-    //         avgYaw += target.getYaw();
-    //     }
-    //     avgDis /= numTags;
-    //     avgYaw /= numTags;
-
-    //     if (numTags == 0){
-    //         std = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
-    //     } else if (numTags == 1 && avgDis > 4.0){ // from photonvision docs. prob not needed
-    //         std = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
-    //     } else if (numTags == 1) { 
-    //         std = VecBuilder.fill(1.0, 1.0, 2.0); // need to tune
-    //     }
-    //     else{
-    //         double disScale = avgDis / 3.0; //3 meters. can tune to be different
-    //         double yawScale = avgYaw / 30.0; //30 degreees. can tune to be different
-    //         double tagScale = 1.0 / Math.sqrt(numTags); //got from team 564, saw vid of local. and it was good
-
-    //         double stdXY = baseXY * disScale * tagScale;
-    //         double stdT = baseT * yawScale * tagScale;
-    //         std = VecBuilder.fill(stdXY, stdXY, stdT);
-    //     }
-    //     return std;
-    // }
+        if (numTags == 0){
+            std = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
+        } 
+        else if (numTags == 1) { 
+            std = VecBuilder.fill(1.0, 1.0, 2.0);
+        }
+        else{
+            double disScale = avgDis / 3.0; //3 meters is baseline for good reading
+            double tagScale = 1.0 / Math.sqrt(numTags);
+            double stdXY = baseXY * disScale * tagScale;
+            double stdT = baseT * tagScale;
+            std = VecBuilder.fill(stdXY, stdXY, stdT);
+        }
+        return std;
+    }
 
     private void updateVisionMeasurementsFront(List<PhotonPipelineResult> pipelineResults) {
-        
-        Optional<EstimatedRobotPose> visionEst;// = Optional.empty();
-        //System.out.println(pipelineResults.size());
+        Optional<EstimatedRobotPose> visionEst;
             for (var result : pipelineResults){
-               // List<PhotonTrackedTarget> targets = result.getTargets();
-                //(targets.size() > 1)
+                List<PhotonTrackedTarget> targets = result.getTargets();
                 visionEst = frontCamPoseEstimator.estimateCoprocMultiTagPose(result);
-                // else 
-                //     visionEst = frontCamPoseEstimator.estimateClosestToCameraHeightPose(result);
 
-
-                //System.out.println(targets.size());
                 if (visionEst.isEmpty()){
-                    //System.out.println("empty");
-
                     continue;
                 }
                 if (!isVisionDataValid(visionEst.get())){
-                    //System.out.println("not valid");
                     continue;
                 }
 
-                //System.out.println("valid");
-                //Matrix<N3,N1> std = getVisionStd(visionEst, targets);
-                //System.out.println(visionEst.get().estimatedPose.toPose2d());
-                addVisionMeasurement(visionEst.get().estimatedPose.toPose2d(), result.getTimestampSeconds());// std);
+                Matrix<N3,N1> std = getVisionStd(visionEst, targets);
+                addVisionMeasurement(visionEst.get().estimatedPose.toPose2d(), result.getTimestampSeconds(), std);
             }
-        // } //else if (camera == VisionConstants.kBackCamName){
-        //     for (var result : pipelineResults){
-        //         visionEst = backCamPoseEstimator.estimateCoprocMultiTagPose(result);
-        //         List<PhotonTrackedTarget> targets = result.getTargets();
-        //         if (visionEst.isEmpty()){
-        //             continue;
-        //         }
-        //         if (!isVisionDataValid(visionEst.get())){
-        //             continue;
-        //         }
-        //         Matrix<N3, N1> std = getVisionStd(visionEst, targets);
-        //         addVisMeasurement(visionEst, result.getTimestampSeconds(), std);
-        //     }
-        // }
     }
 
     private void updateVisionMeasurementsBack(List<PhotonPipelineResult> pipelineResults) {
-        
-        Optional<EstimatedRobotPose> visionEst;// = Optional.empty();
-        //System.out.println(pipelineResults.size());
+        Optional<EstimatedRobotPose> visionEst;
             for (var result : pipelineResults){
-               // List<PhotonTrackedTarget> targets = result.getTargets();
-                //(targets.size() > 1)
+                List<PhotonTrackedTarget> targets = result.getTargets();
                 visionEst = backCamPoseEstimator.estimateCoprocMultiTagPose(result);
-                // else 
-                //     visionEst = frontCamPoseEstimator.estimateClosestToCameraHeightPose(result);
 
-
-                //System.out.println(targets.size());
                 if (visionEst.isEmpty()){
-                    //System.out.println("empty");
-
                     continue;
                 }
                 if (!isVisionDataValid(visionEst.get())){
-                    //System.out.println("not valid");
                     continue;
                 }
 
-                //System.out.println("valid");
-                //Matrix<N3,N1> std = getVisionStd(visionEst, targets);
-                //System.out.println(visionEst.get().estimatedPose.toPose2d());
-                addVisionMeasurement(visionEst.get().estimatedPose.toPose2d(), result.getTimestampSeconds());// std);
+                Matrix<N3,N1> std = getVisionStd(visionEst, targets);
+                addVisionMeasurement(visionEst.get().estimatedPose.toPose2d(), result.getTimestampSeconds(), std);
             }
-        // } //else if (camera == VisionConstants.kBackCamName){
-        //     for (var result : pipelineResults){
-        //         visionEst = backCamPoseEstimator.estimateCoprocMultiTagPose(result);
-        //         List<PhotonTrackedTarget> targets = result.getTargets();
-        //         if (visionEst.isEmpty()){
-        //             continue;
-        //         }
-        //         if (!isVisionDataValid(visionEst.get())){
-        //             continue;
-        //         }
-        //         Matrix<N3, N1> std = getVisionStd(visionEst, targets);
-        //         addVisMeasurement(visionEst, result.getTimestampSeconds(), std);
-        //     }
-        // }
     }
 
-    // private void addVisMeasurement(Optional<EstimatedRobotPose> visionPose, double timestamp, Matrix<N3,N1> visionSTD){
-    //     if (visionPose.isEmpty()){
-    //         return;
-    //     }
-    //     this.addVisionMeasurement(visionPose.get().estimatedPose.toPose2d(), timestamp, visionSTD);
-    // }
-
     public void updateAllVisionMeasurements(){
-        updateVisionMeasurementsFront(vision.getFrontCamPipelineResults());//, VisionConstants.kFrontCamName);
-        updateVisionMeasurementsBack(vision.getBackCamPipelineResults());//, VisionConstants.kBackCamName);
+        updateVisionMeasurementsFront(vision.getFrontCamPipelineResults());
+        updateVisionMeasurementsBack(vision.getBackCamPipelineResults());
     }
 
     public void updateAll(Rotation2d gyroHeading, SwerveModulePosition[] modulePositions){
         super.update(gyroHeading, modulePositions);  //odometry update
         updateAllVisionMeasurements();
         field.setRobotPose(getEstimatedPosition());
-        //System.out.println("updating ant pose estimator");
     }
 }

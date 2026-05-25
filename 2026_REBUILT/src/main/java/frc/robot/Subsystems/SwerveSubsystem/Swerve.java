@@ -20,29 +20,25 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.HardwareMap;
 import frc.robot.Commands.SpinUpCommand.ShotType;
 import frc.robot.Localization.AntPoseEstimator;
 import frc.robot.Localization.VisionConstants;
 import frc.robot.Managers.FieldManager;
 import frc.robot.Managers.GameManager;
+import frc.robot.util.HardwareMap;
 
 public class Swerve extends SubsystemBase {
-      
   SwerveModule frontLeft = new SwerveModule(ModuleConstants.kFrontLeft, "front left");
   SwerveModule frontRight = new SwerveModule(ModuleConstants.kFrontRight, "front right");
   SwerveModule backLeft = new SwerveModule(ModuleConstants.kBackLeft, "back left");
   SwerveModule backRight = new SwerveModule(ModuleConstants.kBackRight, "back right");
-  Field2d field = new Field2d();
   SwerveModule[] modules = {frontLeft, frontRight, backLeft, backRight};
-
+  
   Pigeon2 pigeon = new Pigeon2(HardwareMap.kPigeon.id());
   ChassisSpeeds lastRobotRelativeSpeeds;
   double currentTimestamp = 0.0;
   AntPoseEstimator antPose;
-
-  // HolonomicDriveController swerveController = new HolonomicDriveController(SwerveConstants.kTranslationController, 
-  //                                       SwerveConstants.kTranslationController, SwerveConstants.kRotationController);
+  Field2d field = new Field2d();
   
   public Swerve() {
     antPose = new AntPoseEstimator(SwerveConstants.kDriveKinematics, getPigeonHeading(), getModulePositions(), new Pose2d());
@@ -51,8 +47,6 @@ public class Swerve extends SubsystemBase {
 
     configureAutoBuilder();
   }
-
-
 
   public void resetTurnEncoders(){
     for (SwerveModule mod : modules){
@@ -67,7 +61,6 @@ public class Swerve extends SubsystemBase {
   public Rotation2d getPoseHeading(){
     return antPose.getEstimatedPosition().getRotation();
   }
-
 
   private void configureAutoBuilder() {
     RobotConfig config;
@@ -121,13 +114,6 @@ public class Swerve extends SubsystemBase {
     backRight.stop();
   }
 
-  //Testing method to drive all modules straight
-  public void setVoltage(double voltage){
-    for (SwerveModule mod : modules){
-      mod.driveVoltage(voltage);
-    }
-  }
-
   public void setTurnAngleAll(double angleRadians){
     frontLeft.setState(new SwerveModuleState(0, new Rotation2d(angleRadians)));
     frontRight.setState(new SwerveModuleState(0, new Rotation2d(angleRadians)));
@@ -151,8 +137,6 @@ public class Swerve extends SubsystemBase {
     for(int i = 0; i < 4; i++)
       modules[i].setState(desiredStates[i]);
   }
-
-
 
   public void drive(ChassisSpeeds speeds) {
     speeds = ChassisSpeeds.discretize(speeds, 0.002);
@@ -184,10 +168,12 @@ public class Swerve extends SubsystemBase {
     ));
   }
 
+  //Returns estimated robot pose
   public Pose2d getPose(){
     return antPose.getEstimatedPosition();
   } 
 
+  //Returns estimated shooter pose with shooter offset
   public Pose2d getShooterPose(){
     Pose2d shooterPose = getPose().transformBy(VisionConstants.kRobotToShooter);
     field.setRobotPose(shooterPose);
@@ -211,8 +197,6 @@ public class Swerve extends SubsystemBase {
 
   public boolean readyToShoot(){
     ChassisSpeeds robotRelativeSpeeds = getRobotRelativeSpeeds();
-
-    //Use default thresholds
     return Math.hypot(robotRelativeSpeeds.vxMetersPerSecond, robotRelativeSpeeds.vyMetersPerSecond) < SwerveConstants.kZeroTranslationThreshold
       && robotRelativeSpeeds.omegaRadiansPerSecond < SwerveConstants.kZeroOmegaThreshold;
   }

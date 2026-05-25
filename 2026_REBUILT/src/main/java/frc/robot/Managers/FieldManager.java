@@ -1,7 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.Managers;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -10,18 +6,11 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.Commands.SpinUpCommand.ShotType;
 
-/** Add your docs here. */
 public class FieldManager {
-
-    //coordinates in meters
-    //pose based on bottom left of field element
-    /*
-    * 
-    * -------
-    * -------
-    * x------
-    * 
-    */
+    /**
+     * coordinates in meters
+     * pose based on bottom left of field element
+     */
 
     //hub
     public static Pose2d blueHubPos = new Pose2d(new Translation2d(4.626,4.035), new Rotation2d(0));
@@ -41,15 +30,7 @@ public class FieldManager {
     Translation2d topRedTrench = new Translation2d(0,0);
     Translation2d bottomBlueTrench = new Translation2d(0,0);
     Translation2d topBlueTrench = new Translation2d(0,0);
-
     public static double trenchWidth = 1.278636;
-    //private double trenchDepth = 1.194;
-
-    //bump
-
-    //climb
-    Translation2d blueTowerPos = new Translation2d(0,0);
-    Translation2d redTowerPos = new Translation2d(0,0);
 
     public Translation2d[] distanceToTrenches(Pose2d robotPose){
         Translation2d robotPos = robotPose.getTranslation();
@@ -110,7 +91,5 @@ public class FieldManager {
                 return redFeedTopPos;
         return redFeedBottomPos;
     }
-
-
 }
 

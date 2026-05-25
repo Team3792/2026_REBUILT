@@ -40,7 +40,6 @@ public class SwerveModule{
         resetDriveEncoder();
     }
 
-
     public void resetTurnEncoder(){
         //Everything is in rotations
         double newPosition = encoder.getPosition().getValueAsDouble() * ModuleConstants.kTurnRatio;
@@ -49,13 +48,6 @@ public class SwerveModule{
 
     public void resetDriveEncoder(){
         drive.setPosition(0);
-    }
-
-    //Testing method for driving wheel forward at voltage
-    public void driveVoltage(double voltage){
-        drive.setVoltage(voltage);
-        double turnVoltage = turnController.calculate(getTurnPosition().getRadians(), 0);
-        turn.setVoltage(turnVoltage);
     }
 
     public Rotation2d getTurnPosition(){
@@ -89,12 +81,6 @@ public class SwerveModule{
         turn.setVoltage(0);
         drive.setVoltage(0);
     }
-
-    // public double getAbsoluteEncoderRad() {
-    //     double angle = (encoder.getAbsolutePosition().getValueAsDouble()) * 2.0 * Math.PI;
-    //     return angle;
-    // }
-
 
     public void printEncoders() {
         SmartDashboard.putNumber(name + "Cancoder Position", encoder.getAbsolutePosition().getValueAsDouble());

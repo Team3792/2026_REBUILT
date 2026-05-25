@@ -1,7 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.util;
 
 import java.util.function.BooleanSupplier;
@@ -9,21 +5,19 @@ import java.util.function.BooleanSupplier;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Managers.GameManager;
-import frc.robot.HardwareMap.CANAddress;
+import frc.robot.util.HardwareMap.CANAddress;
 
 import com.ctre.phoenix6.hardware.ParentDevice;
 import edu.wpi.first.wpilibj.Alert;
 
 import java.util.ArrayList;
 
-/** Add your docs here. */
 public class CANManager {
     private static ArrayList<CANConnection> canConnections = new ArrayList<>();
     public static Alert diconnectionAlert = new Alert("CAN disconnect, see DEBUG", AlertType.kError);
 
     public static void addConnection(CANAddress address, BooleanSupplier connectedFunction){
         //Sort array for index
-        //TODO: fix this sorting, it isn't respected in the dashboard
         for(int i = 0; i < canConnections.size(); i++){
             if(address.index() <= canConnections.get(i).address.index()){
                 canConnections.add(i, new CANConnection(address, connectedFunction));

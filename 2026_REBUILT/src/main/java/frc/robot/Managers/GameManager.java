@@ -1,15 +1,9 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.Managers;
-
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 
-/** Add your docs here. */
 public class GameManager {
     public static boolean error = false;
     public static boolean wonAuto;
@@ -22,9 +16,7 @@ public class GameManager {
     public static Trigger shiftFourTrigger = new Trigger(() -> GameManager.atShiftFour());
     public static Trigger endGameTrigger = new Trigger(() -> GameManager.atEndGame());
 
-
-    public GameManager(){
-    }
+    public GameManager(){}
 
     private static double getTime(){
         return DriverStation.getMatchTime();
@@ -121,15 +113,11 @@ public class GameManager {
         }
      }
 
-
     public static Alliance getAllianceColor(){
         if(DriverStation.getAlliance().isPresent())
             return DriverStation.getAlliance().get();
         return Alliance.Blue; //Default is blue
     }  
-
-    public static void setAllianceColor(){
-    }
 
     public static boolean flipFiledToRed(){
         if(getAllianceColor().equals(Alliance.Red))

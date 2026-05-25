@@ -2,18 +2,13 @@ package frc.robot.Subsystems.FeederSubsystem;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 
-// import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.HardwareMap;
+import frc.robot.util.HardwareMap;
 
-//includes conveyor system and serializer
 public class Feeder extends SubsystemBase{
     TalonFX kicker = new TalonFX(HardwareMap.kickerID.id());
     TalonFX conveyor = new TalonFX(HardwareMap.conveyorID.id());
-
-    
-    
 
     public Feeder(){
         kicker.getConfigurator().apply(FeederConstants.getKickerConfig());

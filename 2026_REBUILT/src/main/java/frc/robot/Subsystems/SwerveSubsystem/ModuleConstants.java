@@ -8,24 +8,20 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 
 import edu.wpi.first.math.util.Units;
-import frc.robot.HardwareMap.CANAddress;
+import frc.robot.util.HardwareMap.CANAddress;
 
 
 public class ModuleConstants {
-
     public static final double kMaxModuleSpeedMetersPerSecond = 5.0;
-
     //Conversion Factors
     public static final double kTurnRatio = 25.9;
     public static final double kDriveRatio = 6.0; //Equivalent to 1/6 wheel rotations per motor rotation
-    public static final double kMetersPerWheelRotation = Math.PI * Units.inchesToMeters(3.4); //3.5 is wheel diameter 
+    public static final double kMetersPerWheelRotation = Math.PI * Units.inchesToMeters(3.4); //3.5 is true wheel diameter 
     public static final double kRadiansPerMotorRotation = Math.PI*2 / kTurnRatio;
     public static final double kMetersPerMotorRotation = kMetersPerWheelRotation / kDriveRatio;
     
     //Module Configurations
-        //commented out; replaced by CANManager
-        public static record ModuleConfig (CANAddress driveAddress, CANAddress turnAddress, CANAddress encoderAddress, double encoderOffset){}
-    //public static record ModuleConfig (int driveAddress, int turnAddress, int encoderAddress, double encoderOffset){}
+    public static record ModuleConfig (CANAddress driveAddress, CANAddress turnAddress, CANAddress encoderAddress, double encoderOffset){}
 
     public static final ModuleConfig kFrontLeft = new ModuleConfig(new CANAddress(0, "front left drive", 0),
                                                                    new CANAddress(1, "front left turn", 0), 
