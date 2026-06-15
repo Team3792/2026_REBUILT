@@ -29,6 +29,7 @@ public class SwerveModule{
         encoder.getConfigurator().apply(ModuleConstants.getEncoderConfig(config.encoderOffset())); //Fix offset
 
         driveController = new VelocityVoltage(0).withSlot(0);
+        //TODO: re-tune?
         turnController = new PIDController(6, 0, 0.05);
         turnController.enableContinuousInput(-Math.PI, Math.PI);   
 

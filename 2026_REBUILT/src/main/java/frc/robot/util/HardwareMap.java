@@ -3,6 +3,7 @@ package frc.robot.util;
 public class HardwareMap {
     public static final int kDrivePort = 0;
     public static final int kOperatorPort = 1;
+    public static final int kOutreachPort = 2;
 
     public static final int kPDH = 1;
 

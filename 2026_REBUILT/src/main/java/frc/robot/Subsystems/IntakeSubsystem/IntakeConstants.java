@@ -8,7 +8,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 public class IntakeConstants {
     
-    public final static double kIntakeVoltage = 10;
+    public final static double kIntakeVoltage = 6;
     public final static double kDrivePivotVoltage = 3;
     public final static double kPivotTheshold = 2;
 
@@ -28,7 +28,7 @@ public class IntakeConstants {
     public static TalonFXConfiguration applyLeftIntakeConfig(){
         TalonFXConfiguration config = new TalonFXConfiguration();
         config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
-        config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        config.MotorOutput.NeutralMode = NeutralModeValue.Coast;
         config.CurrentLimits.StatorCurrentLimit = 50;
         config.CurrentLimits.StatorCurrentLimitEnable = true;
         config.Voltage.PeakForwardVoltage = 16;
@@ -39,7 +39,7 @@ public class IntakeConstants {
     public static TalonFXConfiguration applyRightIntakeConfig(){
         TalonFXConfiguration config = new TalonFXConfiguration();
         config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
-        config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        config.MotorOutput.NeutralMode = NeutralModeValue.Coast;
         config.CurrentLimits.StatorCurrentLimit = 50;
         config.CurrentLimits.StatorCurrentLimitEnable = true;
         config.Voltage.PeakForwardVoltage = 16;

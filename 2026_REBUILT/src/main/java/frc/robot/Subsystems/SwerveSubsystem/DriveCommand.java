@@ -44,18 +44,18 @@ public class DriveCommand extends Command {
     vx = translationJoystick.get(xSupplier.get());
     vy = translationJoystick.get(ySupplier.get());
   
-    if(headingLockSupplier.get()){
-      //Determine setpoint 
-      headingLockController.setGoal(FieldManager.getTargetRotation(swerve.getPose(), ShotType.Automatic).getRadians());
-      if(!headingLock){
-        headingLockController.reset(swerve.getPoseHeading().getRadians(), omega);
-        headingLock = true;
-      }
-      omega = headingLockController.getSetpoint().velocity + headingLockController.calculate(swerve.getPoseHeading().getRadians());
-    } else {
+    // if(headingLockSupplier.get()){
+    //   //Determine setpoint 
+    //   headingLockController.setGoal(FieldManager.getTargetRotation(swerve.getPose(), ShotType.Automatic).getRadians());
+    //   if(!headingLock){
+    //     headingLockController.reset(swerve.getPoseHeading().getRadians(), omega);
+    //     headingLock = true;
+    //   }
+    //   omega = headingLockController.getSetpoint().velocity + headingLockController.calculate(swerve.getPoseHeading().getRadians());
+    // } else {
       omega = rotationJoystick.get(tSupplier.get());
       headingLock = false;
-    }
+    //}
 
     ChassisSpeeds chassisSpeeds = new ChassisSpeeds(vx, vy, omega);
 

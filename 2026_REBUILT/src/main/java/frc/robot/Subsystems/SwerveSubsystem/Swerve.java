@@ -89,13 +89,6 @@ public class Swerve extends SubsystemBase {
     );
   }
 
-  @Override
-  public void periodic() {
-    //Update Localization
-    antPose.updateAll(getPigeonHeading(), getModulePositions());
-    printDebug();
-  }
-
   public void printDebug(){
     SmartDashboard.putNumber("Robot Heading (deg)", getPigeonHeading().getDegrees());
     frontLeft.printEncoders();
@@ -199,5 +192,12 @@ public class Swerve extends SubsystemBase {
     ChassisSpeeds robotRelativeSpeeds = getRobotRelativeSpeeds();
     return Math.hypot(robotRelativeSpeeds.vxMetersPerSecond, robotRelativeSpeeds.vyMetersPerSecond) < SwerveConstants.kZeroTranslationThreshold
       && robotRelativeSpeeds.omegaRadiansPerSecond < SwerveConstants.kZeroOmegaThreshold;
+  }
+
+  @Override
+  public void periodic() {
+    //Update Localization
+    antPose.updateAll(getPigeonHeading(), getModulePositions());
+    printDebug();
   }
 }

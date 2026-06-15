@@ -9,6 +9,7 @@ import frc.robot.Managers.FieldManager;
 import frc.robot.Subsystems.ShooterSubsystem.ShotCalculator;
 import frc.robot.Subsystems.ShooterSubsystem.Hood.*;
 import frc.robot.Subsystems.ShooterSubsystem.Shooter.Shooter;
+import frc.robot.Subsystems.ShooterSubsystem.Shooter.ShooterConstants;
 import frc.robot.Subsystems.ShooterSubsystem.ShotCalculator.Shot;
 
 public class SpinUpCommand extends Command {

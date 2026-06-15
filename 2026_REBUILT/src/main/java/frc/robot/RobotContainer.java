@@ -8,9 +8,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Commands.SpinUpCommand;
+
 import frc.robot.Commands.SpinUpCommand.ShotType;
 import frc.robot.Subsystems.FeederSubsystem.Feeder;
 import frc.robot.Subsystems.FeederSubsystem.FeederConstants;
@@ -32,8 +34,9 @@ public class RobotContainer {
   Hood hood = new Hood();
 
   //Controllers
-  CommandXboxController driver = new CommandXboxController(HardwareMap.kDrivePort);
+  CommandPS5Controller driver = new CommandPS5Controller(HardwareMap.kDrivePort);
   CommandXboxController operator = new CommandXboxController(HardwareMap.kOperatorPort);
+  CommandPS5Controller outreach = new CommandPS5Controller(HardwareMap.kOutreachPort);
 
   //Triggers
   Trigger shotReady = new Trigger(() -> swerve.readyToShoot() && hood.readyToShoot() && shooter.readyToShoot());
@@ -41,8 +44,9 @@ public class RobotContainer {
   SendableChooser<Command> autoChooser;
 
   public RobotContainer() {
-    configureOperatorBindings();
-    configureDriverBindings();
+    configureOutreachBindings();
+    //configureOperatorBindings();
+    //configureDriverBindings();
     configurAutoChooser(); 
   }
 
@@ -88,6 +92,32 @@ public class RobotContainer {
     );
   }
 
+  private void configureOutreachBindings(){
+    //Driving: joysticks for driving + right trigger for heading lock
+    swerve.setDefaultCommand(new DriveCommand(swerve, () -> -outreach.getLeftY(), () -> -outreach.getLeftX(), () -> -outreach.getRightX(), () -> outreach.getR2Axis() > 0.1));      
+    driver.povUp().onTrue(Commands.runOnce(swerve::resetHeading));
+    driver.L2().whileTrue(swerve.crossCommand());
+
+    //Intake: right bumper for intake and deploy + left bumper for extake + a for frame perimeter stow + pov down for zero position stow
+    outreach.R1().whileTrue(intake.intake().alongWith(feeder.feed(0, -2)));
+    outreach.L1().whileTrue(intake.extake()
+        .alongWith(feeder.feed(-FeederConstants.kConveyorVoltage, 0)));
+    outreach.square().onTrue(intake.setPositionCommand(IntakeConstants.kFramePerimStow));
+    outreach.triangle().onTrue(intake.setPositionCommand(IntakeConstants.kZeroPosition));
+
+    //Feeder: right stick for feeding to shooter + left stick for extaking 
+    outreach.L2().and(shotReady.or(outreach.L3())).whileTrue(feeder.feed());
+    outreach.R3().whileTrue(feeder.feed(-8, -12));
+
+    //Shooting: right trigger for spin up
+    //outreach.b().whileTrue(new SpinUpCommand(hood, shooter, swerve::getShooterPose, ShotType.FixedBumper));
+    outreach.R2().whileTrue(new SpinUpCommand(hood, shooter, swerve::getShooterPose, ShotType.Automatic));   
+    //outreach.y().whileTrue(new SpinUpCommand(hood, shooter, swerve::getShooterPose, ShotType.FixedFeed));
+
+    //Intake agitate: a for agitating
+    outreach.L2().whileTrue(intake.agitate(1.5));
+  }
+
   private void configureOperatorBindings(){
     //Feedback
     Rumbler.bindTransitionRumbles(operator);
@@ -107,21 +137,21 @@ public class RobotContainer {
     operator.povRight().or(operator.povLeft()).onTrue(Commands.runOnce(SpinUpCommand::resetOffset)); 
     
     //Intake Agitate (drive or operator)
-     operator.a().or(driver.a()).whileTrue(intake.agitate(1.5));
+     operator.a().or(driver.cross()).whileTrue(intake.agitate(1.5));
   }
 
   private void configureDriverBindings(){
     //Swerve
-    swerve.setDefaultCommand(new DriveCommand(swerve, () -> -driver.getLeftY(), () -> -driver.getLeftX(), () -> -driver.getRightX(), () -> driver.getRightTriggerAxis() > 0.1));      
+    swerve.setDefaultCommand(new DriveCommand(swerve, () -> -driver.getLeftY(), () -> -driver.getLeftX(), () -> -driver.getRightX(), () -> driver.getR2Axis() > 0.1));      
     driver.povUp().onTrue(Commands.runOnce(swerve::resetHeading));
-    driver.leftTrigger().whileTrue(swerve.crossCommand());
+    driver.L2().whileTrue(swerve.crossCommand());
 
     //Intake regular
-    driver.rightBumper().whileTrue(intake.intake().alongWith(feeder.feed(0, -2)));
-    driver.leftBumper().whileTrue(intake.extake()
+    driver.R1().whileTrue(intake.intake().alongWith(feeder.feed(0, -2)));
+    driver.L1().whileTrue(intake.extake()
         .alongWith(feeder.feed(-FeederConstants.kConveyorVoltage, 0)));
-    driver.x().onTrue(intake.setPositionCommand(IntakeConstants.kFramePerimStow));
-    driver.y().onTrue(intake.setPositionCommand(IntakeConstants.kZeroPosition));
+    driver.square().onTrue(intake.setPositionCommand(IntakeConstants.kFramePerimStow));
+    driver.circle().onTrue(intake.setPositionCommand(IntakeConstants.kZeroPosition));
 
     //Intake backup
     driver.povUp().whileTrue(intake.manualPivotVoltage(1));  
