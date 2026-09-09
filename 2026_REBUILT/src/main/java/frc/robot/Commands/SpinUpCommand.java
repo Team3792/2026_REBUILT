@@ -55,18 +55,20 @@ public class SpinUpCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() { 
-    if(shotType == ShotType.FixedBumper || shotType == ShotType.FixedFeed)
-      return;
+    // if(shotType == ShotType.FixedBumper || shotType == ShotType.FixedFeed)
+    //   return;
 
-    ShotType trueShotType = shotType;  
-    if(shotType == ShotType.Automatic){
-      trueShotType = FieldManager.getShotType(shooterPose.get());
-    }
+    // ShotType trueShotType = shotType;  
+    // if(shotType == ShotType.Automatic){
+    //   trueShotType = FieldManager.getShotType(shooterPose.get());
+    // }
 
-    double distanceToTarget = FieldManager.getTargetDistance(shooterPose.get(), trueShotType);
-    Shot targetShot = ShotCalculator.getStaticShot(distanceToTarget + shotDistanceOffsetBase + shotDistanceOffsetChange, trueShotType);
-    hood.setAngle(targetShot.hoodAngleDegrees());
-    shooter.setRPS(targetShot.omegaRPS());
+    // double distanceToTarget = FieldManager.getTargetDistance(shooterPose.get(), trueShotType);
+    // Shot targetShot = ShotCalculator.getStaticShot(distanceToTarget + shotDistanceOffsetBase + shotDistanceOffsetChange, trueShotType);
+    // hood.setAngle(targetShot.hoodAngleDegrees());
+    // shooter.setRPS(targetShot.omegaRPS());
+    hood.setAngle(16);
+    shooter.setRPS(52);
 }
 
   // Called once the command ends or is interrupted.
