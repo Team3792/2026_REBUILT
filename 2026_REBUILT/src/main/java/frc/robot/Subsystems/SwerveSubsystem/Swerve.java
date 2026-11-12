@@ -154,7 +154,7 @@ public class Swerve extends SubsystemBase {
   //Resets pose heading to be straight forward from driver perspective 
   public void resetHeading(){
     //Flip if red
-    Rotation2d heading = (GameManager.getAllianceColor() == Alliance.Red) ? Rotation2d.k180deg : Rotation2d.kZero;
+    Rotation2d heading = Rotation2d.kZero;//(GameManager.getAllianceColor() == Alliance.Red) ? Rotation2d.k180deg : Rotation2d.kZero;
     resetPose(new Pose2d(
       getPose().getTranslation(),
       heading

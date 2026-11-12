@@ -31,7 +31,7 @@ public class ModuleConstants {
     public static final ModuleConfig kFrontRight = new ModuleConfig(new CANAddress(3, "front left drive", 0), 
                                                                     new CANAddress(4, "front left turn", 0), 
                                                                     new CANAddress(5, "front left encoder", 0),
-                                                                    -0.113);
+                                                                    -0.8974 -0.5);
 
     public static final ModuleConfig kBackLeft = new ModuleConfig(new CANAddress(6, "back left drive", 0), 
                                                                   new CANAddress(7, "back left turn", 0), 
@@ -41,7 +41,7 @@ public class ModuleConstants {
     public static final ModuleConfig kBackRight = new ModuleConfig(new CANAddress(9, "bacl right drive", 0), 
                                                                    new CANAddress(10, "back right turn", 0),
                                                                    new CANAddress(11, "back right encoder", 0), 
-                                                                   -0.4445 - 0.59 -0.37 - 0.125);
+                                                                   -0.297 );
 
     public static MagnetSensorConfigs getEncoderConfig(double offset){
         MagnetSensorConfigs config = new MagnetSensorConfigs();

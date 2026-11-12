@@ -67,8 +67,8 @@ public class SpinUpCommand extends Command {
     // Shot targetShot = ShotCalculator.getStaticShot(distanceToTarget + shotDistanceOffsetBase + shotDistanceOffsetChange, trueShotType);
     // hood.setAngle(targetShot.hoodAngleDegrees());
     // shooter.setRPS(targetShot.omegaRPS());
-    hood.setAngle(16);
-    shooter.setRPS(52);
+    hood.setAngle(20);
+    shooter.setRPS(30);
 }
 
   // Called once the command ends or is interrupted.
